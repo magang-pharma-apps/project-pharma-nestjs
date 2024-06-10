@@ -1,5 +1,5 @@
 export const jwt_config = {
   secret: 'abcdefghij',
-  // expired: 3600
-  expired: 10000,
+  expired: 86400, // 24 hours in seconds
+  // expired: 3600, // 1 hour in seconds
 };

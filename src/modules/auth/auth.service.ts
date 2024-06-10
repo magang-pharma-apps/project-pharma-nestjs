@@ -18,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async getUser(userId: number) {
+  async getUser(userId: string) {
     const user = await this.userRepository.findOne({
       where: {
         id: userId,
@@ -92,7 +92,7 @@ export class AuthService {
     }
   }
 
-  async profile(user_id: number) {
+  async profile(user_id: string) {
     const user = await this.userRepository.findOne({
       where: {
         id: user_id,
@@ -112,7 +112,7 @@ export class AuthService {
     return user;
   }
 
-  async uploadAvatar(user_id: number, avatar) {
+  async uploadAvatar(user_id: string, avatar) {
     const user = await this.userRepository.findOne({
       where: {
         id: user_id,
