@@ -10,8 +10,8 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
+import { AuthService } from '../service/auth.service';
+import { RegisterDto } from '../dto/register.dto';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -21,9 +21,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ProfileDto } from './dto/profile.dto';
-import { AuthGuard } from './auth.guard';
-import { LoginDto } from './dto/login.dto';
+import { ProfileDto } from '../dto/profile.dto';
+import { AuthGuard } from '../auth.guard';
+import { LoginDto } from '../dto/login.dto';
 
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { existsSync, unlink } from 'fs';
