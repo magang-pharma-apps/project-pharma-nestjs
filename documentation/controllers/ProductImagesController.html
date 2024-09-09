@@ -189,7 +189,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>deleteProductImageById(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>deleteProductImageById(product_id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -203,8 +203,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="108"
-                                    class="link-to-prism">src/modules/products/product-images/product-images.controller.ts:108</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="104"
+                                    class="link-to-prism">src/modules/products/product-images/product-images.controller.ts:104</a></div>
                         </td>
                     </tr>
 
@@ -225,7 +225,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>id</td>
+                                                <td>product_id</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
@@ -266,7 +266,7 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>findAllProductImages(filter: <a href="../classes/ProductImagesDtoOut.html" target="_self">ProductImagesDtoOut</a>)</code>
+                    <code>findAllProductImages(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -280,8 +280,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="102"
-                                    class="link-to-prism">src/modules/products/product-images/product-images.controller.ts:102</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="98"
+                                    class="link-to-prism">src/modules/products/product-images/product-images.controller.ts:98</a></div>
                         </td>
                     </tr>
 
@@ -302,9 +302,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>filter</td>
+                                                <td>id</td>
                                             <td>
-                                                            <code><a href="../classes/ProductImagesDtoOut.html" target="_self" >ProductImagesDtoOut</a></code>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
 
                                             <td>
@@ -360,8 +360,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="80"
-                                    class="link-to-prism">src/modules/products/product-images/product-images.controller.ts:80</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="76"
+                                    class="link-to-prism">src/modules/products/product-images/product-images.controller.ts:76</a></div>
                         </td>
                     </tr>
 
@@ -430,7 +430,6 @@
   Get,
   Param,
   Post,
-  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -441,10 +440,7 @@ import { AuthGuard } from &#x27;src/modules/auth/auth.guard&#x27;;
 import { ResponseFormatter } from &#x27;src/config/response_formatter&#x27;;
 import { FileInterceptor } from &#x27;@nestjs/platform-express&#x27;;
 import { diskStorage } from &#x27;multer&#x27;;
-import {
-  ProductImagesDtoIn,
-  ProductImagesDtoOut,
-} from &#x27;../dto/product-images.dto&#x27;;
+import { ProductImagesDtoIn } from &#x27;../dto/product-images.dto&#x27;;
 
 @ApiTags(&#x27;Product Images&#x27;)
 @ApiBearerAuth(&#x27;accessToken&#x27;)
@@ -524,17 +520,15 @@ export class ProductImagesController {
   }
 
   @Get(&#x27;:id&#x27;)
-  async findAllProductImages(@Query() filter: ProductImagesDtoOut) {
-    const productImages &#x3D; await this.productImagesService.findAll(filter);
+  async findAllProductImages(@Param(&#x27;id&#x27;) id: string) {
+    const productImages &#x3D; await this.productImagesService.findAll(+id);
     return new ResponseFormatter(productImages, &#x27;Product images found&#x27;);
   }
 
   @Delete(&#x27;:id/delete&#x27;)
-  async deleteProductImageById(@Param(&#x27;id&#x27;) id: string) {
-    const productImageId &#x3D; +id;
-
+  async deleteProductImageById(@Param(&#x27;product_id&#x27;) product_id: string) {
     try {
-      await this.productImagesService.deleteProductImageById(productImageId);
+      await this.productImagesService.deleteProductImageById(+product_id);
       return &#x27;Product image deleted&#x27;;
     } catch (error) {
       console.error(&#x60;Error deleting product image: ${error.message}&#x60;);

@@ -14,13 +14,16 @@ export class ProductDtoOut {
   price: number;
 
   @ApiProperty()
-  stock: number;
+  expiryDate: Date;
 
   @ApiProperty()
   status: boolean;
 
   @ApiProperty()
   categoryId: number;
+
+  @ApiProperty()
+  supplierId: number;
 
   @ApiProperty()
   createdAt: Date;

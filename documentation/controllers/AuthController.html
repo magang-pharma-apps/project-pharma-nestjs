@@ -110,7 +110,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/modules/auth/auth.controller.ts</code>
+            <code>src/modules/auth/controller/auth.controller.ts</code>
         </p>
 
             <p class="comment">
@@ -219,7 +219,7 @@
                     <tr>
                         <td class="col-md-4">
                             <div class="io-line">Defined in <a href="" data-line="114"
-                                    class="link-to-prism">src/modules/auth/auth.controller.ts:114</a></div>
+                                    class="link-to-prism">src/modules/auth/controller/auth.controller.ts:114</a></div>
                         </td>
                     </tr>
 
@@ -307,7 +307,7 @@
                     <tr>
                         <td class="col-md-4">
                             <div class="io-line">Defined in <a href="" data-line="44"
-                                    class="link-to-prism">src/modules/auth/auth.controller.ts:44</a></div>
+                                    class="link-to-prism">src/modules/auth/controller/auth.controller.ts:44</a></div>
                         </td>
                     </tr>
 
@@ -387,7 +387,7 @@
                     <tr>
                         <td class="col-md-4">
                             <div class="io-line">Defined in <a href="" data-line="56"
-                                    class="link-to-prism">src/modules/auth/auth.controller.ts:56</a></div>
+                                    class="link-to-prism">src/modules/auth/controller/auth.controller.ts:56</a></div>
                         </td>
                     </tr>
 
@@ -460,7 +460,7 @@
                     <tr>
                         <td class="col-md-4">
                             <div class="io-line">Defined in <a href="" data-line="38"
-                                    class="link-to-prism">src/modules/auth/auth.controller.ts:38</a></div>
+                                    class="link-to-prism">src/modules/auth/controller/auth.controller.ts:38</a></div>
                         </td>
                     </tr>
 
@@ -522,8 +522,8 @@
   UseGuards,
   UseInterceptors,
 } from &#x27;@nestjs/common&#x27;;
-import { AuthService } from &#x27;./auth.service&#x27;;
-import { RegisterDto } from &#x27;./dto/register.dto&#x27;;
+import { AuthService } from &#x27;../service/auth.service&#x27;;
+import { RegisterDto } from &#x27;../dto/register.dto&#x27;;
 import { diskStorage } from &#x27;multer&#x27;;
 import { FileInterceptor } from &#x27;@nestjs/platform-express&#x27;;
 import {
@@ -533,9 +533,9 @@ import {
   ApiResponse,
   ApiTags,
 } from &#x27;@nestjs/swagger&#x27;;
-import { ProfileDto } from &#x27;./dto/profile.dto&#x27;;
-import { AuthGuard } from &#x27;./auth.guard&#x27;;
-import { LoginDto } from &#x27;./dto/login.dto&#x27;;
+import { ProfileDto } from &#x27;../dto/profile.dto&#x27;;
+import { AuthGuard } from &#x27;../auth.guard&#x27;;
+import { LoginDto } from &#x27;../dto/login.dto&#x27;;
 
 import { ResponseFormatter } from &#x27;src/config/response_formatter&#x27;;
 import { existsSync, unlink } from &#x27;fs&#x27;;

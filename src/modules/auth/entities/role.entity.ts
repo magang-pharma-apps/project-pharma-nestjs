@@ -7,9 +7,7 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { PermissionEntity } from './permission.entity';
 import { UserEntity } from './user.entity';
-import { UserRoleEntity } from './user-role..entity';
 
 @Entity('roles')
 export class RoleEntity extends BaseEntity {
@@ -22,17 +20,11 @@ export class RoleEntity extends BaseEntity {
   @Column()
   description: string;
 
-  @ManyToMany(() => PermissionEntity, { cascade: true })
-  @JoinTable({
-    name: 'role_permission',
-    joinColumn: { name: 'role_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
-  })
-  permissions: PermissionEntity[];
+  @Column( { default: true})
+  status: boolean;
+
 
   @ManyToMany(() => UserEntity, (user) => user.roles)
   users: UserEntity[];
 
-  @OneToMany(() => UserRoleEntity, (userRole) => userRole.role)
-  userRoles: UserRoleEntity[];
 }

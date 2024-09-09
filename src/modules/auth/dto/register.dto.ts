@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -25,4 +25,7 @@ export class RegisterDto {
   @MinLength(8)
   @MaxLength(16)
   password: string;
+
+  @ApiPropertyOptional()
+  role: string;
 }

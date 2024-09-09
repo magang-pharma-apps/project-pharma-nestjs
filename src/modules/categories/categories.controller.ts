@@ -29,6 +29,7 @@ export class CategoriesController {
     description: 'Category data',
     type: CreateCategoryDto,
   })
+
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     const category = await this.categoriesService.create(createCategoryDto);
@@ -41,6 +42,7 @@ export class CategoriesController {
     description: 'Category data',
     type: CategoryDtoOut,
   })
+
   @Get()
   async findAll() {
     const categories = await this.categoriesService.findAll();
@@ -65,6 +67,7 @@ export class CategoriesController {
     description: 'Category data',
     type: UpdateCategoryDto,
   })
+  
   @Patch(':id')
   async update(
     @Param('id') id: string,

@@ -37,6 +37,7 @@ export class ProductsController {
     description: 'Products data',
     type: ProductDtoOut,
   })
+
   @Get()
   async findAll() {
     const products = await this.productsService.findAll();
@@ -53,6 +54,7 @@ export class ProductsController {
     description: 'Product data',
     type: ProductDtoOut,
   })
+  
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const product = await this.productsService.findOne(+id);

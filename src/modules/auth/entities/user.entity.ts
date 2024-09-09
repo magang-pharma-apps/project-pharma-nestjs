@@ -8,7 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { RoleEntity } from './role.entity';
-import { UserRoleEntity } from './user-role..entity';
+import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -27,14 +28,27 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   avatar?: string;
 
+  @Column({ default: "USER" })
+  role?: string;
+
   @ManyToMany(() => RoleEntity, (role) => role.users)
   @JoinTable({
-    name: 'user_role',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+    name: 'users_roles',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
   })
   roles: RoleEntity[];
 
-  @OneToMany(() => UserRoleEntity, (userRole) => userRole.user)
-  userRoles: UserRoleEntity[];
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.user)
+  transactions: TransactionEntity[];
+
+  @OneToMany(() => InventoryEntity, (inventory) => inventory.creator)
+  inventories: InventoryEntity[];
+
 }

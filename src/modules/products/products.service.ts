@@ -30,15 +30,18 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      relations: ['category', 'productImages'],
+      relations: ['category', 'supplier', 'productImages'],
       select: {
         id: true,
         name: true,
         price: true,
-        stock: true,
         category: {
           name: true,
           status: true,
+        },
+        supplier: {
+          name: true,
+          contact: true,
         },
         productImages: {
           image: true,
@@ -65,15 +68,18 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      relations: ['category', 'productImages'],
+      relations: ['category', 'supplier','productImages'],
       select: {
         id: true,
         name: true,
         price: true,
-        stock: true,
         category: {
           name: true,
           status: true,
+        },
+        supplier: {
+          name: true,
+          contact: true,
         },
         productImages: {
           image: true,

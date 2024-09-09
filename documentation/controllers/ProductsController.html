@@ -145,6 +145,7 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#findAll" >findAll</a>
                             </li>
@@ -265,6 +266,7 @@
                     <a name="findAll"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier"></span>
                             <span class="modifier">Async</span>
                         <span ><b>findAll</b></span>
                         <a href="#findAll"><span class="icon ion-ios-link"></span></a>
@@ -282,14 +284,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get()<br /></code>
+                    <code>@ApiResponse({status: undefined, description: &#x27;Products data&#x27;, type: ProductDtoOut})<br />@Get()<br /></code>
                 </td>
             </tr>
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="36"
-                                    class="link-to-prism">src/modules/products/products.controller.ts:36</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="42"
+                                    class="link-to-prism">src/modules/products/products.controller.ts:42</a></div>
                         </td>
                     </tr>
 
@@ -336,8 +338,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="52"
-                                    class="link-to-prism">src/modules/products/products.controller.ts:52</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/modules/products/products.controller.ts:59</a></div>
                         </td>
                     </tr>
 
@@ -413,8 +415,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="77"
-                                    class="link-to-prism">src/modules/products/products.controller.ts:77</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="84"
+                                    class="link-to-prism">src/modules/products/products.controller.ts:84</a></div>
                         </td>
                     </tr>
 
@@ -490,8 +492,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="63"
-                                    class="link-to-prism">src/modules/products/products.controller.ts:63</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">src/modules/products/products.controller.ts:70</a></div>
                         </td>
                     </tr>
 
@@ -587,6 +589,12 @@ export class ProductsController {
     return new ResponseFormatter(product, &#x27;Product created&#x27;);
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: &#x27;Products data&#x27;,
+    type: ProductDtoOut,
+  })
+
   @Get()
   async findAll() {
     const products &#x3D; await this.productsService.findAll();
@@ -603,6 +611,7 @@ export class ProductsController {
     description: &#x27;Product data&#x27;,
     type: ProductDtoOut,
   })
+  
   @Get(&#x27;:id&#x27;)
   async findOne(@Param(&#x27;id&#x27;) id: string) {
     const product &#x3D; await this.productsService.findOne(+id);

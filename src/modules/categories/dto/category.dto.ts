@@ -8,10 +8,10 @@ export class CategoryDtoOut {
   name: string;
 
   @ApiProperty()
-  description: string;
+  status: boolean;
 
   @ApiProperty()
-  status: boolean;
+  description: string;
 
   @ApiProperty()
   createdAt: Date;

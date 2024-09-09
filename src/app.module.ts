@@ -8,7 +8,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
-
+import { SuppliersModule } from './modules/suppliers/suppliers.module';
+import { InventoriesModule } from './modules/inventories/inventories.module';
+import { WarehouseModule } from './modules/warehouse/warehouse.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -19,6 +22,10 @@ import { ProductsModule } from './modules/products/products.module';
     }),
     CategoriesModule,
     ProductsModule,
+    SuppliersModule,
+    InventoriesModule,
+    WarehouseModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

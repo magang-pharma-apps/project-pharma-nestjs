@@ -9,18 +9,18 @@ import { UserEntity } from './entities/user.entity';
 import { BaseEntity } from 'src/config/common/BaseEntity';
 import { AuthService } from './service/auth.service';
 import { RoleService } from './service/role.service';
-import { PermissionService } from './service/permission.service';
+// import { PermissionService } from './service/permission.service';
 import { RoleController } from './controller/role.controller';
-import { PermissionController } from './controller/permission.controller';
+// import { PermissionController } from './controller/permission.controller';
 import { RoleEntity } from './entities/role.entity';
-import { PermissionEntity } from './entities/permission.entity';
+// import { PermissionEntity } from './entities/permission.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserEntity,
       BaseEntity,
       RoleEntity,
-      PermissionEntity,
+      // PermissionEntity,
     ]),
     PassportModule.register({
       defaultStrategy: 'jwt',
@@ -34,7 +34,7 @@ import { PermissionEntity } from './entities/permission.entity';
       },
     }),
   ],
-  providers: [AuthService, JwtStrategy, RoleService, PermissionService],
-  controllers: [AuthController, RoleController, PermissionController],
+  providers: [AuthService, JwtStrategy, RoleService],
+  controllers: [AuthController, RoleController],
 })
 export class AuthModule {}

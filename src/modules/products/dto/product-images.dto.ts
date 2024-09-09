@@ -8,7 +8,7 @@ export class ProductImagesDtoOut {
   product_id: number;
 
   @ApiPropertyOptional({ type: 'string' })
-  categoryName: string;
+  categoryName: string; // ?
 }
 
 export class ProductImagesDtoIn {

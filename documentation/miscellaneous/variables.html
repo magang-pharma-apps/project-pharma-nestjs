@@ -144,15 +144,13 @@
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>{
-  type:
-    process.env.DB_CONNECTION &#x3D;&#x3D;&#x3D; &#x27;postgres&#x27;
-      ? &#x27;postgres&#x27;
-      : &#x27;postgres&#x27; || &#x27;postgres&#x27;,
+  type: process.env.DB_CONNECTION &#x3D;&#x3D;&#x3D; &#x27;postgres&#x27; ? &#x27;postgres&#x27; : &#x27;postgres&#x27;,
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT) || 5432,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
+  // entities: [filePathPattern, fileCommonPattern],
   entities: [__dirname + &#x27;/../**/*.entity.{js,ts}&#x27;],
   synchronize: true,
 }</code>
@@ -186,8 +184,9 @@
                     <td class="col-md-4">
                         <i>Default value : </i><code>{
   secret: &#x27;abcdefghij&#x27;,
-  // expired: 3600
-  expired: 10000,
+  expired: 31536000, // 1 year in seconds
+  // expired: 86400, // 24 hours in seconds
+  // expired: 3600, // 1 hour in seconds
 }</code>
                     </td>
                 </tr>
