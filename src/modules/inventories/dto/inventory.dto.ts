@@ -19,6 +19,9 @@ export class InventoryDtoOut {
     @ApiProperty()
     warehouse_id: number;
 
+    @ApiProperty()
+    supplier_id: number;
+
     @ApiPropertyOptional()
     created_by: string;
 

@@ -16,11 +16,11 @@ export class CategoryEntity extends BaseEntity {
   @Column({ unique: true })
   name: string;
 
-  @Column({ type: 'boolean', default: false })
-  status: boolean;
-
   @Column({ nullable: true })
   description: string;
+
+  @Column({ type: 'boolean', default: false })
+  status: boolean;
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
   deletedAt?: Date;

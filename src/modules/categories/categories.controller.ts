@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { CategoryDtoOut } from './dto/category.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Category')
 @ApiBearerAuth('accessToken')
@@ -30,6 +31,7 @@ export class CategoriesController {
     type: CreateCategoryDto,
   })
 
+  // @Permission('create:category')
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     const category = await this.categoriesService.create(createCategoryDto);
@@ -43,6 +45,7 @@ export class CategoriesController {
     type: CategoryDtoOut,
   })
 
+  @Permission('read:category')
   @Get()
   async findAll() {
     const categories = await this.categoriesService.findAll();

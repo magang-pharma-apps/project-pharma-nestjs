@@ -16,6 +16,9 @@ export class CreateInventoryDto {
     note: string;
 
     @ApiProperty()
+    supplier_id: number;
+
+    @ApiProperty()
     warehouse_id: number;
 
     @ApiPropertyOptional()

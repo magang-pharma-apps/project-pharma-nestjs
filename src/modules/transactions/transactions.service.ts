@@ -32,7 +32,7 @@ export class TransactionsService {
         quantity: true,
         product: {
           name: true,
-          price: true,
+          purchasePrice: true,
         },
       },
     });
@@ -60,7 +60,7 @@ export class TransactionsService {
 
         product: {
           name: true,
-          price: true,
+          purchasePrice: true,
         },
       },
     });

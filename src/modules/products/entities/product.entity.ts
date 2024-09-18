@@ -19,14 +19,23 @@ export class ProductEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'code_product', unique: true })
+  codeProduct: string;
+
   @Column({ name: 'name', unique: true })
   name: string;
 
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
-  price: number;
+  // @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
+  // price: number;
+
+  @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
+  purchasePrice: number;
+
+  @Column({ name: 'selling_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
+  sellingPrice: number;
 
   @Column({ name: 'expiry_date', type: 'timestamptz' })
   expiryDate: Date;
@@ -37,8 +46,8 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'category_id' })
   categoryId: number;
 
-  @Column ({ name: 'supplier_id' })
-  supplierId: number
+  // @Column ({ name: 'supplier_id' })
+  // supplierId: number
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
   deletedAt?: Date;
@@ -51,13 +60,13 @@ export class ProductEntity extends BaseEntity {
   })
   category: CategoryEntity;
 
-  @ManyToOne(() => SupplierEntity)
-  @JoinColumn({
-    name: 'supplier_id',
-    referencedColumnName: 'id',
-    foreignKeyConstraintName: 'fk_supplier_id',
-  })
-  supplier: SupplierEntity;
+  // @ManyToOne(() => SupplierEntity)
+  // @JoinColumn({
+  //   name: 'supplier_id',
+  //   referencedColumnName: 'id',
+  //   foreignKeyConstraintName: 'fk_supplier_id',
+  // })
+  // supplier: SupplierEntity;
 
   @OneToMany(() => ProductImagesEntity, (image) => image.product)
   productImages: ProductImagesEntity[];
