@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,26 +9,67 @@ import { UnitEntity } from './entities/unit.entity';
 export class UnitsService {
   constructor(
     @InjectRepository(UnitEntity)
-    private readonly unitRepository: Repository<CreateUnitDto>,
+    private readonly unitRepository: Repository<UnitEntity>,
   ) {}
   
-  create(createUnitDto: CreateUnitDto) {
-    return 'This action adds a new unit';
+  async create(data: CreateUnitDto) {
+    const unit = this.unitRepository.create(data);
+
+    return await this.unitRepository.save(unit);
   }
 
-  findAll() {
-    return `This action returns all units`;
+  async findAll() {
+    const units = await this.unitRepository.find({
+      order: {
+        id: 'DESC',
+      },
+    });
+
+    return units;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} unit`;
+  async findOne(units_id: number) {
+    const unit = await this.unitRepository.findOne({
+      where: {
+        id: units_id,
+      },
+    });
+
+    if (!unit) {
+      throw new NotFoundException('Unit not found');
+    }
+
+    return unit;
   }
 
-  update(id: number, updateUnitDto: UpdateUnitDto) {
-    return `This action updates a #${id} unit`;
+  async update(units_id: number, data: UpdateUnitDto) {
+    const unit = await this.unitRepository.findOne({
+      where: {
+        id: units_id,
+      }
+    });
+
+    if (!unit) {
+      throw new NotFoundException('Unit not found');
+    }
+
+    Object.assign(unit, data);
+
+    return await this.unitRepository.save(unit);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} unit`;
+  async remove(units_id: number) {
+    const unit = await this.unitRepository.findOne({
+      withDeleted: true,
+      where: {
+        id: units_id,
+      }
+    });
+
+    if (!unit) {
+      throw new NotFoundException('Unit not found');
+    }
+
+    return await this.unitRepository.softRemove(unit);
   }
 }

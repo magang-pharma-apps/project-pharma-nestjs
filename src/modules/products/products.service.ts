@@ -30,12 +30,16 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      relations: ['category', 'productImages'],
+      relations: ['category', 'unit', 'productImages'],
       select: {
         id: true,
         name: true,
         purchasePrice: true,
         category: {
+          name: true,
+          status: true,
+        },
+        unit: {
           name: true,
           status: true,
         },
@@ -68,12 +72,16 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      relations: ['category','productImages'],
+      relations: ['category','unit', 'productImages'],
       select: {
         id: true,
         name: true,
         purchasePrice: true,
         category: {
+          name: true,
+          status: true,
+        },
+        unit: {
           name: true,
           status: true,
         },

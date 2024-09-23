@@ -1,8 +1,10 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
-import { Column, 
+import { 
+    Column, 
     DeleteDateColumn, 
-    Entity, OneToMany, 
+    Entity, 
+    OneToMany, 
     PrimaryGeneratedColumn 
 } from "typeorm";
 
@@ -24,6 +26,6 @@ export class UnitEntity extends BaseEntity{
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
     deletedAt?: Date;
 
-    // @OneToMany(() => ProductEntity, (product) => product.unit)
-    // products: ProductEntity[];
+    @OneToMany(() => ProductEntity, (product) => product.unit)
+    products: ProductEntity[];
 }

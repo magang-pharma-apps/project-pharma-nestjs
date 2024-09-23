@@ -58,6 +58,7 @@ export class CategoriesController {
     description: 'Category data',
     type: CategoryDtoOut,
   })
+  
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const category = await this.categoriesService.findOne(+id);

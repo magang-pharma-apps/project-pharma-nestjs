@@ -31,6 +31,9 @@ export class ProductDtoOut {
   @ApiProperty()
   categoryId: number;
 
+  @ApiProperty()
+  unitId: number;
+
   // @ApiProperty()
   // supplierId: number;
 

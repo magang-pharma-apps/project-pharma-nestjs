@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { ProductDtoOut } from './dto/product.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Product')
 @ApiBearerAuth('accessToken')
@@ -38,6 +39,7 @@ export class ProductsController {
     type: ProductDtoOut,
   })
 
+  @Permission('read:product')
   @Get()
   async findAll() {
     const products = await this.productsService.findAll();

@@ -13,6 +13,8 @@ import { BaseEntity } from 'src/config/common/BaseEntity';
 import { SupplierEntity } from 'src/modules/suppliers/entities/supplier.entity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
 import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+import { UnitEntity } from 'src/modules/units/entities/unit.entity';
+import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
@@ -46,6 +48,9 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'category_id' })
   categoryId: number;
 
+  @Column({ name: 'unit_id' })
+  unitId: number;
+
   // @Column ({ name: 'supplier_id' })
   // supplierId: number
 
@@ -60,6 +65,14 @@ export class ProductEntity extends BaseEntity {
   })
   category: CategoryEntity;
 
+  @ManyToOne(() => UnitEntity)
+  @JoinColumn({
+    name: 'unit_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'fk_unit_id',
+  })
+  unit: UnitEntity;
+
   // @ManyToOne(() => SupplierEntity)
   // @JoinColumn({
   //   name: 'supplier_id',
@@ -67,6 +80,9 @@ export class ProductEntity extends BaseEntity {
   //   foreignKeyConstraintName: 'fk_supplier_id',
   // })
   // supplier: SupplierEntity;
+
+  @OneToMany(() => ProductMixtureEntity, (mixture) => mixture.product)
+  productMixtures: ProductMixtureEntity[];
 
   @OneToMany(() => ProductImagesEntity, (image) => image.product)
   productImages: ProductImagesEntity[];

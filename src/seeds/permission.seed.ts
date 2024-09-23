@@ -11,6 +11,7 @@ export async function seedPermissions() {
     const permissionRepository = dataSource.getRepository(PermissionEntity);
 
     const permissions = [
+      { name: 'CREATE_USER', description: 'Permission to create user data' },
       { name: 'READ_USER', description: 'Permission to read user data' },
       { name: 'WRITE_USER', description: 'Permission to write user data' },
       { name: 'DELETE_USER', description: 'Permission to delete user data' },
@@ -88,7 +89,9 @@ export async function seedPermissions() {
         description: 'Permission to delete category data',
       },
 
-      { name: 'read:product', description: 'Permission to read product data' },
+      { name: 'read:product', description: 'Permission to read product data',
+
+      },
       {
         name: 'create:product',
         description: 'Permission to write product data',

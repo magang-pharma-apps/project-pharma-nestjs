@@ -28,6 +28,9 @@ export class CreateProductDto {
   @ApiProperty()
   categoryId: number;
 
+  @ApiProperty()
+  unitId: number;
+
   // @ApiProperty()
   // supplierId: number;
 }
