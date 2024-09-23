@@ -1,22 +1,12 @@
-import { BaseEntity } from 'src/config/common/BaseEntity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { RoleEntity } from './role.entity';
-import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
-import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { UserRoleEntity } from './user_roles.entity';
 
 @Entity('users')
-export class UserEntity extends BaseEntity {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column({ unique: true })
@@ -28,27 +18,6 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   avatar?: string;
 
-  @Column({ default: "USER" })
-  role?: string;
-
-  @ManyToMany(() => RoleEntity, (role) => role.users)
-  @JoinTable({
-    name: 'users_roles',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id',
-    },
-  })
-  roles: RoleEntity[];
-
-  @OneToMany(() => TransactionEntity, (transaction) => transaction.user)
-  transactions: TransactionEntity[];
-
-  @OneToMany(() => InventoryEntity, (inventory) => inventory.creator)
-  inventories: InventoryEntity[];
-
+  @OneToMany(() => UserRoleEntity, (userRole) => userRole.user)
+  userRoles: UserRoleEntity[];
 }

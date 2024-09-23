@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
+import { InventoryEntity } from "src/modules/inventories/entities/inventory.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { 
     Column, 
@@ -25,6 +26,9 @@ export class SupplierEntity extends BaseEntity {
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
   deletedAt?: Date;
 
-  @OneToMany(() => ProductEntity, (product) => product.supplier)
-  products: ProductEntity[];
+  // @OneToMany(() => ProductEntity, (product) => product.supplier)
+  // products: ProductEntity[];
+
+  @OneToMany(() => InventoryEntity, (inventory) => inventory.supplier)
+  inventories: InventoryEntity[];
 }

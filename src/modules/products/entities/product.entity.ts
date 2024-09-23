@@ -13,11 +13,16 @@ import { BaseEntity } from 'src/config/common/BaseEntity';
 import { SupplierEntity } from 'src/modules/suppliers/entities/supplier.entity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
 import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+import { UnitEntity } from 'src/modules/units/entities/unit.entity';
+import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ name: 'code_product', unique: true })
+  codeProduct: string;
 
   @Column({ name: 'name', unique: true })
   name: string;
@@ -25,8 +30,14 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
-  price: number;
+  // @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
+  // price: number;
+
+  @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
+  purchasePrice: number;
+
+  @Column({ name: 'selling_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
+  sellingPrice: number;
 
   @Column({ name: 'expiry_date', type: 'timestamptz' })
   expiryDate: Date;
@@ -37,8 +48,11 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'category_id' })
   categoryId: number;
 
-  @Column ({ name: 'supplier_id' })
-  supplierId: number
+  @Column({ name: 'unit_id' })
+  unitId: number;
+
+  // @Column ({ name: 'supplier_id' })
+  // supplierId: number
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
   deletedAt?: Date;
@@ -51,13 +65,24 @@ export class ProductEntity extends BaseEntity {
   })
   category: CategoryEntity;
 
-  @ManyToOne(() => SupplierEntity)
+  @ManyToOne(() => UnitEntity)
   @JoinColumn({
-    name: 'supplier_id',
+    name: 'unit_id',
     referencedColumnName: 'id',
-    foreignKeyConstraintName: 'fk_supplier_id',
+    foreignKeyConstraintName: 'fk_unit_id',
   })
-  supplier: SupplierEntity;
+  unit: UnitEntity;
+
+  // @ManyToOne(() => SupplierEntity)
+  // @JoinColumn({
+  //   name: 'supplier_id',
+  //   referencedColumnName: 'id',
+  //   foreignKeyConstraintName: 'fk_supplier_id',
+  // })
+  // supplier: SupplierEntity;
+
+  @OneToMany(() => ProductMixtureEntity, (mixture) => mixture.product)
+  productMixtures: ProductMixtureEntity[];
 
   @OneToMany(() => ProductImagesEntity, (image) => image.product)
   productImages: ProductImagesEntity[];

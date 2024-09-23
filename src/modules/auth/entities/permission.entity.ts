@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { RolePermissionEntity } from './role_permissions.entity';
-import { UserRoleEntity } from './user_roles.entity';
-@Entity('roles')
-export class RoleEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+
+@Entity('permissions')
+export class PermissionEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ unique: true })
   name: string;
@@ -14,10 +14,7 @@ export class RoleEntity {
 
   @OneToMany(
     () => RolePermissionEntity,
-    (rolePermission) => rolePermission.role,
+    (rolePermission) => rolePermission.permission,
   )
   rolePermissions: RolePermissionEntity[];
-
-  @OneToMany(() => UserRoleEntity, (userRole) => userRole.role)
-  userRoles: UserRoleEntity[];
 }
