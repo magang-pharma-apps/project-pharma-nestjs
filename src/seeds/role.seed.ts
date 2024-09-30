@@ -11,8 +11,22 @@ export async function seedRoles() {
     const roleRepository = dataSource.getRepository(RoleEntity);
 
     const roles = [
-      { name: 'Admin', description: 'Administrator role with full access' },
-      { name: 'User', description: 'Standard user role with limited access' },
+      { 
+        name: 'Admin', 
+        description: 'Administrator role with full access',
+      },
+      { 
+        name: 'User', 
+        description: 'Standard user role with limited access',
+      },
+      {
+        name: 'Admin_Gudang',
+        description: 'Standard user role with limited access',
+      },
+      { 
+        name: 'Apoteker', 
+        description: 'Standard user role with limited access',
+      },
     ];
 
     for (const roleData of roles) {

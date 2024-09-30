@@ -5,7 +5,7 @@ export class ProductDtoOut {
   id: number;
 
   @ApiProperty()
-  codeProduct: string;
+  productCode: string;
 
   @ApiProperty()
   name: string;
@@ -24,6 +24,9 @@ export class ProductDtoOut {
 
   @ApiProperty()
   expiryDate: Date;
+
+  @ApiProperty()
+  stockQuantity: number;
 
   @ApiProperty()
   status: boolean;

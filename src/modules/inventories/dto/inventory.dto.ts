@@ -8,19 +8,13 @@ export class InventoryDtoOut {
     product_id: number;
 
     @ApiProperty()
-    quantity: number;
-
-    @ApiProperty()
-    location: string;
+    quantity_in_stock: number;
 
     @ApiProperty()
     note: string;
 
     @ApiProperty()
     warehouse_id: number;
-
-    @ApiProperty()
-    supplier_id: number;
 
     @ApiPropertyOptional()
     created_by: string;

@@ -14,15 +14,16 @@ import { SupplierEntity } from 'src/modules/suppliers/entities/supplier.entity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
 import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
-import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
+// import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
+import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'code_product', unique: true })
-  codeProduct: string;
+  @Column({ name: 'product_code', unique: true })
+  productCode: string;
 
   @Column({ name: 'name', unique: true })
   name: string;
@@ -41,6 +42,9 @@ export class ProductEntity extends BaseEntity {
 
   @Column({ name: 'expiry_date', type: 'timestamptz' })
   expiryDate: Date;
+
+  @Column({ name: 'stock_quantity' })
+  stockQuantity: number;
 
   @Column({ name: 'status', type: 'boolean', default: false })
   status: boolean;
@@ -81,8 +85,11 @@ export class ProductEntity extends BaseEntity {
   // })
   // supplier: SupplierEntity;
 
-  @OneToMany(() => ProductMixtureEntity, (mixture) => mixture.product)
-  productMixtures: ProductMixtureEntity[];
+  // @OneToMany(() => ProductMixtureEntity, (mixture) => mixture.product)
+  // productMixtures: ProductMixtureEntity[];
+
+  @OneToMany(() => CompoundProductEntity, (compound) => compound.product)
+  compoundProducts: CompoundProductEntity[];
 
   @OneToMany(() => ProductImagesEntity, (image) => image.product)
   productImages: ProductImagesEntity[];

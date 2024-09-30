@@ -29,19 +29,14 @@ export class InventoriesService {
       order: {
         id: 'DESC',
       },
-      relations: ['product', 'supplier', 'warehouse'],
+      relations: ['product', 'warehouse'],
       select: {
         id: true,
-        quantity: true,
-        location: true,
+        quantityInStock: true,
         note: true,
         product: {
           name: true,
           purchasePrice: true,
-        },
-        supplier: {
-          name: true,
-          contact: true,
         },
         warehouse: {
           name: true,
@@ -69,19 +64,14 @@ export class InventoriesService {
     order: {
       id: 'DESC',
     },
-    relations: ['product', 'supplier', 'warehouse'],
+    relations: ['product', 'warehouse'],
     select: {
       id: true,
-      quantity: true,
-      location: true,
+      quantityInStock: true,
       note: true,
       product: {
         name: true,
         purchasePrice: true,
-      },
-      supplier: {
-        name: true,
-        contact: true,
       },
       warehouse: {
         name: true,

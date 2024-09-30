@@ -11,15 +11,39 @@ export async function seedPermissions() {
     const permissionRepository = dataSource.getRepository(PermissionEntity);
 
     const permissions = [
-      { name: 'CREATE_USER', description: 'Permission to create user data' },
-      { name: 'READ_USER', description: 'Permission to read user data' },
-      { name: 'WRITE_USER', description: 'Permission to write user data' },
-      { name: 'DELETE_USER', description: 'Permission to delete user data' },
+      { 
+        name: 'CREATE_USER', 
+        description: 'Permission to create user data',
+      },
+      { 
+        name: 'READ_USER', 
+        description: 'Permission to read user data',
+      },
+      {
+        name: 'UPDATE_USER',
+        description: 'Permission to update user data',
+      },
+      { 
+        name: 'DELETE_USER', 
+        description: 'Permission to delete user data',
+      },
 
-      { name: 'read:role', description: 'Permission to read role data' },
-      { name: 'create:role', description: 'Permission to write role data' },
-      { name: 'update:role', description: 'Permission to write role data' },
-      { name: 'delete:role', description: 'Permission to delete role data' },
+      { 
+        name: 'read:role', 
+        description: 'Permission to read role data',
+      },
+      { 
+        name: 'create:role',
+        description: 'Permission to create role data',
+      },
+      { 
+        name: 'update:role', 
+        description: 'Permission to update role data',
+      },
+      { 
+        name: 'delete:role', 
+        description: 'Permission to delete role data',
+      },
 
       {
         name: 'read:permission',
@@ -27,11 +51,11 @@ export async function seedPermissions() {
       },
       {
         name: 'create:permission',
-        description: 'Permission to write permission data',
+        description: 'Permission to create permission data',
       },
       {
         name: 'update:permission',
-        description: 'Permission to write permission data',
+        description: 'Permission to update permission data',
       },
       {
         name: 'delete:permission',
@@ -44,11 +68,11 @@ export async function seedPermissions() {
       },
       {
         name: 'create:user-role',
-        description: 'Permission to write user role data',
+        description: 'Permission to create user role data',
       },
       {
         name: 'update:user-role',
-        description: 'Permission to write user role data',
+        description: 'Permission to update user role data',
       },
       {
         name: 'delete:user-role',
@@ -61,11 +85,11 @@ export async function seedPermissions() {
       },
       {
         name: 'create:role-permission',
-        description: 'Permission to write role permission data',
+        description: 'Permission to create role permission data',
       },
       {
         name: 'update:role-permission',
-        description: 'Permission to write role permission data',
+        description: 'Permission to update role permission data',
       },
       {
         name: 'delete:role-permission',
@@ -78,27 +102,28 @@ export async function seedPermissions() {
       },
       {
         name: 'create:category',
-        description: 'Permission to write category data',
+        description: 'Permission to create category data',
       },
       {
         name: 'update:category',
-        description: 'Permission to write category data',
+        description: 'Permission to update category data',
       },
       {
         name: 'delete:category',
         description: 'Permission to delete category data',
       },
 
-      { name: 'read:product', description: 'Permission to read product data',
-
+      { 
+        name: 'read:product', 
+        description: 'Permission to read product data',
       },
       {
         name: 'create:product',
-        description: 'Permission to write product data',
+        description: 'Permission to create product data',
       },
       {
         name: 'update:product',
-        description: 'Permission to write product data',
+        description: 'Permission to update product data',
       },
       {
         name: 'delete:product',

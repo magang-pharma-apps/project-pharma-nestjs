@@ -16,6 +16,7 @@ import { ResponseFormatter } from 'src/config/response_formatter';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { SupplierDtoOut } from './dto/supplier.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Suppliers')
 @ApiBearerAuth('accessToken')
@@ -43,6 +44,7 @@ export class SuppliersController {
     type: SupplierDtoOut,
   })
 
+  @Permission('read:supplier')
   @Get()
   async findAll() {
     const suppliers = await this.suppliersService.findAll();

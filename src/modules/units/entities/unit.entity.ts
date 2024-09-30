@@ -20,7 +20,7 @@ export class UnitEntity extends BaseEntity{
     @Column({ nullable: true })
     description: string;
 
-    @Column({ type: 'boolean', default: false })
+    @Column({ name: 'status', type: 'boolean', default: false })
     status: boolean;
 
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })

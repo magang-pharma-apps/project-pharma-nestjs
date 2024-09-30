@@ -17,6 +17,7 @@ import { ResponseFormatter } from 'src/config/response_formatter';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { InventoryDtoOut } from './dto/inventory.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Inventories')
 @ApiBearerAuth('accessToken')
@@ -38,6 +39,7 @@ export class InventoriesController {
     type: InventoryDtoOut,
   })
 
+  @Permission('read:inventory')
   @Get()
   async findAll() {
     const inventories = await this.inventoriesService.findAll();

@@ -10,10 +10,10 @@ import {
     PrimaryGeneratedColumn 
 } from "typeorm";
 
-export enum TransactionType {
-    MASUK = 'masuk',
-    KELUAR = 'keluar',
-}
+// export enum TransactionType {
+//     MASUK = 'masuk',
+//     KELUAR = 'keluar',
+// }
 
 @Entity('transactions')
 export class TransactionEntity extends BaseEntity {
@@ -26,8 +26,8 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'quantity' })
     quantity: number;
 
-    @Column({ name: 'total_price' })
-    total_price: number;
+    // @Column({ name: 'total_price' })
+    // total_price: number;
 
     @Column({ name: 'transaction_date' })
     transaction_date: Date;
@@ -35,8 +35,17 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'user_id' })
     user_id: number;
 
-    @Column({ name: 'transaction_type', type: 'enum', enum: TransactionType })
-    transaction_type: TransactionType;
+    // @Column({ name: 'transaction_type', type: 'enum', enum: TransactionType })
+    // transaction_type: TransactionType;
+
+    @Column({ name: 'transaction_type' })
+    transaction_type: string
+
+    @Column({ name: 'category_type'})
+    category_type: string
+
+    @Column({ name: 'note'})
+    note: string
 
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
     deletedAt?: Date;

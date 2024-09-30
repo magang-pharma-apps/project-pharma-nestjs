@@ -12,6 +12,9 @@ export class RoleEntity {
   @Column()
   description: string;
 
+  @Column({ default: false })
+  status: boolean;
+
   @OneToMany(
     () => RolePermissionEntity,
     (rolePermission) => rolePermission.role,

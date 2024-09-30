@@ -7,16 +7,10 @@ export class CreateInventoryDto {
     product_id: number;
 
     @ApiProperty()
-    quantity: number;
-
-    @ApiProperty()
-    location: string;
+    quantity_in_stock: number;
 
     @ApiProperty()
     note: string;
-
-    @ApiProperty()
-    supplier_id: number;
 
     @ApiProperty()
     warehouse_id: number;

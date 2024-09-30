@@ -8,7 +8,10 @@ export class SupplierDtoOut {
     name: string;
 
     @ApiProperty()
-    contact: string;
+    contactNumber: string;
+
+    @ApiProperty()
+    email: string;
 
     @ApiProperty()
     address: string;

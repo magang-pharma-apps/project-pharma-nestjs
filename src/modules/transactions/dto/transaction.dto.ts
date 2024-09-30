@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { TransactionType } from "../entities/transaction.entity";
+// import { TransactionType } from "../entities/transaction.entity";
 
 export class TransactionDtoOut {
     @ApiPropertyOptional()
@@ -14,14 +14,23 @@ export class TransactionDtoOut {
     @ApiProperty()
     quantity: number;
 
-    @ApiProperty()
-    total_price: number;
+    // @ApiProperty()
+    // total_price: number;
 
     @ApiProperty()
     transaction_date: Date;
 
+    // @ApiProperty()
+    // transaction_type: TransactionType;
+
     @ApiProperty()
-    transaction_type: TransactionType; 
+    transaction_type: string;
+    
+    @ApiProperty()
+    category_type: string;
+
+    @ApiProperty()
+    note: string;
 
     @ApiProperty()
     createdAt: Date;

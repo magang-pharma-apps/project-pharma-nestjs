@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { WarehouseDtoOut } from './dto/warehouse.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Warehouse')
 @ApiBearerAuth('accessToken')
@@ -43,6 +44,7 @@ export class WarehouseController {
     type: WarehouseDtoOut,
   })
 
+  @Permission('read:warehouse')
   @Get()
   async findAll() {
     const warehouses = await this.warehouseService.findAll();
