@@ -2,7 +2,6 @@ import { BaseEntity } from "src/config/common/BaseEntity";
 import { UserEntity } from "src/modules/auth/entities/user.entity";
 // import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
-import { SupplierEntity } from "src/modules/suppliers/entities/supplier.entity";
 import { WarehouseEntity } from "src/modules/warehouse/entities/warehouse.entity";
 import { 
     Column, 
@@ -21,17 +20,11 @@ export class InventoryEntity extends BaseEntity {
     @Column({ name: 'product_id' })
     product_id: number;
 
-    @Column({ name: 'quantity' })
-    quantity: number;
-
-    @Column({ name: 'location' })
-    location: string;
+    @Column({ name: 'quantity_in_stock' })
+    quantityInStock: number;
 
     @Column({ name: 'note' })
     note: string;
-
-    @Column ({ name: 'supplier_id' })
-    supplierId: number
 
     @Column ({ name: 'warehouse_id' })
     warehouse_id: number
@@ -49,14 +42,6 @@ export class InventoryEntity extends BaseEntity {
       foreignKeyConstraintName: 'fk_product_id',
     })
     product: ProductEntity;
-
-    @ManyToOne(() => SupplierEntity)
-    @JoinColumn({
-      name: 'supplier_id',
-      referencedColumnName: 'id',
-      foreignKeyConstraintName: 'fk_supplier_id',
-    })
-    supplier: SupplierEntity;
 
     @ManyToOne(() => WarehouseEntity)
     @JoinColumn({

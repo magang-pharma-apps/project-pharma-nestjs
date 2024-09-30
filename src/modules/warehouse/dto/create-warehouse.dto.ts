@@ -5,8 +5,11 @@ export class CreateWarehouseDto {
     name: string;
 
     @ApiProperty()
-    description: string;
+    location: string;
 
     @ApiProperty()
     status: boolean;
+
+    @ApiProperty()
+    supplier_id: number;
 }

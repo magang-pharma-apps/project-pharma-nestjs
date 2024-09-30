@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { TransactionDtoOut } from './dto/transaction.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('accessToken')
@@ -38,6 +39,7 @@ export class TransactionsController {
     type: TransactionDtoOut,
   })
 
+  @Permission('read:transaction')
   @Get()
   async findAll() {
     const transactions = await this.transactionsService.findAll();

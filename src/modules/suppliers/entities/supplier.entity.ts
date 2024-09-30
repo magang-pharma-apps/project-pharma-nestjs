@@ -1,6 +1,7 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { InventoryEntity } from "src/modules/inventories/entities/inventory.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
+import { WarehouseEntity } from "src/modules/warehouse/entities/warehouse.entity";
 import { 
     Column, 
     DeleteDateColumn, 
@@ -17,8 +18,11 @@ export class SupplierEntity extends BaseEntity {
   @Column({ unique: true })
   name: string;
 
-  @Column({ name: 'contact' })
-  contact: string;
+  @Column({ name: 'contact_number' })
+  contactNumber: string;
+
+  @Column({ name: 'email' })
+  email: string;
 
   @Column({ name: 'address' })
   address: string;
@@ -29,6 +33,6 @@ export class SupplierEntity extends BaseEntity {
   // @OneToMany(() => ProductEntity, (product) => product.supplier)
   // products: ProductEntity[];
 
-  @OneToMany(() => InventoryEntity, (inventory) => inventory.supplier)
-  inventories: InventoryEntity[];
+  @OneToMany(() => WarehouseEntity, (warehouse) => warehouse.supplier)
+  warehouse: WarehouseEntity[];
 }

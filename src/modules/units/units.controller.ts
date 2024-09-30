@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { UnitDtoOut } from './dto/unit.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Unit')
 @ApiBearerAuth('accessToken')
@@ -43,6 +44,7 @@ export class UnitsController {
     type: UnitDtoOut,
   })
 
+  @Permission('read:unit')
   @Get()
   async findAll() {
     const units = await this.unitsService.findAll();

@@ -18,6 +18,9 @@ export class UserEntity {
   @Column({ nullable: true })
   avatar?: string;
 
+  @Column({ default: false })
+  status: boolean;
+
   @OneToMany(() => UserRoleEntity, (userRole) => userRole.user)
   userRoles: UserRoleEntity[];
 }

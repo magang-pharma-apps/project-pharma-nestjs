@@ -20,10 +20,31 @@ export class WarehouseService {
 
   async findAll() {
     const warehouses = this.warehouseRepository.find({
+      where: {
+        deletedAt: null,
+      },
       order: {
         id: 'DESC',
       },
+      relations: ['suppliers'],
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        status: true,
+        supplier: {
+          id: true,
+          name: true,
+          contactNumber: true,
+          email: true,
+          address: true,
+        },
+      }
     });
+
+    if (!warehouses) {
+      throw new NotFoundException('Warehouses not found');
+    }
 
     return warehouses;
   }
@@ -32,7 +53,25 @@ export class WarehouseService {
     const warehouse = await this.warehouseRepository.findOne({
       where: {
         id: warehouse_id,
+        deletedAt: null,
       },
+      order: {
+        id: 'DESC',
+      },
+      relations: ['suppliers'],
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        status: true,
+        supplier: {
+          id: true,
+          name: true,
+          contactNumber: true,
+          email: true,
+          address: true,
+        },
+      }
     });
 
     if (!warehouse) {
@@ -55,7 +94,9 @@ export class WarehouseService {
 
     Object.assign(warehouse, data);
 
-    return await this.warehouseRepository.save(warehouse);
+    const updatedWarehouse = await this.warehouseRepository.save(warehouse);
+
+    return updatedWarehouse;
   }
 
   async remove(warehouse_id: number) {
@@ -70,6 +111,8 @@ export class WarehouseService {
       throw new NotFoundException('Warehouse not found');
     }
 
-    return await this.warehouseRepository.softRemove(warehouse);
+    const deletedWarehouse = await this.warehouseRepository.softRemove(warehouse);
+
+    return deletedWarehouse;
   }
 }

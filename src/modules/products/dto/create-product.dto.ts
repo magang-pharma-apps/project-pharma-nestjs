@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
   @ApiProperty()
-  codeProduct: string;
+  productCode: string;
 
   @ApiProperty()
   name: string;
@@ -21,6 +21,9 @@ export class CreateProductDto {
 
   @ApiProperty()
   expiryDate: Date;
+
+  @ApiProperty()
+  stockQuantity: number;
 
   @ApiProperty()
   status: boolean;

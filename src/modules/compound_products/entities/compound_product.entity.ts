@@ -1,4 +1,5 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
+import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { 
     Column, 
@@ -9,20 +10,35 @@ import {
     PrimaryGeneratedColumn 
 } from "typeorm";
 
-@Entity('product_mixtures')
-export class ProductMixtureEntity extends BaseEntity {
+@Entity('compound_products')
+export class CompoundProductEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ name: 'product_id' })
-    product_id: number;
+    productId: number;
 
-    @Column({ name: 'ingredient_product_id' })
-    ingredient_product_id: number;
+    @Column({ name: 'compound_name' })
+    compoundName: string;
+
+    @Column({ name: 'formula_description' })
+    formulaDescription: string;
+
+    @Column({ name: 'compound_price' })
+    compoundPrice: number;
 
     @Column({ name: 'quantity' })
     quantity: number;
 
+    @Column({ name: 'expiry_date' })
+    expiryDate: Date;
+
+    @Column({ name: 'status', type: 'boolean', default: false})
+    status: boolean;
+
+    @Column({ name: 'created_by', nullable: true })
+    createdBy: string;
+    
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
     deletedAt?: Date;
 
@@ -34,11 +50,12 @@ export class ProductMixtureEntity extends BaseEntity {
     })
     product: ProductEntity;
 
-    @ManyToOne(() => ProductEntity)
+    @ManyToOne(() => UserEntity)
     @JoinColumn({
-        name: 'ingredient_product_id',
+        name: 'created_by',
         referencedColumnName: 'id',
-        foreignKeyConstraintName: 'fk_ingredient_product_id',
+        foreignKeyConstraintName: 'fk_user_created_by',
     })
-    ingredientProduct: ProductEntity;
+    creator: UserEntity;
+
 }

@@ -13,7 +13,8 @@ import { InventoriesModule } from './modules/inventories/inventories.module';
 import { WarehouseModule } from './modules/warehouse/warehouse.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { UnitsModule } from './modules/units/units.module';
-import { ProductMixturesModule } from './modules/product_mixtures/product_mixtures.module';
+// import { ProductMixturesModule } from './modules/product_mixtures/product_mixtures.module';
+import { CompoundProductsModule } from './modules/compound_products/compound_products.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -29,7 +30,8 @@ import { ProductMixturesModule } from './modules/product_mixtures/product_mixtur
     WarehouseModule,
     TransactionsModule,
     UnitsModule,
-    ProductMixturesModule,
+    // ProductMixturesModule,
+    CompoundProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
