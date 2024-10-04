@@ -27,9 +27,6 @@ export class SupplierEntity extends BaseEntity {
   @Column({ name: 'address' })
   address: string;
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-  deletedAt?: Date;
-
   // @OneToMany(() => ProductEntity, (product) => product.supplier)
   // products: ProductEntity[];
 

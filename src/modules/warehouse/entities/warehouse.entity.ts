@@ -28,9 +28,6 @@ export class WarehouseEntity extends BaseEntity {
     @Column ({ name: 'supplier_id' })
     supplierId: number
 
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-    deletedAt?: Date;
-
     @OneToMany(() => InventoryEntity, (inventory) => inventory.warehouse)
     inventories: InventoryEntity[];
 

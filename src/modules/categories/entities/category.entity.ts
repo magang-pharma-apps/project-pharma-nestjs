@@ -22,9 +22,6 @@ export class CategoryEntity extends BaseEntity {
   @Column({ name: 'status', type: 'boolean', default: false })
   status: boolean;
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-  deletedAt?: Date;
-
   @OneToMany(() => ProductEntity, (product) => product.category)
   products: ProductEntity[];
 }

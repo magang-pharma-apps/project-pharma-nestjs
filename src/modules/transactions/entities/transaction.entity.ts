@@ -47,9 +47,6 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'note'})
     note: string
 
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-    deletedAt?: Date;
-
     @ManyToOne(() => ProductEntity)
     @JoinColumn({
         name: 'product_id',
