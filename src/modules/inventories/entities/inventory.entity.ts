@@ -32,9 +32,6 @@ export class InventoryEntity extends BaseEntity {
     @Column({ name: 'created_by', nullable: true })
     createdBy: string;
 
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-    deletedAt?: Date;
-
     @ManyToOne(() => ProductEntity)
     @JoinColumn({
       name: 'product_id',

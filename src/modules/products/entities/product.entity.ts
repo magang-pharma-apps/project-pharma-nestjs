@@ -1,6 +1,5 @@
 import {
   Column,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -10,12 +9,12 @@ import {
 import { ProductImagesEntity } from './product-images.entity';
 import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
 import { BaseEntity } from 'src/config/common/BaseEntity';
-import { SupplierEntity } from 'src/modules/suppliers/entities/supplier.entity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
 import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
 // import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
+import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
@@ -58,9 +57,6 @@ export class ProductEntity extends BaseEntity {
   // @Column ({ name: 'supplier_id' })
   // supplierId: number
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-  deletedAt?: Date;
-
   @ManyToOne(() => CategoryEntity)
   @JoinColumn({
     name: 'category_id',
@@ -99,4 +95,7 @@ export class ProductEntity extends BaseEntity {
 
   @OneToMany(() => TransactionEntity, (transaction) => transaction.product)
   transactions: TransactionEntity[];
+
+  @OneToMany(() => StockAdjustmentEntity, (stockAdjustment) => stockAdjustment.product)
+  stockAdjustments: StockAdjustmentEntity[];
 }

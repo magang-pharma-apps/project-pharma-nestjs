@@ -1,13 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { PaginationDto } from 'src/config/common/dto/pagination.dto';
 
-export class RoleDto {
-  @ApiProperty()
-  id: string;
+export class RoleDto extends PaginationDto {
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   description?: string;
 }
 

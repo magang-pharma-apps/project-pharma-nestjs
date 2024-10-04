@@ -15,6 +15,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
 import { UnitsModule } from './modules/units/units.module';
 // import { ProductMixturesModule } from './modules/product_mixtures/product_mixtures.module';
 import { CompoundProductsModule } from './modules/compound_products/compound_products.module';
+import { StockAdjustmentsModule } from './modules/stock_adjustments/stock_adjustments.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -32,6 +33,7 @@ import { CompoundProductsModule } from './modules/compound_products/compound_pro
     UnitsModule,
     // ProductMixturesModule,
     CompoundProductsModule,
+    StockAdjustmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
