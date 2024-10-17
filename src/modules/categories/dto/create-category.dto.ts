@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCategoryDto {
   @ApiProperty()
@@ -7,6 +7,9 @@ export class CreateCategoryDto {
   @ApiProperty()
   description: string;
 
-  @ApiProperty()
-  status: boolean;
+  @ApiPropertyOptional({ description: 'URL of the category image' })
+  categoryImageUrl?: string;  // Kolom opsional
+
+  // @ApiProperty()
+  // status: boolean;
 }

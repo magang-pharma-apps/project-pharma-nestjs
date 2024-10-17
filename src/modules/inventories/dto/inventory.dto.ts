@@ -5,23 +5,14 @@ export class InventoryDtoOut {
     id: number;
 
     @ApiProperty()
-    product_id: number;
+    productId: number;
 
     @ApiProperty()
-    quantity_in_stock: number;
+    warehouseId: number;
+
+    @ApiProperty()
+    quantityInStock: number;
 
     @ApiProperty()
     note: string;
-
-    @ApiProperty()
-    warehouse_id: number;
-
-    @ApiPropertyOptional()
-    created_by: string;
-
-    @ApiProperty()
-    createdAt: Date;
-
-    @ApiProperty()
-    updatedAt: Date;
 }

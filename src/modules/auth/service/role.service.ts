@@ -121,8 +121,8 @@ export class RoleService {
       throw new NotFoundException('Role not found');
     }
 
-    role.isActive = false;
-    role.isInactive = true;
+    // 
+    role.status = false;
 
     const updatedRole = await this.roleRepository.save(role);
 

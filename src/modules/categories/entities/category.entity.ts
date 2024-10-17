@@ -2,7 +2,6 @@ import { BaseEntity } from 'src/config/common/BaseEntity';
 import { ProductEntity } from 'src/modules/products/entities/product.entity';
 import {
   Column,
-  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,8 +18,14 @@ export class CategoryEntity extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ name: 'status', type: 'boolean', default: false })
-  status: boolean;
+  @Column({ name: 'image_url', type: 'varchar', nullable: true })
+  categoryImageUrl: string;
+
+  // @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
+  // localImagePath: string; // Path untuk gambar yang disimpan secara fisik
+
+  // @Column({ name: 'status', type: 'boolean', default: false })
+  // status: boolean;
 
   @OneToMany(() => ProductEntity, (product) => product.category)
   products: ProductEntity[];
