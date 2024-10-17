@@ -10,15 +10,9 @@ export class WarehouseDtoOut {
     @ApiProperty()
     location: string;
 
-    @ApiProperty()
-    status: boolean;
+    // @ApiProperty()
+    // status: boolean;
 
     @ApiProperty()
     supplier_id: number;
-
-    @ApiProperty()
-    createdAt: Date;
-
-    @ApiProperty()
-    updatedAt: Date;
 }

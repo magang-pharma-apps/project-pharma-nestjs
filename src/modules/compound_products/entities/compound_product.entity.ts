@@ -3,7 +3,6 @@ import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { 
     Column, 
-    DeleteDateColumn, 
     Entity, 
     JoinColumn, 
     ManyToOne, 
@@ -33,11 +32,8 @@ export class CompoundProductEntity extends BaseEntity {
     @Column({ name: 'expiry_date' })
     expiryDate: Date;
 
-    @Column({ name: 'status', type: 'boolean', default: false})
-    status: boolean;
-
-    @Column({ name: 'created_by', nullable: true })
-    createdBy: string;
+    // @Column({ name: 'status', type: 'boolean', default: false})
+    // status: boolean;
     
     @ManyToOne(() => ProductEntity)
     @JoinColumn({

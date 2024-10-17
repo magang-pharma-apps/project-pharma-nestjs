@@ -15,7 +15,10 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
 import { UnitsModule } from './modules/units/units.module';
 // import { ProductMixturesModule } from './modules/product_mixtures/product_mixtures.module';
 import { CompoundProductsModule } from './modules/compound_products/compound_products.module';
-import { StockAdjustmentsModule } from './modules/stock_adjustments/stock_adjustments.module';
+// import { StockAdjustmentsModule } from './modules/stock_adjustments/stock_adjustments.module';
+import { CardStockEntriesModule } from './modules/card_stock_entries/card_stock_entries.module';
+import { StockOpnameEntriesModule } from './modules/stock_opname_entries/stock_opname_entries.module';
+import { TransactionDetailsModule } from './modules/transaction_details/transaction_details.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -33,7 +36,10 @@ import { StockAdjustmentsModule } from './modules/stock_adjustments/stock_adjust
     UnitsModule,
     // ProductMixturesModule,
     CompoundProductsModule,
-    StockAdjustmentsModule,
+    // StockAdjustmentsModule,
+    CardStockEntriesModule,
+    StockOpnameEntriesModule,
+    TransactionDetailsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

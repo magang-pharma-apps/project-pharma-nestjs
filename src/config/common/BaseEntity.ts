@@ -24,11 +24,14 @@ export abstract class BaseEntity {
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy: string;
 
-  @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive: boolean;
+  // @Column({ name: 'is_active', type: 'boolean', default: true })
+  // isActive: boolean;
 
-  @Column({ name: 'is_inactive', type: 'boolean', default: false })
-  isInactive: boolean;
+  // @Column({ name: 'is_inactive', type: 'boolean', default: false })
+  // isInactive: boolean;
+
+  @Column({ name: 'status', type: 'boolean', default: true })
+  status: boolean;
 
   @VersionColumn({ name: 'version', nullable: false, default: 1 })
   version: number;
@@ -44,8 +47,8 @@ export abstract class BaseEntity {
   @BeforeUpdate()
   updateUpdatedAt() {
     this.updatedAt = moment().add(7, 'hours').toDate();
-    if (!this.isActive) {
-      this.isInactive = true;
-    }
+    // if (!this.isActive) {
+    //   this.isInactive = true;
+    // }
   }
 }

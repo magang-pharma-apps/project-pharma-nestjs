@@ -5,7 +5,6 @@ import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { WarehouseEntity } from "src/modules/warehouse/entities/warehouse.entity";
 import { 
     Column, 
-    DeleteDateColumn, 
     Entity, 
     JoinColumn, 
     ManyToOne, 
@@ -18,19 +17,16 @@ export class InventoryEntity extends BaseEntity {
     id: number;
 
     @Column({ name: 'product_id' })
-    product_id: number;
+    productId: number;
+    
+    @Column ({ name: 'warehouse_id' })
+    warehouseId: number
 
     @Column({ name: 'quantity_in_stock' })
     quantityInStock: number;
 
     @Column({ name: 'note' })
     note: string;
-
-    @Column ({ name: 'warehouse_id' })
-    warehouse_id: number
-
-    @Column({ name: 'created_by', nullable: true })
-    createdBy: string;
 
     @ManyToOne(() => ProductEntity)
     @JoinColumn({
@@ -48,12 +44,12 @@ export class InventoryEntity extends BaseEntity {
     })
     warehouse: WarehouseEntity;
 
-    @ManyToOne(() => UserEntity)
-    @JoinColumn({
-        name: 'created_by',
-        referencedColumnName: 'id',
-        foreignKeyConstraintName: 'fk_user_created_by',
-    })
-    creator: UserEntity;
+    // @ManyToOne(() => UserEntity)
+    // @JoinColumn({
+    //     name: 'created_by',
+    //     referencedColumnName: 'id',
+    //     foreignKeyConstraintName: 'fk_user_created_by',
+    // })
+    // creator: UserEntity;
 
 }

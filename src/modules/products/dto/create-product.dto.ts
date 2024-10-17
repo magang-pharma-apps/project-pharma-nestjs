@@ -25,8 +25,8 @@ export class CreateProductDto {
   @ApiProperty()
   stockQuantity: number;
 
-  @ApiProperty()
-  status: boolean;
+  // @ApiProperty()
+  // status: boolean;
 
   @ApiProperty()
   categoryId: number;

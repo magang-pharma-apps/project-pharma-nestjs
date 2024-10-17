@@ -6,16 +6,7 @@ export class TransactionDtoOut {
     id: number;
 
     @ApiPropertyOptional()
-    product_id: number;
-
-    @ApiPropertyOptional()
     user_id: number;
-
-    @ApiProperty()
-    quantity: number;
-
-    // @ApiProperty()
-    // total_price: number;
 
     @ApiProperty()
     transaction_date: Date;
@@ -33,8 +24,11 @@ export class TransactionDtoOut {
     note: string;
 
     @ApiProperty()
-    createdAt: Date;
+    tax: number;
 
     @ApiProperty()
-    updatedAt: Date;
+    subTotal: number;
+
+    @ApiProperty()
+    grandTotal: number;
 }

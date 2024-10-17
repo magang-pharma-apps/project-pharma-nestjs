@@ -19,15 +19,6 @@ export class CompoundProductDtoOut {
     @ApiProperty()
     expiry_date: Date;
 
-    @ApiProperty()
-    status: boolean
-
-    @ApiPropertyOptional()
-    created_by: string;
-
-    @ApiProperty()
-    createdAt: Date;
-
-    @ApiProperty()
-    updatedAt: Date;
+    // @ApiProperty()
+    // status: boolean
 }

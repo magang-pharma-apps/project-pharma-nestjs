@@ -1,8 +1,7 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { 
-    Column, 
-    DeleteDateColumn, 
+    Column,  
     Entity, 
     OneToMany, 
     PrimaryGeneratedColumn 
@@ -20,8 +19,8 @@ export class UnitEntity extends BaseEntity{
     @Column({ nullable: true })
     description: string;
 
-    @Column({ name: 'status', type: 'boolean', default: false })
-    status: boolean;
+    // @Column({ name: 'status', type: 'boolean', default: false })
+    // status: boolean;
 
     @OneToMany(() => ProductEntity, (product) => product.unit)
     products: ProductEntity[];
