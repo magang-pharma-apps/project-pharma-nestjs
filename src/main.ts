@@ -5,12 +5,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  
+
   app.enableCors({
     origin: 'http://localhost:5000',
     methods: 'GET, HEAD, POST, PUT, DELETE, PATCH',
     credentials: true,
-  })
+  });
   // Setup validator
   app.useGlobalPipes(
     new ValidationPipe({
@@ -20,8 +20,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Latihan Nest JS')
-    .setDescription('Latihan membuat API menggunakan Nest JS')
+    .setTitle('Inventory Pharmacy App')
+    .setDescription('Dokumentasi API Sistem Management Inventory Farmasi')
     .addBearerAuth(
       {
         description: 'Masukkan token JWT',
