@@ -15,10 +15,4 @@ export class SupplierDtoOut {
 
     @ApiProperty()
     address: string;
-
-    @ApiProperty()
-    createdAt: Date;
-
-    @ApiProperty()
-    updatedAt: Date;
 }

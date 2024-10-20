@@ -1,12 +1,13 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { UserEntity } from "src/modules/auth/entities/user.entity";
+import { CardStockEntryEntity } from "src/modules/card_stock_entries/entities/card_stock_entry.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { 
     Column, 
-    DeleteDateColumn, 
     Entity, 
     JoinColumn, 
     ManyToOne, 
+    OneToMany, 
     PrimaryGeneratedColumn 
 } from "typeorm";
 
@@ -20,20 +21,11 @@ export class TransactionEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: 'product_id' })
-    product_id: number;
-
-    @Column({ name: 'quantity' })
-    quantity: number;
-
-    // @Column({ name: 'total_price' })
-    // total_price: number;
+    @Column({ name: 'user_id' })
+    user_id: number;
 
     @Column({ name: 'transaction_date' })
     transaction_date: Date;
-
-    @Column({ name: 'user_id' })
-    user_id: number;
 
     // @Column({ name: 'transaction_type', type: 'enum', enum: TransactionType })
     // transaction_type: TransactionType;
@@ -47,13 +39,14 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'note'})
     note: string
 
-    @ManyToOne(() => ProductEntity)
-    @JoinColumn({
-        name: 'product_id',
-        referencedColumnName: 'id',
-        foreignKeyConstraintName: 'fk_product_id',
-    })
-    product: ProductEntity;
+    @Column({ name: 'tax'})
+    tax: number
+
+    @Column({ name: 'sub_total'})
+    subTotal: number
+
+    @Column({ name: 'grand_total'})
+    grandTotal: number
 
     @ManyToOne(() => UserEntity)
     @JoinColumn({
@@ -62,4 +55,7 @@ export class TransactionEntity extends BaseEntity {
         foreignKeyConstraintName: 'fk_user_id',
     })
     user: UserEntity;
+
+    @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.transaction)
+    cardStockEntries: CardStockEntryEntity[];
 }

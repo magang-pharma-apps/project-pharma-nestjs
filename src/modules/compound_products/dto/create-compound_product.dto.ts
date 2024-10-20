@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
+import { ApiProperty } from "@nestjs/swagger"
 
 export class CreateCompoundProductDto {
 
@@ -20,9 +20,6 @@ export class CreateCompoundProductDto {
     @ApiProperty()
     expiry_date: Date
 
-    @ApiProperty()
-    status: boolean
-
-    @ApiPropertyOptional()
-    created_by: string;
+    // @ApiProperty()
+    // status: boolean
 }

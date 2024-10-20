@@ -9,13 +9,10 @@ export class CategoryDtoOut {
 
   @ApiProperty()
   description: string;
+
+  @ApiPropertyOptional({ description: 'URL of the category image' })
+  categoryImageUrl?: string;  // Kolom opsional
   
-  @ApiProperty()
-  status: boolean;
-
-  @ApiProperty()
-  createdAt: Date;
-
-  @ApiProperty()
-  updatedAt: Date;
+  // @ApiProperty()
+  // status: boolean;
 }

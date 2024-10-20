@@ -10,12 +10,6 @@ export class UnitDtoOut {
     @ApiProperty()
     description: string;
 
-    @ApiProperty()
-    status: boolean;
-
-    @ApiProperty()
-    createdAt: Date;
-
-    @ApiProperty()
-    updatedAt: Date;
+    // @ApiProperty()
+    // status: boolean;
 }

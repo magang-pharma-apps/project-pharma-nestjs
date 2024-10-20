@@ -2,8 +2,7 @@ import { BaseEntity } from "src/config/common/BaseEntity";
 import { InventoryEntity } from "src/modules/inventories/entities/inventory.entity";
 import { SupplierEntity } from "src/modules/suppliers/entities/supplier.entity";
 import { 
-    Column, 
-    DeleteDateColumn, 
+    Column,  
     Entity, 
     JoinColumn, 
     ManyToOne, 
@@ -22,8 +21,8 @@ export class WarehouseEntity extends BaseEntity {
     @Column({ nullable: true })
     location: string;
 
-    @Column({ name: 'status', type: 'boolean', default: false })
-    status: boolean;
+    // @Column({ name: 'status', type: 'boolean', default: false })
+    // status: boolean;
 
     @Column ({ name: 'supplier_id' })
     supplierId: number

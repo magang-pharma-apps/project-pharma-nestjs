@@ -26,15 +26,6 @@ export class TransactionsService {
       order: {
         id: 'DESC',
       },
-      relations: ['product'],
-      select: {
-        id: true,
-        quantity: true,
-        product: {
-          name: true,
-          purchasePrice: true,
-        },
-      },
     });
 
     if (!transactions) {
@@ -52,16 +43,6 @@ export class TransactionsService {
       },
       order: {
         id: 'DESC',
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        quantity: true,
-
-        product: {
-          name: true,
-          purchasePrice: true,
-        },
       },
     });
 

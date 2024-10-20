@@ -3,16 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateTransactionDto {
     @ApiProperty()
-    product_id: number;
-
-    @ApiProperty()
     user_id: number;
-
-    @ApiProperty()
-    quantity: number;
-
-    // @ApiProperty()
-    // total_price: number;
 
     @ApiProperty()
     transaction_date: Date;
@@ -28,4 +19,13 @@ export class CreateTransactionDto {
 
     @ApiProperty()
     note: string;
+
+    @ApiProperty()
+    tax: number;
+
+    @ApiProperty()
+    subTotal: number;
+
+    @ApiProperty()
+    grandTotal: number;
 }

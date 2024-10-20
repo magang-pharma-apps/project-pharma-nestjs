@@ -14,7 +14,8 @@ import { TransactionEntity } from 'src/modules/transactions/entities/transaction
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
 // import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
-import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
+// import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
+import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
@@ -45,8 +46,8 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'stock_quantity' })
   stockQuantity: number;
 
-  @Column({ name: 'status', type: 'boolean', default: false })
-  status: boolean;
+  // @Column({ name: 'status', type: 'boolean', default: false })
+  // status: boolean;
 
   @Column({ name: 'category_id' })
   categoryId: number;
@@ -93,9 +94,12 @@ export class ProductEntity extends BaseEntity {
   @OneToMany(() => InventoryEntity, (inventory) => inventory.product)
   inventories: InventoryEntity[];
 
-  @OneToMany(() => TransactionEntity, (transaction) => transaction.product)
-  transactions: TransactionEntity[];
+  // @OneToMany(() => TransactionEntity, (transaction) => transaction.product)
+  // transactions: TransactionEntity[];
 
-  @OneToMany(() => StockAdjustmentEntity, (stockAdjustment) => stockAdjustment.product)
-  stockAdjustments: StockAdjustmentEntity[];
+  // @OneToMany(() => StockAdjustmentEntity, (stockAdjustment) => stockAdjustment.product)
+  // stockAdjustments: StockAdjustmentEntity[];
+
+  @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.product)
+  cardStockEntries: CardStockEntryEntity[];
 }

@@ -28,8 +28,8 @@ export class ProductDtoOut {
   @ApiProperty()
   stockQuantity: number;
 
-  @ApiProperty()
-  status: boolean;
+  // @ApiProperty()
+  // status: boolean;
 
   @ApiProperty()
   categoryId: number;
@@ -39,10 +39,4 @@ export class ProductDtoOut {
 
   // @ApiProperty()
   // supplierId: number;
-
-  @ApiProperty()
-  createdAt: Date;
-
-  @ApiProperty()
-  updatedAt: Date;
 }
