@@ -49,11 +49,17 @@ export class ProductEntity extends BaseEntity {
   // @Column({ name: 'status', type: 'boolean', default: false })
   // status: boolean;
 
-  @Column({ name: 'category_id' })
+  @Column({ name: 'category_id', nullable: true })
   categoryId: number;
 
-  @Column({ name: 'unit_id' })
+  @Column({ name: 'unit_id', nullable: true })
   unitId: number;
+
+  @Column({ name: 'image_url', type: 'varchar', nullable: true })
+  productImageUrl: string;
+
+  @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
+  localImagePath: string; // Path untuk gambar yang disimpan secara fisik
 
   // @Column ({ name: 'supplier_id' })
   // supplierId: number

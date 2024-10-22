@@ -4,8 +4,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { Repository } from 'typeorm';
-import { join } from 'path';
-import { writeFile } from 'fs/promises';
+import * as fs from 'fs';
+import * as path from 'path';
 import axios from 'axios';
 
 @Injectable()
@@ -19,7 +19,40 @@ export class ProductsService {
   async create(data: CreateProductDto) {
     const product = this.productRepository.create(data);
 
+    // Unduh gambar dari URL dan simpan ke direktori lokal
+    if (data.productImageUrl) {
+      const imagePath = await this.downloadImage(data.productImageUrl);
+      product.localImagePath = imagePath; // Simpan path lokal gambar
+    }
+
     return await this.productRepository.save(product);
+  }
+
+  //Fungsi untuk mengunduh gambar
+  private async downloadImage(imageUrl: string): Promise<string> {
+    const response = await axios({
+      url: imageUrl,
+      method: 'GET',
+      responseType: 'stream',
+    });
+
+    const fileName = `product_${Date.now()}.jpg`; // Nama file unik
+    const uploadDir = path.join(process.cwd(), 'public/uploads/image'); // Gunakan path dari root proyek
+
+    // Cek apakah direktori sudah ada, jika tidak buat direktori
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const savePath = path.join(uploadDir, fileName);
+    const writer = fs.createWriteStream(savePath);
+
+    response.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', () => resolve(`/uploads/image/${fileName}`)); // Return path relatif
+      writer.on('error', reject);
+    });
   }
 
   async findAll() {

@@ -5,6 +5,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   VersionColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import * as moment from 'moment';
 
@@ -15,7 +16,7 @@ export abstract class BaseEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz', nullable: true })
   updatedAt: Date;
 
-  @Column({ name: 'deleted_at', type: 'timestamptz', nullable: true })
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
   deletedAt: Date;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
