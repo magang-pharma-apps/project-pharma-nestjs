@@ -10,12 +10,19 @@ import { ProductImagesEntity } from './product-images.entity';
 import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
 import { BaseEntity } from 'src/config/common/BaseEntity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
-import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+// import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
 // import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
 // import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
+
+// Definisi enum untuk DrugClass
+export enum DrugClass {
+  OBAT_BEBAS = 'obat bebas',
+  OBAT_BEBAS_TERBATAS = 'obat bebas terbatas',
+  OBAT_KERAS = 'obat keras',
+}
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
@@ -61,8 +68,8 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
   localImagePath: string; // Path untuk gambar yang disimpan secara fisik
 
-  // @Column ({ name: 'supplier_id' })
-  // supplierId: number
+  @Column({ name: 'drug_class', type: 'enum', enum: DrugClass, nullable: true })
+  drugClass: DrugClass;
 
   @ManyToOne(() => CategoryEntity)
   @JoinColumn({

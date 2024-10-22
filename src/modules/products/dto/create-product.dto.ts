@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { DrugClass } from '../entities/product.entity';
 
 export class CreateProductDto {
   @ApiProperty()
@@ -37,6 +38,6 @@ export class CreateProductDto {
   @ApiPropertyOptional({ description: 'URL of the product image' })
   productImageUrl?: string;  // Kolom opsional
 
-  // @ApiProperty()
-  // supplierId: number;
+  @ApiProperty()
+  drugClass?: DrugClass; // Ubah tipe ini dari string menjadi DrugClass
 }
