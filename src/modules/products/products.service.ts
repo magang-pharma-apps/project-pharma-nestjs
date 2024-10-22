@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -57,78 +57,75 @@ export class ProductsService {
 
   async findAll() {
     const products = await this.productRepository.find({
-      where: {
-        deletedAt: null,
-        category: {
-          status: true,
-        },
-      },
+      // where: {
+      //   deletedAt: null,
+      //   category: {
+      //     status: true,
+      //   },
+      // },
       order: {
         id: 'DESC',
       },
-      relations: ['category', 'unit', 'productImages'],
-      select: {
-        id: true,
-        name: true,
-        purchasePrice: true,
-        category: {
-          name: true,
-          status: true,
-        },
-        unit: {
-          name: true,
-          status: true,
-        },
-        // supplier: {
-        //   name: true,
-        //   contact: true,
-        // },
-        productImages: {
-          image: true,
-        },
-      },
-    });
+    //   relations: ['category', 'unit', 'productImages'],
+    //   select: {
+    //     id: true,
+    //     name: true,
+    //     purchasePrice: true,
+    //     category: {
+    //       name: true,
+    //       status: true,
+    //     },
+    //     unit: {
+    //       name: true,
+    //       status: true,
+    //     },
+    //     productImages: {
+    //       image: true,
+    //     },
+    //   },
+     });
 
-    if (!products) {
-      throw new NotFoundException('Products not found');
-    }
+    // if (!products) {
+    //   throw new NotFoundException('Products not found');
+    // }
 
     return products;
   }
 
-  async findOne(id: number) {
+  async findOne(product_id: number) {
     const product = await this.productRepository.findOne({
       where: {
-        id: id,
-        deletedAt: null,
-        category: {
-          status: true,
+        id: product_id,
+        // id: id,
+        // deletedAt: null,
+        // category: {
+        //   status: true,
         },
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['category','unit', 'productImages'],
-      select: {
-        id: true,
-        name: true,
-        purchasePrice: true,
-        category: {
-          name: true,
-          status: true,
-        },
-        unit: {
-          name: true,
-          status: true,
-        },
-        // supplier: {
-        //   name: true,
-        //   contact: true,
-        // },
-        productImages: {
-          image: true,
-        },
-      },
+      // },
+      // order: {
+      //   id: 'DESC',
+      // },
+      // relations: ['category','unit', 'productImages'],
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   purchasePrice: true,
+      //   category: {
+      //     name: true,
+      //     status: true,
+      //   },
+      //   unit: {
+      //     name: true,
+      //     status: true,
+      //   },
+      //   // supplier: {
+      //   //   name: true,
+      //   //   contact: true,
+      //   // },
+      //   productImages: {
+      //     image: true,
+      //   },
+      // },
     });
 
     if (!product) {
@@ -138,11 +135,12 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: number, data: UpdateProductDto) {
+  async update(product_id: number, data: UpdateProductDto) {
     const product = await this.productRepository.findOne({
       where: {
-        id: id,
-        deletedAt: null,
+        id: product_id,
+        // id: id,
+        // deletedAt: null,
       },
     });
 
@@ -152,16 +150,19 @@ export class ProductsService {
 
     Object.assign(product, data);
 
-    const updatedProduct = await this.productRepository.save(product);
+    // const updatedProduct = await this.productRepository.save(product);
 
-    return updatedProduct;
+    // return updatedProduct;
+
+    return await this.productRepository.save(product);
   }
 
-  async remove(id: number) {
+  async remove(product_id: number) {
     const product = await this.productRepository.findOne({
       withDeleted: true,
       where: {
-        id: id,
+        // id: id,
+        id: product_id,
       },
     });
 
@@ -169,8 +170,10 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
-    const deletedProduct = await this.productRepository.softRemove(product);
+    // const deletedProduct = await this.productRepository.softRemove(product);
 
-    return deletedProduct;
+    // return deletedProduct;
+
+    return await this.productRepository.softRemove(product);
   }
 }
