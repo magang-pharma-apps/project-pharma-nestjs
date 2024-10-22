@@ -21,8 +21,8 @@ export class CategoryEntity extends BaseEntity {
   @Column({ name: 'image_url', type: 'varchar', nullable: true })
   categoryImageUrl: string;
 
-  // @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
-  // localImagePath: string; // Path untuk gambar yang disimpan secara fisik
+  @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
+  localImagePath: string; // Path untuk gambar yang disimpan secara fisik
 
   // @Column({ name: 'status', type: 'boolean', default: false })
   // status: boolean;

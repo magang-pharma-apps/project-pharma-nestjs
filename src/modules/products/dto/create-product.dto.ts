@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateProductDto {
   @ApiProperty()
@@ -33,6 +33,9 @@ export class CreateProductDto {
 
   @ApiProperty()
   unitId: number;
+
+  @ApiPropertyOptional({ description: 'URL of the product image' })
+  productImageUrl?: string;  // Kolom opsional
 
   // @ApiProperty()
   // supplierId: number;

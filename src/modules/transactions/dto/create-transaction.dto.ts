@@ -1,8 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 // import { TransactionType } from "../entities/transaction.entity";
 
+// export class transactiondetail {
+//     @
+// }
+
 export class CreateTransactionDto {
-    @ApiProperty()
+    @ApiPropertyOptional()
     user_id: number;
 
     @ApiProperty()
@@ -28,4 +32,8 @@ export class CreateTransactionDto {
 
     @ApiProperty()
     grandTotal: number;
+
+    // @ApiProperty()
+    // detail: transactiondetail[];
+
 }

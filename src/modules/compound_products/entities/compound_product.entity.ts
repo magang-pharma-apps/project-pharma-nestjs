@@ -17,6 +17,9 @@ export class CompoundProductEntity extends BaseEntity {
     @Column({ name: 'product_id' })
     productId: number;
 
+    @Column({ name: 'user_id' })
+    user_id: number;
+
     @Column({ name: 'compound_name' })
     compoundName: string;
 
@@ -43,12 +46,20 @@ export class CompoundProductEntity extends BaseEntity {
     })
     product: ProductEntity;
 
+    // @ManyToOne(() => UserEntity)
+    // @JoinColumn({
+    //     name: 'created_by',
+    //     referencedColumnName: 'id',
+    //     foreignKeyConstraintName: 'fk_user_created_by',
+    // })
+    // creator: UserEntity;
+
     @ManyToOne(() => UserEntity)
     @JoinColumn({
-        name: 'created_by',
+    name: 'user_id',
         referencedColumnName: 'id',
-        foreignKeyConstraintName: 'fk_user_created_by',
+        foreignKeyConstraintName: 'fk_user_id',
     })
-    creator: UserEntity;
+    user: UserEntity;
 
 }

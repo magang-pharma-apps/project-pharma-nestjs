@@ -7,6 +7,9 @@ export class CompoundProductDtoOut {
     @ApiPropertyOptional()
     product_id: number;
 
+    @ApiPropertyOptional()
+    user_id: number;
+
     @ApiProperty()
     compound_name: string;
 
