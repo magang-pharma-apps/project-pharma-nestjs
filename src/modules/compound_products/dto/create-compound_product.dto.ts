@@ -1,6 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 
 export class CreateCompoundProductDto {
+
+    @ApiPropertyOptional()
+    user_id: number;
 
     @ApiProperty()
     product_id: number

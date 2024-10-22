@@ -16,7 +16,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Inventory Pharmacy App')
-    .setDescription('Dokumentasi API Sistem Management Inventory Farmasi')
+    .setDescription('Dokumentasi API menggunakan Nest JS')
     .addBearerAuth(
       {
         description: 'Masukkan token JWT',
@@ -28,7 +28,7 @@ async function bootstrap() {
       'accessToken',
     )
     .setVersion('1.0')
-    .addTag('Latihan')
+    .addTag('Inventory Pharmacy App')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
