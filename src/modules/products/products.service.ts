@@ -95,7 +95,9 @@ export class ProductsService {
       where: {
         id: id,
         deletedAt: null,
-        status: true,
+        category : {
+          status: true,
+        },
       },
       order: {
         id: 'DESC',
