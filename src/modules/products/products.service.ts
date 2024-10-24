@@ -59,7 +59,9 @@ export class ProductsService {
     const products = await this.productRepository.find({
       where: {
         deletedAt: null,
-        status: true,
+        category: {
+          status: true,
+        },      
       },
       order: {
         id: 'DESC',
@@ -149,8 +151,6 @@ export class ProductsService {
     const updatedProduct = await this.productRepository.save(product);
 
     return updatedProduct;
-
-    //return await this.productRepository.save(product);
   }
 
   async remove(id: number) {
@@ -168,7 +168,5 @@ export class ProductsService {
     const deletedProduct = await this.productRepository.softRemove(product);
 
     return deletedProduct;
-
-    //return await this.productRepository.softRemove(product);
   }
 }

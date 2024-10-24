@@ -19,9 +19,9 @@ import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/ca
 
 // Definisi enum untuk DrugClass
 export enum DrugClass {
-  OBAT_BEBAS = 'obat bebas',
-  OBAT_BEBAS_TERBATAS = 'obat bebas terbatas',
-  OBAT_KERAS = 'obat keras',
+  OBAT_BEBAS = 'OBAT_BEBAS',
+  OBAT_BEBAS_TERBATAS = 'OBAT_BEBAS_TERBATAS',
+  OBAT_KERAS = 'OBAT_KERAS',
 }
 
 @Entity('products')
@@ -53,9 +53,6 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'stock_quantity' })
   stockQuantity: number;
 
-  // @Column({ name: 'status', type: 'boolean', default: false })
-  // status: boolean;
-
   @Column({ name: 'category_id', nullable: true })
   categoryId: number;
 
@@ -86,17 +83,6 @@ export class ProductEntity extends BaseEntity {
     foreignKeyConstraintName: 'fk_unit_id',
   })
   unit: UnitEntity;
-
-  // @ManyToOne(() => SupplierEntity)
-  // @JoinColumn({
-  //   name: 'supplier_id',
-  //   referencedColumnName: 'id',
-  //   foreignKeyConstraintName: 'fk_supplier_id',
-  // })
-  // supplier: SupplierEntity;
-
-  // @OneToMany(() => ProductMixtureEntity, (mixture) => mixture.product)
-  // productMixtures: ProductMixtureEntity[];
 
   @OneToMany(() => CompoundProductEntity, (compound) => compound.product)
   compoundProducts: CompoundProductEntity[];
