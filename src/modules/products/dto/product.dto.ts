@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { DrugClass } from '../entities/product.entity';
 
 export class ProductDtoOut {
   @ApiPropertyOptional()
@@ -13,9 +14,6 @@ export class ProductDtoOut {
   @ApiProperty()
   description: string;
 
-  // @ApiProperty()
-  // price: number;
-
   @ApiProperty()
   purchasePrice: number;
 
@@ -28,15 +26,15 @@ export class ProductDtoOut {
   @ApiProperty()
   stockQuantity: number;
 
-  // @ApiProperty()
-  // status: boolean;
-
   @ApiProperty()
   categoryId: number;
 
   @ApiProperty()
   unitId: number;
 
-  // @ApiProperty()
-  // supplierId: number;
+  @ApiPropertyOptional({ description: 'URL of the product image' })
+  productImageUrl?: string;
+
+  @ApiPropertyOptional()
+  drugClass?: DrugClass;
 }

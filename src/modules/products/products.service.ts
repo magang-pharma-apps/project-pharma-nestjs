@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -59,9 +59,7 @@ export class ProductsService {
     const products = await this.productRepository.find({
       where: {
         deletedAt: null,
-        category: {
-          status: true,
-        },
+        status: true,
       },
       order: {
         id: 'DESC',
@@ -79,15 +77,11 @@ export class ProductsService {
           name: true,
           status: true,
         },
-        // supplier: {
-        //   name: true,
-        //   contact: true,
-        // },
         productImages: {
           image: true,
         },
       },
-    });
+     });
 
     if (!products) {
       throw new NotFoundException('Products not found');
@@ -101,7 +95,7 @@ export class ProductsService {
       where: {
         id: id,
         deletedAt: null,
-        category: {
+        category : {
           status: true,
         },
       },
@@ -155,6 +149,8 @@ export class ProductsService {
     const updatedProduct = await this.productRepository.save(product);
 
     return updatedProduct;
+
+    //return await this.productRepository.save(product);
   }
 
   async remove(id: number) {
@@ -172,5 +168,7 @@ export class ProductsService {
     const deletedProduct = await this.productRepository.softRemove(product);
 
     return deletedProduct;
+
+    //return await this.productRepository.softRemove(product);
   }
 }
