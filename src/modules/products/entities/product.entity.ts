@@ -10,18 +10,18 @@ import { ProductImagesEntity } from './product-images.entity';
 import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
 import { BaseEntity } from 'src/config/common/BaseEntity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
-// import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
-// import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
-// import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
+// import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+// import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
+// import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 
 // Definisi enum untuk DrugClass
 export enum DrugClass {
-  OBAT_BEBAS = 'OBAT_BEBAS',
-  OBAT_BEBAS_TERBATAS = 'OBAT_BEBAS_TERBATAS',
-  OBAT_KERAS = 'OBAT_KERAS',
+  OBAT_BEBAS = 'Obat Bebas',
+  OBAT_BEBAS_TERBATAS = 'Obat Bebas Terbatas',
+  OBAT_KERAS = 'Obat Keras',
 }
 
 @Entity('products')
