@@ -21,6 +21,7 @@ import { StockOpnameEntriesModule } from './modules/stock_opname_entries/stock_o
 import { TransactionDetailsModule } from './modules/transaction_details/transaction_details.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { PrescriptionsModule } from './modules/prescriptions/prescriptions.module';
+import { DoctorsModule } from './modules/doctors/doctors.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -44,6 +45,7 @@ import { PrescriptionsModule } from './modules/prescriptions/prescriptions.modul
     TransactionDetailsModule,
     CustomersModule,
     PrescriptionsModule,
+    DoctorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

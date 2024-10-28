@@ -38,9 +38,6 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  // @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
-  // price: number;
-
   @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
   purchasePrice: number;
 

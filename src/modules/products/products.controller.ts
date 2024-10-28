@@ -19,9 +19,6 @@ import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { ProductDtoOut } from './dto/product.dto';
 import { Permission } from 'src/decorators/requires-permission.decorator';
-import axios from 'axios';
-import { join } from 'path';
-import { writeFile } from 'fs/promises';
 
 @ApiTags('Product')
 @ApiBearerAuth('accessToken')

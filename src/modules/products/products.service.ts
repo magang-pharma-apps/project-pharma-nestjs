@@ -69,8 +69,15 @@ export class ProductsService {
       relations: ['category', 'unit', 'productImages'],
       select: {
         id: true,
+        productCode: true,
         name: true,
+        description: true,
         purchasePrice: true,
+        sellingPrice: true,
+        expiryDate: true,
+        stockQuantity: true,
+        productImageUrl: true,
+        drugClass: true,
         category: {
           name: true,
           status: true,
@@ -78,9 +85,6 @@ export class ProductsService {
         unit: {
           name: true,
           status: true,
-        },
-        productImages: {
-          image: true,
         },
       },
      });
@@ -107,8 +111,15 @@ export class ProductsService {
       relations: ['category','unit', 'productImages'],
       select: {
         id: true,
+        productCode: true,
         name: true,
+        description: true,
         purchasePrice: true,
+        sellingPrice: true,
+        expiryDate: true,
+        stockQuantity: true,
+        productImageUrl: true,
+        drugClass: true,
         category: {
           name: true,
           status: true,
@@ -116,13 +127,6 @@ export class ProductsService {
         unit: {
           name: true,
           status: true,
-        },
-        // supplier: {
-        //   name: true,
-        //   contact: true,
-        // },
-        productImages: {
-          image: true,
         },
       },
     });
