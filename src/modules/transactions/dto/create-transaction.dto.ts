@@ -12,9 +12,6 @@ export class CreateTransactionDto {
     @ApiProperty()
     transaction_date: Date;
 
-    // @ApiProperty()
-    // transaction_type: TransactionType; 
-
     @ApiProperty()
     transaction_type: string;
 
