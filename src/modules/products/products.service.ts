@@ -59,7 +59,9 @@ export class ProductsService {
     const products = await this.productRepository.find({
       where: {
         deletedAt: null,
-        status: true,
+        category: {
+          status: true,
+        },      
       },
       order: {
         id: 'DESC',
@@ -67,8 +69,15 @@ export class ProductsService {
       relations: ['category', 'unit', 'productImages'],
       select: {
         id: true,
+        productCode: true,
         name: true,
+        description: true,
         purchasePrice: true,
+        sellingPrice: true,
+        expiryDate: true,
+        stockQuantity: true,
+        productImageUrl: true,
+        drugClass: true,
         category: {
           name: true,
           status: true,
@@ -76,9 +85,6 @@ export class ProductsService {
         unit: {
           name: true,
           status: true,
-        },
-        productImages: {
-          image: true,
         },
       },
      });
@@ -105,8 +111,15 @@ export class ProductsService {
       relations: ['category','unit', 'productImages'],
       select: {
         id: true,
+        productCode: true,
         name: true,
+        description: true,
         purchasePrice: true,
+        sellingPrice: true,
+        expiryDate: true,
+        stockQuantity: true,
+        productImageUrl: true,
+        drugClass: true,
         category: {
           name: true,
           status: true,
@@ -114,13 +127,6 @@ export class ProductsService {
         unit: {
           name: true,
           status: true,
-        },
-        // supplier: {
-        //   name: true,
-        //   contact: true,
-        // },
-        productImages: {
-          image: true,
         },
       },
     });
@@ -149,8 +155,6 @@ export class ProductsService {
     const updatedProduct = await this.productRepository.save(product);
 
     return updatedProduct;
-
-    //return await this.productRepository.save(product);
   }
 
   async remove(id: number) {
@@ -168,7 +172,5 @@ export class ProductsService {
     const deletedProduct = await this.productRepository.softRemove(product);
 
     return deletedProduct;
-
-    //return await this.productRepository.softRemove(product);
   }
 }

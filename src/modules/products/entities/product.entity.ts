@@ -10,18 +10,18 @@ import { ProductImagesEntity } from './product-images.entity';
 import { CategoryEntity } from 'src/modules/categories/entities/category.entity';
 import { BaseEntity } from 'src/config/common/BaseEntity';
 import { InventoryEntity } from 'src/modules/inventories/entities/inventory.entity';
-// import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
-// import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
-// import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
+// import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+// import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
+// import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 
 // Definisi enum untuk DrugClass
 export enum DrugClass {
-  OBAT_BEBAS = 'obat bebas',
-  OBAT_BEBAS_TERBATAS = 'obat bebas terbatas',
-  OBAT_KERAS = 'obat keras',
+  OBAT_BEBAS = 'Obat Bebas',
+  OBAT_BEBAS_TERBATAS = 'Obat Bebas Terbatas',
+  OBAT_KERAS = 'Obat Keras',
 }
 
 @Entity('products')
@@ -38,9 +38,6 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  // @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2 })
-  // price: number;
-
   @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
   purchasePrice: number;
 
@@ -52,9 +49,6 @@ export class ProductEntity extends BaseEntity {
 
   @Column({ name: 'stock_quantity' })
   stockQuantity: number;
-
-  // @Column({ name: 'status', type: 'boolean', default: false })
-  // status: boolean;
 
   @Column({ name: 'category_id', nullable: true })
   categoryId: number;
@@ -86,17 +80,6 @@ export class ProductEntity extends BaseEntity {
     foreignKeyConstraintName: 'fk_unit_id',
   })
   unit: UnitEntity;
-
-  // @ManyToOne(() => SupplierEntity)
-  // @JoinColumn({
-  //   name: 'supplier_id',
-  //   referencedColumnName: 'id',
-  //   foreignKeyConstraintName: 'fk_supplier_id',
-  // })
-  // supplier: SupplierEntity;
-
-  // @OneToMany(() => ProductMixtureEntity, (mixture) => mixture.product)
-  // productMixtures: ProductMixtureEntity[];
 
   @OneToMany(() => CompoundProductEntity, (compound) => compound.product)
   compoundProducts: CompoundProductEntity[];

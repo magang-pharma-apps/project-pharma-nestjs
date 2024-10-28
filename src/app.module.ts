@@ -19,6 +19,9 @@ import { CompoundProductsModule } from './modules/compound_products/compound_pro
 import { CardStockEntriesModule } from './modules/card_stock_entries/card_stock_entries.module';
 import { StockOpnameEntriesModule } from './modules/stock_opname_entries/stock_opname_entries.module';
 import { TransactionDetailsModule } from './modules/transaction_details/transaction_details.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { PrescriptionsModule } from './modules/prescriptions/prescriptions.module';
+import { DoctorsModule } from './modules/doctors/doctors.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -40,6 +43,9 @@ import { TransactionDetailsModule } from './modules/transaction_details/transact
     CardStockEntriesModule,
     StockOpnameEntriesModule,
     TransactionDetailsModule,
+    CustomersModule,
+    PrescriptionsModule,
+    DoctorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
