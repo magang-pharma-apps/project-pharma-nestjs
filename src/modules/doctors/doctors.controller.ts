@@ -1,34 +1,91 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Patch, 
+  Param, 
+  Delete, 
+  UseGuards,
+  HttpStatus
+} from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
+import { ResponseFormatter } from 'src/config/response_formatter';
+import { DoctorDtoOut } from './dto/doctor.dto';
 
+@ApiTags('Doctor')
+@ApiBearerAuth('accessToken')
 @Controller('doctors')
+@UseGuards(AuthGuard)
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Doctor data',
+    type: CreateDoctorDto
+  })
+
   @Post()
-  create(@Body() createDoctorDto: CreateDoctorDto) {
-    return this.doctorsService.create(createDoctorDto);
+  async create(@Body() createDoctorDto: CreateDoctorDto) {
+    const doctor = await this.doctorsService.create(createDoctorDto);
+
+    return new ResponseFormatter(doctor, 'Doctor created');
   }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Doctor data',
+    type: DoctorDtoOut
+  })
 
   @Get()
-  findAll() {
-    return this.doctorsService.findAll();
+  async findAll() {
+    const doctors = await this.doctorsService.findAll();
+
+    return new ResponseFormatter(doctors, 'Doctors found');
   }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Doctor data',
+    type: DoctorDtoOut
+  })
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.doctorsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const doctor = await this.doctorsService.findOne(+id);
+
+    return new ResponseFormatter(doctor, 'Doctor found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Doctor data',
+    type: UpdateDoctorDto
+  })
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
-    return this.doctorsService.update(+id, updateDoctorDto);
+  async update(
+    @Param('id') id: string, 
+    @Body() updateDoctorDto: UpdateDoctorDto,
+  ) {
+    const doctor = await this.doctorsService.update(
+      +id, 
+      updateDoctorDto,
+    );
+
+    return new ResponseFormatter(doctor, 'Doctor updated');
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.doctorsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const doctor = await this.doctorsService.remove(+id);
+
+    return new ResponseFormatter(doctor, 'Doctor deleted');
   }
 }
