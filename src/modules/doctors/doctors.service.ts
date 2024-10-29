@@ -1,26 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DoctorEntity } from './entities/doctor.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DoctorsService {
-  create(createDoctorDto: CreateDoctorDto) {
-    return 'This action adds a new doctor';
+  constructor(
+    @InjectRepository(DoctorEntity)
+    private readonly doctorsRepository: Repository<DoctorEntity>,
+  ) {}
+
+  async create(data: CreateDoctorDto) {
+    const doctor = this.doctorsRepository.create(data);
+
+    return await this.doctorsRepository.save(doctor);
   }
 
-  findAll() {
-    return `This action returns all doctors`;
+  async findAll() {
+    const doctors = await this.doctorsRepository.find({
+      order: {
+        id: 'DESC',
+      }, 
+    });
+
+    return doctors;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} doctor`;
+  async findOne(doctor_id: number) {
+    const doctor = await this.doctorsRepository.findOne({
+      where: {
+        id: doctor_id,
+      }, 
+    });
+
+    if (!doctor) {
+      throw new NotFoundException('Doctor not found');
+    }
+
+    return doctor;
   }
 
-  update(id: number, updateDoctorDto: UpdateDoctorDto) {
-    return `This action updates a #${id} doctor`;
+  async update(doctor_id: number, data: UpdateDoctorDto) {
+    const doctor = await this.doctorsRepository.findOne({
+      where: {
+        id: doctor_id,
+      }, 
+    });
+
+    if (!doctor) {
+      throw new NotFoundException('Doctor not found');
+    }
+
+    Object.assign(doctor, data);
+
+    return await this.doctorsRepository.save(doctor);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} doctor`;
+  async remove(doctor_id: number) {
+    const doctor = await this.doctorsRepository.findOne({
+      withDeleted: true,
+      where: {
+        id: doctor_id,
+      },
+    });
+
+    if (!doctor) {
+      throw new NotFoundException('Doctor not found');
+    }
+
+    return await this.doctorsRepository.softRemove(doctor);
   }
 }
