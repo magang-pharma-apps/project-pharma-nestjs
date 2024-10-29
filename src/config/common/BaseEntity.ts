@@ -31,7 +31,7 @@ export abstract class BaseEntity {
   // @Column({ name: 'is_inactive', type: 'boolean', default: false })
   // isInactive: boolean;
 
-  @Column({ name: 'status', type: 'boolean', nullable: true, default: true })
+  @Column({ name: 'status', type: 'boolean', default: true })
   status: boolean;
 
   @VersionColumn({ name: 'version', nullable: false, default: 1 })

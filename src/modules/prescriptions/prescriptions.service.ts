@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePrescriptionDto } from './dto/create-prescription.dto';
 import { UpdatePrescriptionDto } from './dto/update-prescription.dto';
-import { In, Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { PrescriptionEntity } from './entities/prescription.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -18,20 +18,28 @@ export class PrescriptionsService {
     return await this.prescriptionRepository.save(prescription);
   }
 
-  findAll() {
-    const prescription = this.prescriptionRepository.find({
+  async findAll() {
+    const prescription = await this.prescriptionRepository.find({
       where: {
         deletedAt: null,
       },
       order: {
         id: 'DESC',
       },
-      relations: ['customer', 'doctor'],
+      relations: ['doctor', 'customer'],
       select: {
         id: true,
         prescriptionCode: true,
         prescriptions: true,
         prescriptionDate: true,
+        doctor: {
+          name: true,
+          status: true,
+        },
+        customer: {
+          name: true,
+          status: true,
+        },
       },
     });
 
@@ -48,12 +56,20 @@ export class PrescriptionsService {
         id: id,
         deletedAt: null,
       },
-      relations: ['customer', 'doctor'],
+      relations: ['doctor', 'customer'],
       select: {
         id: true,
         prescriptionCode: true,
         prescriptions: true,
         prescriptionDate: true,
+        doctor: {
+          name: true,
+          status: true,
+        },
+        customer: {
+          name: true,
+          status: true,
+        },
       },
     });
 

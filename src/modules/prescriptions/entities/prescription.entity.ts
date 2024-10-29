@@ -1,12 +1,16 @@
-import { BaseEntity } from "src/config/common/BaseEntity";
+import { BaseEntityWithoutStatus } from "src/config/common/BaseEntityWithoutStatus";
+import { CustomerEntity } from "src/modules/customers/entities/customer.entity";
+import { DoctorEntity } from "src/modules/doctors/entities/doctor.entity";
 import { 
     Column, 
     Entity, 
+    JoinColumn, 
+    ManyToOne, 
     PrimaryGeneratedColumn 
 } from "typeorm";
 
 @Entity('prescriptions')
-export class PrescriptionEntity extends BaseEntity {
+export class PrescriptionEntity extends BaseEntityWithoutStatus {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -27,4 +31,20 @@ export class PrescriptionEntity extends BaseEntity {
 
     @Column({ name  : 'is_redeem', type: 'boolean', default: false })
     isRedeem: boolean;
+
+    @ManyToOne(() => DoctorEntity)
+    @JoinColumn({
+        name: 'doctor_id',
+        referencedColumnName: 'id',
+        foreignKeyConstraintName: 'fk_doctor_id',
+    })
+    doctor: DoctorEntity;
+
+    @ManyToOne(() => CustomerEntity)
+    @JoinColumn({ 
+        name: 'customer_id',
+        referencedColumnName: 'id',
+        foreignKeyConstraintName: 'fk_customer_id',
+    })
+    customer: CustomerEntity;
 }
