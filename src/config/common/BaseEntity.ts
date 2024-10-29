@@ -6,7 +6,7 @@ import {
   BeforeUpdate,
   VersionColumn,
   DeleteDateColumn,
-} from 'typeorm';
+} from 'typeorm'; 
 import * as moment from 'moment';
 
 export abstract class BaseEntity {
