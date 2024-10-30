@@ -32,6 +32,7 @@ export class PrescriptionsService {
         prescriptionCode: true,
         prescriptions: true,
         prescriptionDate: true,
+        isRedeem: true,
         doctor: {
           name: true,
           status: true,
@@ -62,6 +63,7 @@ export class PrescriptionsService {
         prescriptionCode: true,
         prescriptions: true,
         prescriptionDate: true,
+        isRedeem: true,
         doctor: {
           name: true,
           status: true,
