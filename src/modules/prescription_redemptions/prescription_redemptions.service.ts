@@ -26,36 +26,43 @@ export class PrescriptionRedemptionsService {
       order: {
         id: 'DESC',
       },
-      // relations: ['prescription', 'product'],
-      // select: {
-      //   id: true,
-      //   price: true,
-      //   prescription: {
-      //     id: true,
-      //     prescriptionCode: true,
-      //     prescriptionDate: true,
-      //     doctor: {
-      //       name: true,
-      //     },
-      //     customer: {
-      //       name: true,
-      //     },
-      //   },
-      //   product:{
-      //     id: true,
-      //     name: true,
-      //     purchasePrice: true,
-      //     sellingPrice: true,
-      //     expiryDate: true,
-      //     productImageUrl: true,
-      //     drugClass: true,
-      //     category: {
-      //       name: true,
-      //     },
-      //     unit: {
-      //       name: true,
-      //   }
-      // },
+      relations: ['prescription', 'product'],
+      select: {
+        id: true,
+        price: true,
+        prescription: {
+          id: true,
+          prescriptionCode: true,
+          prescriptionDate: true,
+          isRedeem: true,
+          doctor: {
+            name: true,
+            status: true,
+          },
+          customer: {
+            name: true,
+            age: true,
+            status: true,
+          },
+        },
+        product:{
+          id: true,
+          name: true,
+          purchasePrice: true,
+          sellingPrice: true,
+          expiryDate: true,
+          productImageUrl: true,
+          drugClass: true,
+          category: {
+            name: true,
+            status: true,
+          },
+          unit: {
+            name: true,
+            status: true,
+          },
+        },
+      },
     });
 
     if (!prescriptionRedemptions) {
@@ -74,36 +81,43 @@ export class PrescriptionRedemptionsService {
       order: {
         id: 'DESC',
       },
-      // relations: ['prescription', 'product'],
-      // select: {
-      //   id: true,
-      //   price: true,
-      //   prescription: {
-      //     id: true,
-      //     prescriptionCode: true,
-      //     prescriptionDate: true,
-      //     doctor: {
-      //       name: true,
-      //     },
-      //     customer: {
-      //       name: true,
-      //     },
-      //   },
-      //   product:{
-      //     id: true,
-      //     name: true,
-      //     purchasePrice: true,
-      //     sellingPrice: true,
-      //     expiryDate: true,
-      //     productImageUrl: true,
-      //     drugClass: true,
-      //     category: {
-      //       name: true,
-      //     },
-      //     unit: {
-      //       name: true,
-      //   }
-      // },
+      relations: ['prescription', 'product'],
+      select: {
+        id: true,
+        price: true,
+        prescription: {
+          id: true,
+          prescriptionCode: true,
+          prescriptionDate: true,
+          isRedeem: true,
+          doctor: {
+            name: true,
+            status: true,
+          },
+          customer: {
+            name: true,
+            age: true,
+            status: true,
+          },
+        },
+        product:{
+          id: true,
+          name: true,
+          purchasePrice: true,
+          sellingPrice: true,
+          expiryDate: true,
+          productImageUrl: true,
+          drugClass: true,
+          category: {
+            name: true,
+            status: true,
+          },
+          unit: {
+            name: true,
+            status: true,
+          },
+        },
+      },
     });
 
     if (!prescriptionRedemption) {
