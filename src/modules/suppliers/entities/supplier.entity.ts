@@ -4,7 +4,6 @@ import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { WarehouseEntity } from "src/modules/warehouse/entities/warehouse.entity";
 import { 
     Column, 
-    DeleteDateColumn, 
     Entity, 
     OneToMany, 
     PrimaryGeneratedColumn 

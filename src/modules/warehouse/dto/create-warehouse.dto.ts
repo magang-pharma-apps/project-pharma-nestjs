@@ -11,5 +11,5 @@ export class CreateWarehouseDto {
     // status: boolean;
 
     @ApiProperty()
-    supplier_id: number;
+    supplierId: number;
 }

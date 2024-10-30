@@ -20,5 +20,5 @@ export class DoctorEntity extends BaseEntity {
     email: string;
 
     @OneToMany(() => PrescriptionEntity, (prescription) => prescription.doctor)
-    prescription: PrescriptionEntity
+    prescription: PrescriptionEntity[];
 }

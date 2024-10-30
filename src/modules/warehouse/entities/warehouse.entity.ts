@@ -15,17 +15,14 @@ export class WarehouseEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true })
+    @Column({ name: 'name', unique: true })
     name: string;
 
-    @Column({ nullable: true })
+    @Column({ name: 'location' })
     location: string;
 
-    // @Column({ name: 'status', type: 'boolean', default: false })
-    // status: boolean;
-
-    @Column ({ name: 'supplier_id' })
-    supplierId: number
+    @Column ({ name: 'supplier_id', nullable: true })
+    supplierId: number;
 
     @OneToMany(() => InventoryEntity, (inventory) => inventory.warehouse)
     inventories: InventoryEntity[];
