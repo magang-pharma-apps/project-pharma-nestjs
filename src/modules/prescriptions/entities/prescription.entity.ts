@@ -1,11 +1,13 @@
 import { BaseEntityWithoutStatus } from "src/config/common/BaseEntityWithoutStatus";
 import { CustomerEntity } from "src/modules/customers/entities/customer.entity";
 import { DoctorEntity } from "src/modules/doctors/entities/doctor.entity";
+import { PrescriptionRedemptionEntity } from "src/modules/prescription_redemptions/entities/prescription_redemption.entity";
 import { 
     Column, 
     Entity, 
     JoinColumn, 
     ManyToOne, 
+    OneToMany, 
     PrimaryGeneratedColumn 
 } from "typeorm";
 
@@ -47,4 +49,7 @@ export class PrescriptionEntity extends BaseEntityWithoutStatus {
         foreignKeyConstraintName: 'fk_customer_id',
     })
     customer: CustomerEntity;
+
+    @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.prescription)
+    prescriptionRedemption: PrescriptionRedemptionEntity[];
 }
