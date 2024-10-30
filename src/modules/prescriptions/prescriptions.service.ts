@@ -39,6 +39,7 @@ export class PrescriptionsService {
         },
         customer: {
           name: true,
+          age: true,
           status: true,
         },
       },
@@ -70,6 +71,7 @@ export class PrescriptionsService {
         },
         customer: {
           name: true,
+          age: true,
           status: true,
         },
       },
