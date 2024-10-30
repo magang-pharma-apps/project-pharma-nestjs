@@ -2,14 +2,14 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreatePrescriptionRedemptionDto {
     @ApiProperty()
-    prescription_id: string;
+    prescriptionId: number;
 
     @ApiProperty()
-    product_id: string;
+    productId: number;
 
     @ApiProperty()
     price: number;
 
     @ApiProperty()
-    is_paid: boolean;
+    isPaid: boolean;
 }
