@@ -13,7 +13,7 @@ export class SuppliersService {
   ) {}
 
   async create(data: CreateSupplierDto) {
-    const supplier = this.supplierRepository.create(data); 'This action adds a new supplier';
+    const supplier = this.supplierRepository.create(data);
 
     return await this.supplierRepository.save(supplier);
   }

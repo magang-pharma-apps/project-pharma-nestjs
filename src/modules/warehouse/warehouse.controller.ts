@@ -25,11 +25,11 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 export class WarehouseController {
   constructor(private readonly warehouseService: WarehouseService) {}
 
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Warehouse data',
-    type: CreateWarehouseDto,
-  })
+  // @ApiResponse({
+  //   status: HttpStatus.OK,
+  //   description: 'Warehouse data',
+  //   type: CreateWarehouseDto,
+  // })
 
   @Post()
   async create(@Body() createWarehouseDto: CreateWarehouseDto) {
@@ -65,11 +65,11 @@ export class WarehouseController {
     return new ResponseFormatter(warehouse, 'Warehouse found');
   }
 
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Warehouse data',
-    type: UpdateWarehouseDto,
-  })
+  // @ApiResponse({
+  //   status: HttpStatus.OK,
+  //   description: 'Warehouse data',
+  //   type: UpdateWarehouseDto,
+  // })
 
   @Patch(':id')
   async update(

@@ -19,25 +19,24 @@ export class WarehouseService {
   }
 
   async findAll() {
-    const warehouses = this.warehouseRepository.find({
+    const warehouses = await this.warehouseRepository.find({
       where: {
         deletedAt: null,
       },
       order: {
         id: 'DESC',
       },
-      relations: ['suppliers'],
+      relations: ['supplier'],
       select: {
         id: true,
         name: true,
         location: true,
-        status: true,
         supplier: {
-          id: true,
           name: true,
           contactNumber: true,
           email: true,
           address: true,
+          status: true,
         },
       }
     });
@@ -49,27 +48,26 @@ export class WarehouseService {
     return warehouses;
   }
 
-  async findOne(warehouse_id: number) {
+  async findOne(id: number) {
     const warehouse = await this.warehouseRepository.findOne({
       where: {
-        id: warehouse_id,
+        id: id,
         deletedAt: null,
       },
       order: {
         id: 'DESC',
       },
-      relations: ['suppliers'],
+      relations: ['supplier'],
       select: {
         id: true,
         name: true,
         location: true,
-        status: true,
         supplier: {
-          id: true,
           name: true,
           contactNumber: true,
           email: true,
           address: true,
+          status: true,
         },
       }
     });
@@ -81,10 +79,11 @@ export class WarehouseService {
     return warehouse;
   }
 
-  async update(warehouse_id: number, data: UpdateWarehouseDto) {
+  async update(id: number, data: UpdateWarehouseDto) {
     const warehouse = await this.warehouseRepository.findOne({
       where: {
-        id: warehouse_id,
+        id: id,
+        deletedAt: null,
       },
     });
 
@@ -99,11 +98,11 @@ export class WarehouseService {
     return updatedWarehouse;
   }
 
-  async remove(warehouse_id: number) {
+  async remove(id: number) {
     const warehouse = await this.warehouseRepository.findOne({
       withDeleted: true,
       where: {
-        id: warehouse_id,
+        id: id,
       },
     });
 
