@@ -22,6 +22,7 @@ import { TransactionDetailsModule } from './modules/transaction_details/transact
 import { CustomersModule } from './modules/customers/customers.module';
 import { PrescriptionsModule } from './modules/prescriptions/prescriptions.module';
 import { DoctorsModule } from './modules/doctors/doctors.module';
+import { PrescriptionRedemptionsModule } from './modules/prescription_redemptions/prescription_redemptions.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
@@ -46,6 +47,7 @@ import { DoctorsModule } from './modules/doctors/doctors.module';
     CustomersModule,
     PrescriptionsModule,
     DoctorsModule,
+    PrescriptionRedemptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

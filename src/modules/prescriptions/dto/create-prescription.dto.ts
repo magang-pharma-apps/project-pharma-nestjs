@@ -5,7 +5,7 @@ export class CreatePrescriptionDto {
     prescriptionCode: string;
 
     @ApiProperty()
-    prescription: string;
+    prescriptions: string;
 
     @ApiProperty()
     prescriptionDate: Date;

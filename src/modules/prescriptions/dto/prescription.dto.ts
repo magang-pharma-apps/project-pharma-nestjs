@@ -8,7 +8,7 @@ export class PrescriptionDtoOut {
     presctiptionCode: String;
 
     @ApiProperty()
-    prescription: String;
+    prescriptions: String;
 
     @ApiProperty()
     prescriptionDate: Date;
