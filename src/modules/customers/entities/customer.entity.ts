@@ -17,5 +17,5 @@ export class CustomerEntity extends BaseEntity {
     address: string
 
     @OneToMany(() => PrescriptionEntity, (prescription) => prescription.customer)
-    prescription: PrescriptionEntity
+    prescription: PrescriptionEntity[];
 }

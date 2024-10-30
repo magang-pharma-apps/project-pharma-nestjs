@@ -13,6 +13,7 @@ import { InventoryEntity } from 'src/modules/inventories/entities/inventory.enti
 import { UnitEntity } from 'src/modules/units/entities/unit.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
 import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
+import { PrescriptionRedemptionEntity } from 'src/modules/prescription_redemptions/entities/prescription_redemption.entity';
 // import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
 // import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
 // import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
@@ -90,12 +91,9 @@ export class ProductEntity extends BaseEntity {
   @OneToMany(() => InventoryEntity, (inventory) => inventory.product)
   inventories: InventoryEntity[];
 
-  // @OneToMany(() => TransactionEntity, (transaction) => transaction.product)
-  // transactions: TransactionEntity[];
-
-  // @OneToMany(() => StockAdjustmentEntity, (stockAdjustment) => stockAdjustment.product)
-  // stockAdjustments: StockAdjustmentEntity[];
-
   @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.product)
   cardStockEntries: CardStockEntryEntity[];
+
+  @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.product)
+  prescriptionRedemptions: PrescriptionRedemptionEntity[];
 }
