@@ -51,7 +51,7 @@ export class PrescriptionRedemptionsService {
           purchasePrice: true,
           sellingPrice: true,
           expiryDate: true,
-          productImageUrl: true,
+          localImagePath: true,
           drugClass: true,
           category: {
             name: true,
@@ -106,7 +106,7 @@ export class PrescriptionRedemptionsService {
           purchasePrice: true,
           sellingPrice: true,
           expiryDate: true,
-          productImageUrl: true,
+          localImagePath: true,
           drugClass: true,
           category: {
             name: true,

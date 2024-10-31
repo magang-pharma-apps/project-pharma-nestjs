@@ -11,9 +11,6 @@ export class CreateProductDto {
   @ApiProperty()
   description: string;
 
-  // @ApiProperty()
-  // price: number;
-
   @ApiProperty()
   purchasePrice: number;
 
@@ -26,17 +23,17 @@ export class CreateProductDto {
   @ApiProperty()
   stockQuantity: number;
 
-  // @ApiProperty()
-  // status: boolean;
-
   @ApiProperty()
   categoryId: number;
 
   @ApiProperty()
   unitId: number;
 
-  @ApiPropertyOptional({ description: 'URL of the product image' })
-  productImageUrl?: string;  // Kolom opsional
+  // @ApiPropertyOptional({ description: 'URL of the product image' })
+  // productImageUrl?: string;  // Kolom opsional
+
+  @ApiProperty()
+  localImagePath: string;
 
   @ApiProperty()
   drugClass?: DrugClass; // Ubah tipe ini dari string menjadi DrugClass
