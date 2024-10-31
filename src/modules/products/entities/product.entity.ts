@@ -39,10 +39,20 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
+  @Column({
+    name: 'purchase_price',
+    type: 'decimal',
+    precision: 10,
+    default: '0',
+  })
   purchasePrice: number;
 
-  @Column({ name: 'selling_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
+  @Column({
+    name: 'selling_price',
+    type: 'decimal',
+    precision: 10,
+    default: '0',
+  })
   sellingPrice: number;
 
   @Column({ name: 'expiry_date', type: 'timestamptz' })
@@ -87,13 +97,19 @@ export class ProductEntity extends BaseEntity {
 
   @OneToMany(() => ProductImagesEntity, (image) => image.product)
   productImages: ProductImagesEntity[];
-  
+
   @OneToMany(() => InventoryEntity, (inventory) => inventory.product)
   inventories: InventoryEntity[];
 
-  @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.product)
+  @OneToMany(
+    () => CardStockEntryEntity,
+    (cardStockEntry) => cardStockEntry.product,
+  )
   cardStockEntries: CardStockEntryEntity[];
 
-  @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.product)
+  @OneToMany(
+    () => PrescriptionRedemptionEntity,
+    (prescriptionRedemption) => prescriptionRedemption.product,
+  )
   prescriptionRedemptions: PrescriptionRedemptionEntity[];
 }
