@@ -61,7 +61,7 @@ export class ProductsService {
         deletedAt: null,
         category: {
           status: true,
-        },      
+        },
       },
       order: {
         id: 'DESC',
@@ -87,13 +87,19 @@ export class ProductsService {
           status: true,
         },
       },
-     });
+    });
 
     if (!products) {
       throw new NotFoundException('Products not found');
     }
 
-    return products;
+    const data = products.map((product) => {
+      product.purchasePrice = parseFloat(product.purchasePrice.toString());
+      product.sellingPrice = parseFloat(product.sellingPrice.toString());
+      return product;
+    });
+
+    return data;
   }
 
   async findOne(id: number) {
@@ -101,14 +107,14 @@ export class ProductsService {
       where: {
         id: id,
         deletedAt: null,
-        category : {
+        category: {
           status: true,
         },
       },
       order: {
         id: 'DESC',
       },
-      relations: ['category','unit', 'productImages'],
+      relations: ['category', 'unit', 'productImages'],
       select: {
         id: true,
         productCode: true,
