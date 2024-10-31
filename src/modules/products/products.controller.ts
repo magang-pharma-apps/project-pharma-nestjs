@@ -10,15 +10,19 @@ import {
   HttpStatus,
   NotFoundException,
   BadRequestException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { ProductDtoOut } from './dto/product.dto';
 import { Permission } from 'src/decorators/requires-permission.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @ApiTags('Product')
 @ApiBearerAuth('accessToken')
@@ -27,12 +31,87 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Post()
-  async create(@Body() createProductDto: CreateProductDto) {
-    const product = await this.productsService.create(createProductDto);
+  // @ApiConsumes('multipart/form-data')
+  // @ApiBody({
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       images: {
+  //         type: 'string',
+  //         format: 'binary',
+  //         description: 'Upload images JPEG, JPG, PNG',
+  //       },
+  //     },
+  //   },
+  // })
 
-    return new ResponseFormatter(product, 'Product created');
+  // @UseInterceptors(
+  //   FileInterceptor('images', {
+  //     storage: diskStorage({
+  //       destination: './public/uploads/product',
+  //       filename: (req, file, cb) => {
+  //         const randomName = Math.random().toString(36).substring(7);
+  //         const extension = file.originalname.substring(
+  //           file.originalname.lastIndexOf('.'),
+  //         );
+  //         const fileName = randomName + extension;
+  //         cb(
+  //           null,
+  //           fileName,
+  //         );
+  //       },
+  //     }),
+  //     fileFilter: (req, file, cb) => {
+  //       if (
+  //         file.mimetype === 'image/jpeg' ||
+  //         file.mimetype === 'image/png' ||
+  //         file.mimetype === 'image/jpg'
+  //       ) {
+  //         cb(null, true);
+  //       } else {
+  //         cb(
+  //           new BadRequestException(
+  //             'File type not supported, File Only Support JPG, JPEG, PNG',
+  //           ),
+  //           false,
+  //         );
+  //       }
+  //     },
+  //     limits: {
+  //       fileSize: 1024 * 1024 * 2, // 2MB
+  //     },
+  //   })
+  // )
+  
+  // @Post()
+  // @UseInterceptors(FileInterceptor('file'))
+  // async create(
+  //   @Body() createProductDto: CreateProductDto,
+  //   @UploadedFile() file: Express.Multer.File,
+  // ) {
+
+  //   if (!file) {
+  //     throw new BadRequestException('No file uploaded');
+  //   }
+
+  //   createProductDto.localImagePath = `/uploads/product/${file.filename}`;
+
+  //   const product = await this.productsService.create(createProductDto);
+
+  //   return new ResponseFormatter(product, 'Product created');
+  // }
+
+ 
+  @Post()
+  @UseInterceptors(FileInterceptor('file')) // Menangani file upload
+  @ApiResponse({ status: 201, description: 'Product created successfully.' })
+  async create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File // Mengambil file yang diupload
+  ) {
+    return this.productsService.create(createProductDto, file);
   }
+
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -70,10 +149,29 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        images: {
+          type: 'string',
+          format: 'binary',
+          description: 'Upload images JPEG, JPG, PNG',
+        },
+      },
+    },
+  })
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
+
+    if (!file) {
+      updateProductDto.localImagePath = `/uploads/product/${file.filename}`;
+    }
+
     const product = await this.productsService.update(+id, updateProductDto);
 
     if (!product) {

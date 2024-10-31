@@ -32,8 +32,8 @@ export class ProductDtoOut {
   @ApiProperty()
   unitId: number;
 
-  @ApiPropertyOptional({ description: 'URL of the product image' })
-  productImageUrl?: string;
+  // @ApiPropertyOptional({ description: 'URL of the product image' })
+  // productImageUrl?: string;
 
   @ApiPropertyOptional()
   drugClass?: DrugClass;
