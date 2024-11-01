@@ -14,6 +14,9 @@ import { UnitEntity } from 'src/modules/units/entities/unit.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
 import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
 import { PrescriptionRedemptionEntity } from 'src/modules/prescription_redemptions/entities/prescription_redemption.entity';
+// import { TransactionEntity } from 'src/modules/transactions/entities/transaction.entity';
+// import { ProductMixtureEntity } from 'src/modules/product_mixtures/entities/product_mixture.entity';
+// import { StockAdjustmentEntity } from 'src/modules/stock_adjustments/entities/stock_adjustment.entity';
 
 // Definisi enum untuk DrugClass
 export enum DrugClass {
@@ -36,20 +39,10 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  @Column({
-    name: 'purchase_price',
-    type: 'decimal',
-    precision: 10,
-    default: '0',
-  })
+  @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
   purchasePrice: number;
 
-  @Column({
-    name: 'selling_price',
-    type: 'decimal',
-    precision: 10,
-    default: '0',
-  })
+  @Column({ name: 'selling_price', type: 'decimal', precision: 10, scale: 2, default: '0' })
   sellingPrice: number;
 
   @Column({ name: 'expiry_date', type: 'timestamptz' })
@@ -64,11 +57,8 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'unit_id', nullable: true })
   unitId: number;
 
-  // @Column({ name: 'image_url', type: 'varchar', nullable: true })
-  // productImageUrl: string;
-
-  // @Column({ name: 'image' })
-  // image: string;
+  @Column({ name: 'image_url', type: 'varchar', nullable: true })
+  productImageUrl: string;
 
   @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
   localImagePath: string; // Path untuk gambar yang disimpan secara fisik
@@ -97,19 +87,13 @@ export class ProductEntity extends BaseEntity {
 
   @OneToMany(() => ProductImagesEntity, (image) => image.product)
   productImages: ProductImagesEntity[];
-
+  
   @OneToMany(() => InventoryEntity, (inventory) => inventory.product)
   inventories: InventoryEntity[];
 
-  @OneToMany(
-    () => CardStockEntryEntity,
-    (cardStockEntry) => cardStockEntry.product,
-  )
+  @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.product)
   cardStockEntries: CardStockEntryEntity[];
 
-  @OneToMany(
-    () => PrescriptionRedemptionEntity,
-    (prescriptionRedemption) => prescriptionRedemption.product,
-  )
+  @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.product)
   prescriptionRedemptions: PrescriptionRedemptionEntity[];
 }
