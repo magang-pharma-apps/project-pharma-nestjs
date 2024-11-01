@@ -9,7 +9,6 @@ import {
   UseGuards,
   HttpStatus,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -27,6 +26,13 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product data',
+    type: CreateProductDto,
+  })
+
+  // @Permission('create:product')
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
     const product = await this.productsService.create(createProductDto);
@@ -58,6 +64,7 @@ export class ProductsController {
     type: ProductDtoOut,
   })
   
+  // @Permission('read:product')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const product = await this.productsService.findOne(+id);
@@ -69,6 +76,13 @@ export class ProductsController {
     return new ResponseFormatter(product, 'Product found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product data',
+    type: UpdateProductDto,
+  })
+
+  // @Permission('update:product')
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -83,6 +97,7 @@ export class ProductsController {
     return new ResponseFormatter(product, 'Product updated');
   }
 
+  // @Permission('delete:product')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const product = await this.productsService.remove(+id);

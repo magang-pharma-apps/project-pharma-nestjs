@@ -17,7 +17,7 @@ export class ProductsService {
   ) {}
 
   async create(data: CreateProductDto) {
-    const product = await this.productRepository.create(data);
+    const product = this.productRepository.create(data);
 
     // Unduh gambar dari URL dan simpan ke direktori lokal
     if (data.productImageUrl) {
@@ -66,7 +66,7 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      relations: ['category', 'unit', 'productImages'],
+      relations: ['category', 'unit'],
       select: {
         id: true,
         productCode: true,
@@ -93,6 +93,12 @@ export class ProductsService {
       throw new NotFoundException('Products not found');
     }
 
+    const data = products.map((product) => {
+      product.purchasePrice = parseFloat(product.purchasePrice.toString());
+      product.sellingPrice = parseFloat(product.sellingPrice.toString());
+      return product;
+    });
+
     return products;
   }
 
@@ -108,7 +114,7 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      relations: ['category','unit', 'productImages'],
+      relations: ['category','unit'],
       select: {
         id: true,
         productCode: true,
@@ -134,6 +140,12 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException('Product not found');
     }
+
+    // const data = products.map((product) => {
+    //   product.purchasePrice = parseFloat(product.purchasePrice.toString());
+    //   product.sellingPrice = parseFloat(product.sellingPrice.toString());
+    //   return product;
+    // });
 
     return product;
   }
