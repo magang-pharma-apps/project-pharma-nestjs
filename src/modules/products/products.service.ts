@@ -5,52 +5,55 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
+import * as path from 'path';
 import axios from 'axios';
-
-import { join } from 'path';
-import { existsSync, mkdirSync, writeFile } from 'fs';
-import { promisify } from 'util';
-import { extname } from 'path';
-
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
-    
     // @Inject(REQUEST) private req: any,
-  ) {
-     // Buat direktori untuk menyimpan gambar jika belum ada
-     const uploadPath = join(__dirname, '..', '..', 'uploads/images');
-     if (!existsSync(uploadPath)) {
-       mkdirSync(uploadPath, { recursive: true });
-     }
-  }
+  ) {}
 
-  async create(productDto: CreateProductDto, file: Express.Multer.File) {
-    // Simpan file gambar di server
-    if (file) {
-      const fileExtension = extname(file.originalname);
-      const fileName = `${Date.now()}${fileExtension}`; // Menggunakan timestamp untuk nama file unik
-      const uploadPath = join(__dirname, '..', '..', 'uploads/images', fileName);
-      
-      // Simpan file ke disk
-      await fs.promises.writeFile(uploadPath, file.buffer);
-      
-      // Update localImagePath di DTO
-      productDto.localImagePath = `uploads/images/${fileName}`;
+  async create(data: CreateProductDto) {
+    const product = await this.productRepository.create(data);
+
+    // Unduh gambar dari URL dan simpan ke direktori lokal
+    if (data.productImageUrl) {
+      const imagePath = await this.downloadImage(data.productImageUrl);
+      product.localImagePath = imagePath; // Simpan path lokal gambar
     }
 
-    // Simpan produk ke dalam database
-    const newProduct = this.productRepository.create(productDto);
-    await this.productRepository.save(newProduct);
-    
-    console.log('Product data saved:', productDto);
-    return newProduct; // Kembalikan produk yang ditambahkan
+    return await this.productRepository.save(product);
   }
 
+  //Fungsi untuk mengunduh gambar
+  private async downloadImage(imageUrl: string): Promise<string> {
+    const response = await axios({
+      url: imageUrl,
+      method: 'GET',
+      responseType: 'stream',
+    });
 
+    const fileName = `product_${Date.now()}.jpg`; // Nama file unik
+    const uploadDir = path.join(process.cwd(), 'public/uploads/image'); // Gunakan path dari root proyek
+
+    // Cek apakah direktori sudah ada, jika tidak buat direktori
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const savePath = path.join(uploadDir, fileName);
+    const writer = fs.createWriteStream(savePath);
+
+    response.data.pipe(writer);
+
+    return new Promise((resolve, reject) => {
+      writer.on('finish', () => resolve(`/uploads/image/${fileName}`)); // Return path relatif
+      writer.on('error', reject);
+    });
+  }
 
   async findAll() {
     const products = await this.productRepository.find({
@@ -58,12 +61,12 @@ export class ProductsService {
         deletedAt: null,
         category: {
           status: true,
-        },
+        },      
       },
       order: {
         id: 'DESC',
       },
-      relations: ['category', 'unit'],
+      relations: ['category', 'unit', 'productImages'],
       select: {
         id: true,
         productCode: true,
@@ -73,7 +76,7 @@ export class ProductsService {
         sellingPrice: true,
         expiryDate: true,
         stockQuantity: true,
-        localImagePath: true,
+        productImageUrl: true,
         drugClass: true,
         category: {
           name: true,
@@ -84,19 +87,13 @@ export class ProductsService {
           status: true,
         },
       },
-    });
+     });
 
     if (!products) {
       throw new NotFoundException('Products not found');
     }
 
-    const data = products.map((product) => {
-      product.purchasePrice = parseFloat(product.purchasePrice.toString());
-      product.sellingPrice = parseFloat(product.sellingPrice.toString());
-      return product;
-    });
-
-    return data;
+    return products;
   }
 
   async findOne(id: number) {
@@ -104,14 +101,14 @@ export class ProductsService {
       where: {
         id: id,
         deletedAt: null,
-        category: {
+        category : {
           status: true,
         },
       },
       order: {
         id: 'DESC',
       },
-      relations: ['category','unit'],
+      relations: ['category','unit', 'productImages'],
       select: {
         id: true,
         productCode: true,
@@ -121,7 +118,7 @@ export class ProductsService {
         sellingPrice: true,
         expiryDate: true,
         stockQuantity: true,
-        localImagePath: true,
+        productImageUrl: true,
         drugClass: true,
         category: {
           name: true,
@@ -141,7 +138,7 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: number, data: UpdateProductDto, newImagePath?: string) {
+  async update(id: number, data: UpdateProductDto) {
     const product = await this.productRepository.findOne({
       where: {
         id: id,
@@ -153,16 +150,11 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
-    // Perbarui data
     Object.assign(product, data);
 
-    if (newImagePath) {
-      product.localImagePath = newImagePath;
-    }
+    const updatedProduct = await this.productRepository.save(product);
 
-    // const updatedProduct = await this.productRepository.save(product);
-
-    return await this.productRepository.save(product);
+    return updatedProduct;
   }
 
   async remove(id: number) {
@@ -177,15 +169,8 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
-    // Hapus file gambar dari server
-    if (product.localImagePath) {
-      fs.unlink(`public${product.localImagePath}`, (err) => {
-        if (err) console.error(`Failed to delete image file: ${err.message}`);
-      });
-    }
+    const deletedProduct = await this.productRepository.softRemove(product);
 
-    // const deletedProduct = await this.productRepository.softRemove(product);
-
-    return await this.productRepository.softRemove(product);
+    return deletedProduct;
   }
 }
