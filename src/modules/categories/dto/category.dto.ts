@@ -12,7 +12,4 @@ export class CategoryDtoOut {
 
   @ApiPropertyOptional({ description: 'URL of the category image' })
   categoryImageUrl?: string;  // Kolom opsional
-  
-  // @ApiProperty()
-  // status: boolean;
 }

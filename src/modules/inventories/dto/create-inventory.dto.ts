@@ -3,7 +3,6 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateInventoryDto {
     @ApiProperty()
-    // @IsNotEmpty()
     productId: number;
 
     @ApiProperty()

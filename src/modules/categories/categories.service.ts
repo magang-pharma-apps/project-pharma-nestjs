@@ -82,7 +82,9 @@ export class CategoriesService {
 
   async update(categories_id: number, data: UpdateCategoryDto) {
     const category = await this.categoryRepository.findOne({
-      where: { id: categories_id },
+      where: { 
+        id: categories_id,
+      },
     });
 
     if (!category) {
@@ -95,6 +97,7 @@ export class CategoriesService {
     }
 
     Object.assign(category, data);
+    
     return await this.categoryRepository.save(category);
   }
 

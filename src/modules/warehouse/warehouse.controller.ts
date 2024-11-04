@@ -7,7 +7,8 @@ import {
   Param, 
   Delete, 
   UseGuards,
-  HttpStatus
+  HttpStatus,
+  NotFoundException
 } from '@nestjs/common';
 import { WarehouseService } from './warehouse.service';
 import { CreateWarehouseDto } from './dto/create-warehouse.dto';
@@ -20,17 +21,18 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Warehouse')
 @ApiBearerAuth('accessToken')
-@Controller('warehouse')
 @UseGuards(AuthGuard)
+@Controller('warehouse')
 export class WarehouseController {
   constructor(private readonly warehouseService: WarehouseService) {}
 
-  // @ApiResponse({
-  //   status: HttpStatus.OK,
-  //   description: 'Warehouse data',
-  //   type: CreateWarehouseDto,
-  // })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Warehouse data',
+    type: CreateWarehouseDto,
+  })
 
+  // @Permission('create:warehouse')
   @Post()
   async create(@Body() createWarehouseDto: CreateWarehouseDto) {
     const warehouse = await this.warehouseService.create(createWarehouseDto);
@@ -49,6 +51,10 @@ export class WarehouseController {
   async findAll() {
     const warehouses = await this.warehouseService.findAll();
 
+    if (!warehouses) {
+      return new NotFoundException('Warehouses not found');
+    }
+
     return new ResponseFormatter(warehouses, 'Warehouses found');
   }
 
@@ -58,19 +64,25 @@ export class WarehouseController {
     type: WarehouseDtoOut,
   })
 
+  // @Permission('read:warehouse')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const warehouse = await this.warehouseService.findOne(+id);
 
+    if (!warehouse) {
+      return new NotFoundException('Warehouse not found');
+    }
+
     return new ResponseFormatter(warehouse, 'Warehouse found');
   }
 
-  // @ApiResponse({
-  //   status: HttpStatus.OK,
-  //   description: 'Warehouse data',
-  //   type: UpdateWarehouseDto,
-  // })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Warehouse data',
+    type: UpdateWarehouseDto,
+  })
 
+  // @Permission('update:warehouse')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -81,12 +93,21 @@ export class WarehouseController {
       updateWarehouseDto
     );
 
+    if (!warehouse) {
+      return new NotFoundException('Warehouse not found');
+    }
+
     return new ResponseFormatter(warehouse, 'Warehouse updated');
   }
 
+  // @Permission('delete:warehouse')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const warehouse = await this.warehouseService.remove(+id);
+
+    if (!warehouse) {
+      return new NotFoundException('Warehouse not found');
+    }
 
     return new ResponseFormatter(warehouse, 'Warehouse deleted');
   }

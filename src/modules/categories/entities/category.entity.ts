@@ -12,10 +12,10 @@ export class CategoryEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ name: 'name', unique: true })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'description', nullable: true })
   description: string;
 
   @Column({ name: 'image_url', type: 'varchar', nullable: true })
@@ -23,9 +23,6 @@ export class CategoryEntity extends BaseEntity {
 
   @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
   localImagePath: string; // Path untuk gambar yang disimpan secara fisik
-
-  // @Column({ name: 'status', type: 'boolean', default: false })
-  // status: boolean;
 
   @OneToMany(() => ProductEntity, (product) => product.category)
   products: ProductEntity[];

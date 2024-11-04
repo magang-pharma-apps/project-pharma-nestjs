@@ -26,6 +26,13 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 export class InventoriesController {
   constructor(private readonly inventoriesService: InventoriesService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Inventory data',
+    type: CreateInventoryDto,
+  })
+
+  // @Permission('create:inventory')
   @Post()
   async create(@Body() createInventoryDto: CreateInventoryDto) {
     const inventory = await this.inventoriesService.create(createInventoryDto);
@@ -57,6 +64,7 @@ export class InventoriesController {
     type: InventoryDtoOut,
   })
 
+  // @Permission('read:inventory')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const inventory = await this.inventoriesService.findOne(+id);
@@ -68,6 +76,13 @@ export class InventoriesController {
     return new ResponseFormatter(inventory, 'Inventory found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Inventory data',
+    type: UpdateInventoryDto,
+  })
+
+  // @Permission('update:inventory')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -82,6 +97,7 @@ export class InventoriesController {
     return new ResponseFormatter(inventory, 'Inventory updated');
   }
 
+  // @Permission('delete:inventory')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const inventory = await this.inventoriesService.remove(+id);

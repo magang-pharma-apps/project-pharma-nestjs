@@ -20,29 +20,18 @@ export class TransactionsService {
 
   async findAll() {
     const transactions = await this.transactionRepository.find({
-      where: {
-        deletedAt: null,
-      },
       order: {
         id: 'DESC',
       },
     });
 
-    if (!transactions) {
-      throw new NotFoundException('Transactions not found');
-    }
-
     return transactions;
   }
 
-  async findOne(id: number) {
+  async findOne(transaction_id: number) {
     const transaction = await this.transactionRepository.findOne({
       where: {
-        id: id,
-        deletedAt: null,
-      },
-      order: {
-        id: 'DESC',
+        id: transaction_id,
       },
     });
 
@@ -53,11 +42,10 @@ export class TransactionsService {
     return transaction;
   }
 
-  async update(id: number, data: UpdateTransactionDto) {
+  async update(transaction_id: number, data: UpdateTransactionDto) {
     const transaction = await this.transactionRepository.findOne({
       where: {
-        id: id,
-        deletedAt: null,
+        id: transaction_id,
       },
     });
 
@@ -66,16 +54,15 @@ export class TransactionsService {
     }
 
     Object.assign(transaction, data);
-    const updatedTransaction = this.transactionRepository.save(transaction);
 
-    return updatedTransaction;
+    return await this.transactionRepository.save(transaction);
   }
 
-  async remove(id: number) {
+  async remove(transaction_id: number) {
     const transaction = await this.transactionRepository.findOne({
       withDeleted: true,
       where: {
-        id: id,
+        id: transaction_id,
       },
     });
 
@@ -83,9 +70,7 @@ export class TransactionsService {
       throw new NotFoundException('Transaction not found');
     }
 
-    const deletedTransaction = await this.transactionRepository.softRemove(transaction);
-
-    return deletedTransaction;
+    return await this.transactionRepository.softRemove(transaction);
   
   }
 }

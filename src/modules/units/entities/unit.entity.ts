@@ -13,10 +13,10 @@ export class UnitEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true })
+    @Column({ name: 'name', unique: true })
     name: string;
 
-    @Column({ nullable: true })
+    @Column({ name: 'description', nullable: true })
     description: string;
 
     // @Column({ name: 'status', type: 'boolean', default: false })

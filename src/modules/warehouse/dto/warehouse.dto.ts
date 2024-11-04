@@ -10,9 +10,6 @@ export class WarehouseDtoOut {
     @ApiProperty()
     location: string;
 
-    // @ApiProperty()
-    // status: boolean;
-
     @ApiProperty()
     supplierId: number;
 }

@@ -1,6 +1,4 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
-import { UserEntity } from "src/modules/auth/entities/user.entity";
-// import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { WarehouseEntity } from "src/modules/warehouse/entities/warehouse.entity";
 import { 

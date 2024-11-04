@@ -6,7 +6,4 @@ export class CreateUnitDto {
 
     @ApiProperty()
     description: string;
-
-    // @ApiProperty()
-    // status: boolean;
 }

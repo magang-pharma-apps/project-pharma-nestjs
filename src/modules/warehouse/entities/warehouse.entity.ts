@@ -24,9 +24,6 @@ export class WarehouseEntity extends BaseEntity {
     @Column ({ name: 'supplier_id', nullable: true })
     supplierId: number;
 
-    @OneToMany(() => InventoryEntity, (inventory) => inventory.warehouse)
-    inventories: InventoryEntity[];
-
     @ManyToOne(() => SupplierEntity)
     @JoinColumn({
       name: 'supplier_id',
@@ -34,4 +31,7 @@ export class WarehouseEntity extends BaseEntity {
       foreignKeyConstraintName: 'fk_supplier_id',
     })
     supplier: SupplierEntity;
+
+    @OneToMany(() => InventoryEntity, (inventory) => inventory.warehouse)
+    inventories: InventoryEntity[];
 }

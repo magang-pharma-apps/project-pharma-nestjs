@@ -31,6 +31,7 @@ export class UnitsController {
     type: CreateUnitDto,
   })
 
+  // @Permission('create:unit')
   @Post()
   async create(@Body() createUnitDto: CreateUnitDto) {
     const unit = await this.unitsService.create(createUnitDto);
@@ -58,6 +59,7 @@ export class UnitsController {
     type: UnitDtoOut,
   })
 
+  // @Permission('read:unit')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const unit = await this.unitsService.findOne(+id);
@@ -71,9 +73,11 @@ export class UnitsController {
     type: UpdateUnitDto,
   })
 
+  // @Permission('update:unit')
   @Patch(':id')
-  async update(@Param('id') id: string, 
-  @Body() updateUnitDto: UpdateUnitDto
+  async update(
+    @Param('id') id: string,
+    @Body() updateUnitDto: UpdateUnitDto
 ) {
     const unit = await this.unitsService.update(
       +id, 
@@ -83,6 +87,7 @@ export class UnitsController {
     return new ResponseFormatter(unit, 'Unit updated');
   }
 
+  // @Permission('delete:unit')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const unit = await this.unitsService.remove(+id);

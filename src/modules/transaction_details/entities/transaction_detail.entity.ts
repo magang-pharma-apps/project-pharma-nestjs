@@ -1,7 +1,13 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { TransactionEntity } from "src/modules/transactions/entities/transaction.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { 
+  Column, 
+  Entity, 
+  JoinColumn, 
+  ManyToOne, 
+  PrimaryGeneratedColumn 
+} from "typeorm";
 
 @Entity('transaction_details')
 export class TransactionDetailEntity extends BaseEntity {
