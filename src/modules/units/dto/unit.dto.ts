@@ -9,7 +9,4 @@ export class UnitDtoOut {
 
     @ApiProperty()
     description: string;
-
-    // @ApiProperty()
-    // status: boolean;
 }

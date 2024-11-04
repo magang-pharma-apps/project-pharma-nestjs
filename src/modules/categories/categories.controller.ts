@@ -59,6 +59,7 @@ export class CategoriesController {
     type: CategoryDtoOut,
   })
   
+  // @Permission('read:category')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const category = await this.categoriesService.findOne(+id);
@@ -72,6 +73,7 @@ export class CategoriesController {
     type: UpdateCategoryDto,
   })
   
+  // @Permission('update:category')
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -85,6 +87,7 @@ export class CategoriesController {
     return new ResponseFormatter(category, 'Category updated');
   }
 
+  // @Permission('delete:category')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const category = await this.categoriesService.remove(+id);

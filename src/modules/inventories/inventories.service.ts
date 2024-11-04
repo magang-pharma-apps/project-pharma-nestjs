@@ -36,7 +36,7 @@ export class InventoriesService {
         note: true,
         product: {
           name: true,
-          purchasePrice: true,
+          status: true,
         },
         warehouse: {
           name: true,
@@ -71,7 +71,7 @@ export class InventoriesService {
       note: true,
       product: {
         name: true,
-        purchasePrice: true,
+        status: true,
       },
       warehouse: {
         name: true,

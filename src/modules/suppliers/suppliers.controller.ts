@@ -31,6 +31,7 @@ export class SuppliersController {
     type: CreateSupplierDto,
   })
 
+  // @Permission('create:supplier')
   @Post()
   async create(@Body() createSupplierDto: CreateSupplierDto) {
     const supplier = await this.suppliersService.create(createSupplierDto);
@@ -58,6 +59,7 @@ export class SuppliersController {
     type: SupplierDtoOut,
   })
 
+  // @Permission('read:supplier')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const supplier = await this.suppliersService.findOne(+id);
@@ -71,6 +73,7 @@ export class SuppliersController {
     type: UpdateSupplierDto,
   })
 
+  // @Permission('update:supplier')
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -84,6 +87,7 @@ export class SuppliersController {
     return new ResponseFormatter(supplier, 'Supplier updated');
   }
 
+  // @Permission('delete:supplier')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const supplier = await this.suppliersService.remove(+id);

@@ -21,7 +21,10 @@ export class TransactionDetailsService {
   async findAll() {
     const transactionDetails = await this.transactionDetailRepository.find({
       where: {
-        deletedAt: null
+        deletedAt: null,
+        transaction: {
+          status: true
+        },
       },
       order: {
         id: 'DESC'
@@ -33,7 +36,7 @@ export class TransactionDetailsService {
         note: true,
         product: {
           name: true,
-          purchasePrice: true
+          status: true
         },
         transaction: {
           status: true
@@ -51,7 +54,10 @@ export class TransactionDetailsService {
   async findOne(id: number) {
     const transactionDetail = await this.transactionDetailRepository.findOne({
       where: {
-        deletedAt: null
+        deletedAt: null,
+        transaction: {
+          status: true
+        },
       },
       order: {
         id: 'DESC'
@@ -63,7 +69,7 @@ export class TransactionDetailsService {
         note: true,
         product: {
           name: true,
-          purchasePrice: true
+          status: true
         },
         transaction: {
           status: true

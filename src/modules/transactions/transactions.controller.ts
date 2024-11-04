@@ -8,7 +8,6 @@ import {
   Delete, 
   UseGuards,
   HttpStatus,
-  NotFoundException
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -21,11 +20,18 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('accessToken')
-@UseGuards(AuthGuard)
 @Controller('transactions')
+@UseGuards(AuthGuard)
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Transaction data',
+    type: CreateTransactionDto,
+  })
+
+  // @Permission('create:transaction')
   @Post()
   async create(@Body() createTransactionDto: CreateTransactionDto) {
     const transaction = await this.transactionsService.create(createTransactionDto);
@@ -44,10 +50,6 @@ export class TransactionsController {
   async findAll() {
     const transactions = await this.transactionsService.findAll();
 
-    if (!transactions) {
-      return new NotFoundException('Transactions not found');
-    }
-
     return new ResponseFormatter(transactions, 'Transactions found');
   }
 
@@ -57,39 +59,39 @@ export class TransactionsController {
     type: TransactionDtoOut,
   })
 
+  // @Permission('read:transaction')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const transaction = await this.transactionsService.findOne(+id);
 
-    if (!transaction) {
-      return new NotFoundException('Transaction not found');
-    } 
-
     return new ResponseFormatter(transaction, 'Transaction found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Transaction data',
+    type: UpdateTransactionDto,
+  })
+
+  // @Permission('update:transaction')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
     @Body() updateTransactionDto: UpdateTransactionDto
   ) {
-    const transaction = await this.transactionsService.update(+id, updateTransactionDto);
-
-    if (!transaction) {
-      return new NotFoundException('Transaction not found');
-    }
+    const transaction = await this.transactionsService.update(
+      +id, 
+      updateTransactionDto,
+    );
 
     return new ResponseFormatter(transaction, 'Transaction updated');
   }
 
+  // @Permission('delete:transaction')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const transaction = await this.transactionsService.remove(+id);
 
-    if (!transaction) {
-      return new NotFoundException('Transaction not found');
-    }
-
-    return new ResponseFormatter(transaction, 'Transaction removed');
+    return new ResponseFormatter(transaction, 'Transaction deleted');
   }
 }

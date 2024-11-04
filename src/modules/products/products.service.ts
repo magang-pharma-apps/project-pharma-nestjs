@@ -87,7 +87,7 @@ export class ProductsService {
           status: true,
         },
       },
-     });
+    });
 
     if (!products) {
       throw new NotFoundException('Products not found');
@@ -99,7 +99,7 @@ export class ProductsService {
       return product;
     });
 
-    return products;
+    return data;
   }
 
   async findOne(id: number) {

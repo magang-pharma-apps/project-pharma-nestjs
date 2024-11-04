@@ -1,7 +1,7 @@
+import { UUID } from "crypto";
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { CardStockEntryEntity } from "src/modules/card_stock_entries/entities/card_stock_entry.entity";
-import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { 
     Column, 
     Entity, 
@@ -22,19 +22,19 @@ export class TransactionEntity extends BaseEntity {
     id: number;
 
     @Column({ name: 'user_id' })
-    user_id: number;
+    userId: UUID;
 
     @Column({ name: 'transaction_date' })
-    transaction_date: Date;
+    transactionDate: Date;
 
     // @Column({ name: 'transaction_type', type: 'enum', enum: TransactionType })
     // transaction_type: TransactionType;
 
     @Column({ name: 'transaction_type' })
-    transaction_type: string
+    transactionType: string
 
     @Column({ name: 'category_type'})
-    category_type: string
+    categoryType: string
 
     @Column({ name: 'note'})
     note: string

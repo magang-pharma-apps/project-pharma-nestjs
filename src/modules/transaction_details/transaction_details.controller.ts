@@ -18,6 +18,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { TransactionDetailDtoOut } from './dto/transaction_detail.dto';
 import { Not } from 'typeorm';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 
 @ApiTags('Transaction Details')
@@ -27,6 +28,13 @@ import { Not } from 'typeorm';
 export class TransactionDetailsController {
   constructor(private readonly transactionDetailsService: TransactionDetailsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Transaction detail data',
+    type: CreateTransactionDetailDto,
+  })
+
+  // @Permission('create:transaction-detail')
   @Post()
   async create(@Body() createTransactionDetailDto: CreateTransactionDetailDto) {
     const transactionDetail = await this.transactionDetailsService.create(createTransactionDetailDto);
@@ -36,10 +44,11 @@ export class TransactionDetailsController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'transaction detail data',
+    description: 'Transaction detail data',
     type: TransactionDetailDtoOut,
   })
 
+  // @Permission('read:transaction-detail')
   @Get()
   async findAll() {
     const transactionDetails = await this.transactionDetailsService.findAll();
@@ -53,10 +62,11 @@ export class TransactionDetailsController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'transaction detail data',
+    description: 'Transaction detail data',
     type: TransactionDetailDtoOut,
   })
 
+  // @Permission('read:transaction-detail')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const transactionDetail = await this.transactionDetailsService.findOne(+id);
@@ -68,6 +78,13 @@ export class TransactionDetailsController {
     return new ResponseFormatter(transactionDetail, 'Transaction Detail found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Transaction detail data',
+    type: UpdateTransactionDetailDto,
+  })
+
+  // @Permission('update:transaction-detail')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -82,6 +99,7 @@ export class TransactionDetailsController {
     return new ResponseFormatter(transactionDetail, 'Transaction Detail updated');
   }
 
+  // @Permission('delete:transaction-detail')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const transactionDetail = await this.transactionDetailsService.remove(+id);

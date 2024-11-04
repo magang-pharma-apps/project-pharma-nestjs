@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { UUID } from "crypto";
 // import { TransactionType } from "../entities/transaction.entity";
 
 export class TransactionDtoOut {
@@ -6,19 +7,19 @@ export class TransactionDtoOut {
     id: number;
 
     @ApiPropertyOptional()
-    user_id: number;
+    userId: UUID;
 
     @ApiProperty()
-    transaction_date: Date;
+    transactionDate: Date;
 
     // @ApiProperty()
     // transaction_type: TransactionType;
 
     @ApiProperty()
-    transaction_type: string;
+    transactionType: string;
     
     @ApiProperty()
-    category_type: string;
+    categoryType: string;
 
     @ApiProperty()
     note: string;

@@ -22,6 +22,9 @@ export class WarehouseService {
     const warehouses = await this.warehouseRepository.find({
       where: {
         deletedAt: null,
+        supplier: {
+          status: true
+        },
       },
       order: {
         id: 'DESC',
@@ -38,7 +41,7 @@ export class WarehouseService {
           address: true,
           status: true,
         },
-      }
+      },
     });
 
     if (!warehouses) {
@@ -53,6 +56,9 @@ export class WarehouseService {
       where: {
         id: id,
         deletedAt: null,
+        supplier: {
+          status: true
+        },
       },
       order: {
         id: 'DESC',
@@ -69,7 +75,7 @@ export class WarehouseService {
           address: true,
           status: true,
         },
-      }
+      },
     });
 
     if (!warehouse) {

@@ -7,9 +7,6 @@ export class CreateWarehouseDto {
     @ApiProperty()
     location: string;
 
-    // @ApiProperty()
-    // status: boolean;
-
     @ApiProperty()
     supplierId: number;
 }
