@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UUID } from "crypto";
+import { PaymentMethod } from "../entities/transaction.entity";
 // import { TransactionType } from "../entities/transaction.entity";
 
 export class TransactionDtoOut {
@@ -32,4 +33,7 @@ export class TransactionDtoOut {
 
     @ApiProperty()
     grandTotal: number;
+
+    @ApiPropertyOptional()
+    paymentMethod?: PaymentMethod;
 }

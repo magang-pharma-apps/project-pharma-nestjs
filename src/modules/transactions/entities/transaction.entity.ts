@@ -2,6 +2,7 @@ import { UUID } from "crypto";
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { CardStockEntryEntity } from "src/modules/card_stock_entries/entities/card_stock_entry.entity";
+import { TransactionDetailEntity } from "src/modules/transaction_details/entities/transaction_detail.entity";
 import { 
     Column, 
     Entity, 
@@ -15,6 +16,11 @@ import {
 //     MASUK = 'masuk',
 //     KELUAR = 'keluar',
 // }
+
+export enum PaymentMethod {
+    CASH = 'Cash',
+    DEBIT = 'Debit',
+  }
 
 @Entity('transactions')
 export class TransactionEntity extends BaseEntity {
@@ -31,22 +37,25 @@ export class TransactionEntity extends BaseEntity {
     // transaction_type: TransactionType;
 
     @Column({ name: 'transaction_type' })
-    transactionType: string
+    transactionType: string;
 
     @Column({ name: 'category_type'})
-    categoryType: string
+    categoryType: string;
 
     @Column({ name: 'note'})
-    note: string
+    note: string;
 
     @Column({ name: 'tax'})
-    tax: number
+    tax: number;
 
     @Column({ name: 'sub_total'})
-    subTotal: number
+    subTotal: number;
 
     @Column({ name: 'grand_total'})
-    grandTotal: number
+    grandTotal: number;
+
+    @Column({ name: 'payment_method', type: 'enum', enum: PaymentMethod, nullable: true })
+    paymentMethod: PaymentMethod;
 
     @ManyToOne(() => UserEntity)
     @JoinColumn({
@@ -55,6 +64,9 @@ export class TransactionEntity extends BaseEntity {
         foreignKeyConstraintName: 'fk_user_id',
     })
     user: UserEntity;
+
+    @OneToMany(() => TransactionDetailEntity, (transactionDetail) => transactionDetail.transaction)
+    transactionDetails: TransactionDetailEntity[];
 
     @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.transaction)
     cardStockEntries: CardStockEntryEntity[];
