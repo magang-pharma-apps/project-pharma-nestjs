@@ -4,8 +4,8 @@ export class CreateTransactionDetailDto {
     @ApiProperty()
     productId: number;
 
-    @ApiProperty()
-    transactionId: number;
+    // @ApiProperty()
+    // transactionId: number;
 
     @ApiProperty()
     quantity: number;

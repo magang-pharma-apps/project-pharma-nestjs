@@ -65,8 +65,8 @@ export class TransactionEntity extends BaseEntity {
     })
     user: UserEntity;
 
-    @OneToMany(() => TransactionDetailEntity, (transactionDetail) => transactionDetail.transaction)
-    transactionDetails: TransactionDetailEntity[];
+    @OneToMany(() => TransactionDetailEntity, (transactionDetail) => transactionDetail.transaction, {cascade: true})
+    items: TransactionDetailEntity[];
 
     @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.transaction)
     cardStockEntries: CardStockEntryEntity[];

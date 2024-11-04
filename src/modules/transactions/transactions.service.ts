@@ -13,7 +13,13 @@ export class TransactionsService {
   ) {}
 
   async create(data: CreateTransactionDto) {
-    const transaction = this.transactionRepository.create(data);
+    const transaction = this.transactionRepository.create({
+      ...data,
+      items: data.items.map(item => ({
+        ...item,
+        transaction: undefined,
+      }))
+    });
 
     return await this.transactionRepository.save(transaction);
   }
