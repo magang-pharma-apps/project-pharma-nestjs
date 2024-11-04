@@ -1,6 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UUID } from "crypto";
 import { PaymentMethod } from "../entities/transaction.entity";
+import { CreateTransactionDetailDto } from "src/modules/transaction_details/dto/create-transaction_detail.dto";
+import { IsArray, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateTransactionDto {
     @ApiPropertyOptional()
@@ -29,4 +32,10 @@ export class CreateTransactionDto {
 
     @ApiProperty()
     paymentMethod?: PaymentMethod;
+
+    @ApiProperty({ type: [CreateTransactionDetailDto] })
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateTransactionDetailDto)
+    items: CreateTransactionDetailDto[];
 }
