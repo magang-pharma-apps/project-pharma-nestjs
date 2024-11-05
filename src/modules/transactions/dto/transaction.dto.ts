@@ -36,4 +36,7 @@ export class TransactionDtoOut {
 
     @ApiPropertyOptional()
     paymentMethod?: PaymentMethod;
+
+    @ApiProperty() // Menggunakan properti untuk id resep jika perlu
+    prescriptionId: number;
 }
