@@ -38,4 +38,7 @@ export class CreateTransactionDto {
     @ValidateNested({ each: true })
     @Type(() => CreateTransactionDetailDto)
     items: CreateTransactionDetailDto[];
+
+    @ApiProperty() // Menggunakan properti untuk id resep jika perlu
+    prescriptionId: number;
 }

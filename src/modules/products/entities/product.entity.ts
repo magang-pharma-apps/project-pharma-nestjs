@@ -91,6 +91,6 @@ export class ProductEntity extends BaseEntity {
   @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.product)
   cardStockEntries: CardStockEntryEntity[];
 
-  @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.product)
-  prescriptionRedemptions: PrescriptionRedemptionEntity[];
+  // @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.product)
+  // prescriptionRedemptions: PrescriptionRedemptionEntity[];
 }

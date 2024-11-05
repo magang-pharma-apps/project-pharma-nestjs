@@ -8,8 +8,8 @@ export class PrescriptionRedemptionDtoOut {
     @ApiProperty()
     prescriptionId: number
 
-    @ApiProperty()
-    productId: number    
+    // @ApiProperty()
+    // productId: number    
 
     @ApiProperty()
     price: number
