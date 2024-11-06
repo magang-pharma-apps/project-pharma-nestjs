@@ -69,7 +69,7 @@ export class TransactionEntity extends BaseEntity {
     })
     user: UserEntity;
 
-    @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transactions)
+    @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transaction)
     @JoinColumn({
         name: 'prescription_id',
         referencedColumnName: 'id',

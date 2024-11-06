@@ -4,6 +4,7 @@ import { UpdatePrescriptionRedemptionDto } from './dto/update-prescription_redem
 import { InjectRepository } from '@nestjs/typeorm';
 import { PrescriptionRedemptionEntity } from './entities/prescription_redemption.entity';
 import { Repository } from 'typeorm';
+import { TransactionDetailEntity } from '../transaction_details/entities/transaction_detail.entity';
 
 @Injectable()
 export class PrescriptionRedemptionsService {
@@ -19,40 +20,36 @@ export class PrescriptionRedemptionsService {
   // }
 
   async create(data: CreatePrescriptionRedemptionDto) {
-    // Membuat PrescriptionRedemptionEntity baru dengan transaksi dan detailnya
+    // Membuat entitas PrescriptionRedemption dengan transaksi tunggal
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
-      prescriptionId: data.prescriptionId, // Jika ada
-      price: data.price, // Sesuaikan dengan DTO
-      isPaid: data.isPaid, // Sesuaikan dengan DTO
-  
-      // Menyertakan transaksi dan detail transaksinya
-      transactions: data.transactions.map(transaction => ({
-        userId: transaction.userId,
-        transactionDate: transaction.transactionDate,
-        transactionType: transaction.transactionType,
-        categoryType: transaction.categoryType,
-        note: transaction.note,
-        tax: transaction.tax,
-        subTotal: transaction.subTotal,
-        grandTotal: transaction.grandTotal,
-        paymentMethod: transaction.paymentMethod,
-  
-        // Map detail transaksi
-        items: transaction.items.map(detail => ({
-          productId: detail.productId,
-          quantity: detail.quantity,
-          note: detail.note,
-          // Tambahkan properti lain yang diperlukan
-        })),
-      })),
+      prescriptionId: data.prescriptionId,
+      price: data.price,
+      isPaid: data.isPaid,
+      transaction: {
+          userId: data.transaction.userId,
+          transactionDate: data.transaction.transactionDate,
+          transactionType: data.transaction.transactionType,
+          categoryType: data.transaction.categoryType,
+          note: data.transaction.note,
+          tax: data.transaction.tax,
+          subTotal: data.transaction.subTotal,
+          grandTotal: data.transaction.grandTotal,
+          paymentMethod: data.transaction.paymentMethod,
+          prescriptionId: data.prescriptionId,
+          // Membuat items untuk transaksi
+          items: data.transaction.items.map(itemData => {
+            const item = new TransactionDetailEntity();
+            item.productId = itemData.productId;
+            item.quantity = itemData.quantity;
+            item.note = itemData.note;
+            return item;
+          }),
+      },
     });
   
-    // Simpan PrescriptionRedemption beserta transaksi dan detailnya
+    // Simpan PrescriptionRedemption beserta transaksi dan item
     return await this.prescriptionRedemptionRepository.save(prescriptionRedemption);
-
-    // const savedPrescriptionRedemption = await this.prescriptionRedemptionRepository.save(prescriptionRedemption);
-
-    // return savedPrescriptionRedemption;
+    
   }  
 
   findAll() {
