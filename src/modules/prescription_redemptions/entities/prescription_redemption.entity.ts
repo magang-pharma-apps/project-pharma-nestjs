@@ -29,6 +29,9 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
     @Column({ name: 'is_paid', type: 'boolean', default: false })
     isPaid: boolean;
 
+    @Column({ name: 'is_redeem', type: 'boolean', default: false })
+    isRedeem: boolean;
+
     @ManyToOne(() => PrescriptionEntity)
     @JoinColumn({
         name: 'prescription_id',

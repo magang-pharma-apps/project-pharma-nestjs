@@ -16,4 +16,7 @@ export class PrescriptionRedemptionDtoOut {
 
     @ApiProperty()
     isPaid: boolean
+
+    @ApiProperty()
+    isRedeem: boolean
 }

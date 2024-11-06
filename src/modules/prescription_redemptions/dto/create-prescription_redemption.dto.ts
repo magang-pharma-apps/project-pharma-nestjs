@@ -16,6 +16,9 @@ export class CreatePrescriptionRedemptionDto {
     @ApiProperty()
     isPaid: boolean;
 
+    @ApiProperty()
+    isRedeem: boolean;
+
     // Ubah ini menjadi object, bukan array
     @ApiProperty({ type: CreateTransactionDto })
     @ValidateNested() // Validasi objek
