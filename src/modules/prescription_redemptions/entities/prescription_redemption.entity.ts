@@ -23,8 +23,8 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
     // @Column({ name: 'product_id' })
     // productId: number;
 
-    @Column({ name: 'price' })
-    price: number;
+    // @Column({ name: 'price' })
+    // price: number;
 
     @Column({ name: 'is_paid', type: 'boolean', default: false })
     isPaid: boolean;

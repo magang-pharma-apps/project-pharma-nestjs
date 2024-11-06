@@ -58,8 +58,8 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'payment_method', type: 'enum', enum: PaymentMethod, nullable: true })
     paymentMethod: PaymentMethod;
 
-    @Column({ name: 'prescription_id', nullable: true })
-    prescriptionId: number;
+    @Column({ name: 'redemption_id', nullable: true })
+    redemptionId: number;
 
     @ManyToOne(() => UserEntity)
     @JoinColumn({
@@ -71,7 +71,7 @@ export class TransactionEntity extends BaseEntity {
 
     @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transaction)
     @JoinColumn({
-        name: 'prescription_id',
+        name: 'redemption_id',
         referencedColumnName: 'id',
     })
     prescriptionRedemption: PrescriptionRedemptionEntity; // Menambahkan relasi ke PrescriptionRedemptionEntity

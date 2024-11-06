@@ -10,8 +10,8 @@ export class CreatePrescriptionRedemptionDto {
     // @ApiProperty()
     // productId: number;
 
-    @ApiProperty()
-    price: number;
+    // @ApiProperty()
+    // price: number;
 
     @ApiProperty()
     isPaid: boolean;
