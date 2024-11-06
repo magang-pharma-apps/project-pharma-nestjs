@@ -24,7 +24,7 @@ export class PrescriptionsService {
         deletedAt: null,
       },
       order: {
-        id: 'DESC',
+        isRedeem: 'ASC',
       },
       relations: ['doctor', 'customer'],
       select: {

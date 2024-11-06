@@ -5,12 +5,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PrescriptionRedemptionEntity } from './entities/prescription_redemption.entity';
 import { Repository } from 'typeorm';
 import { TransactionDetailEntity } from '../transaction_details/entities/transaction_detail.entity';
+import { PrescriptionEntity } from '../prescriptions/entities/prescription.entity';
 
 @Injectable()
 export class PrescriptionRedemptionsService {
   constructor(
     @InjectRepository(PrescriptionRedemptionEntity)
     private readonly prescriptionRedemptionRepository: Repository<PrescriptionRedemptionEntity>,
+
+    @InjectRepository(PrescriptionEntity)
+    private readonly prescriptionRepository: Repository<PrescriptionEntity>,
   ) {}
 
   // async create(data: CreatePrescriptionRedemptionDto) {
@@ -19,12 +23,34 @@ export class PrescriptionRedemptionsService {
   //   return await this.prescriptionRedemptionRepository.save(prescriptionRedemption);
   // }
 
+  // Metode untuk memperbarui status isRedeem pada Prescription
+  async updatePrescriptionRedeemStatus(prescriptionId: number, isRedeem: boolean): Promise<void> {
+    const prescription = await this.prescriptionRepository.findOne({
+      where: { id: prescriptionId },
+    });
+
+    if (prescription) {
+      prescription.isRedeem = isRedeem;  // Perbarui status isRedeem
+      await this.prescriptionRepository.save(prescription);  // Simpan perubahan
+    } else {
+      throw new Error('Prescription not found');
+    }
+  }
+
   async create(data: CreatePrescriptionRedemptionDto) {
+    const { isRedeem, prescriptionId } = data;
+
+    // Jika isRedeem = true, update status isRedeem di Prescription
+    if (isRedeem) {
+      await this.updatePrescriptionRedeemStatus(prescriptionId, true);
+    }
+
     // Membuat entitas PrescriptionRedemption dengan transaksi tunggal
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
       prescriptionId: data.prescriptionId,
       // price: data.price,
       isPaid: data.isPaid,
+      isRedeem: data.isRedeem,
       transaction: {
           userId: data.transaction.userId,
           transactionDate: data.transaction.transactionDate,
@@ -126,23 +152,34 @@ export class PrescriptionRedemptionsService {
   }
 
   async update(id: number, data: UpdatePrescriptionRedemptionDto) {
+    // Temukan PrescriptionRedemption berdasarkan ID
     const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
       where: {
         id: id,
         deletedAt: null,
       },
+      relations: ['prescription'], // Pastikan kita mendapatkan relasi ke Prescription
     });
-
+  
     if (!prescriptionRedemption) {
       throw new NotFoundException('PrescriptionRedemption not found');
     }
-
-    Object.assign(prescriptionRedemption, data);      
-
+  
+    // Jika ada isRedeem pada data yang diterima, update Prescription
+    if (data.isRedeem !== undefined) {
+      const prescription = prescriptionRedemption.prescription; // Ambil Prescription terkait
+      prescription.isRedeem = data.isRedeem;  // Update isRedeem
+      await this.prescriptionRepository.save(prescription);  // Simpan perubahan ke Prescription
+    }
+  
+    // Terapkan perubahan lainnya pada PrescriptionRedemption
+    Object.assign(prescriptionRedemption, data);
+  
+    // Simpan PrescriptionRedemption yang telah diperbarui
     const updatedPrescriptionRedemption = await this.prescriptionRedemptionRepository.save(prescriptionRedemption);
-
+  
     return updatedPrescriptionRedemption;
-  }
+  }  
 
   async remove(id: number) {
     const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
@@ -160,4 +197,6 @@ export class PrescriptionRedemptionsService {
 
     return deletedPrescriptionRedemption;
   }
+
+
 }

@@ -23,14 +23,23 @@ import { PrescriptionRedemptionDtoOut } from './dto/prescription_redemption.dto'
 @UseGuards(AuthGuard)
 @Controller('prescription-redemptions')
 export class PrescriptionRedemptionsController {
-  constructor(private readonly prescriptionRedemptionsService: PrescriptionRedemptionsService) {}
+  constructor(
+    private readonly prescriptionRedemptionsService: PrescriptionRedemptionsService
+  ) {}
 
   @Post()
   async create(@Body() createPrescriptionRedemptionDto: CreatePrescriptionRedemptionDto) {
-    const prescriptionRedemption = await this.prescriptionRedemptionsService.create(createPrescriptionRedemptionDto);
+    const { isRedeem, prescriptionId } = createPrescriptionRedemptionDto;
 
-    return new ResponseFormatter(prescriptionRedemption, 'PrescriptionRedemption created');
+    // Jika isRedeem = true, update status isRedeem di Prescription
+    if (isRedeem) {
+      await this.prescriptionRedemptionsService.updatePrescriptionRedeemStatus(prescriptionId, true);
+    }
+
+    // Panggil service untuk memproses data redemption
+    return this.prescriptionRedemptionsService.create(createPrescriptionRedemptionDto);
   }
+
 
   @ApiResponse({
     status: HttpStatus.OK,
