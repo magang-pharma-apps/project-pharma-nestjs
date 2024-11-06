@@ -8,6 +8,7 @@ import {
     JoinColumn, 
     ManyToOne, 
     OneToMany, 
+    OneToOne, 
     PrimaryGeneratedColumn 
 } from "typeorm";
 
@@ -44,6 +45,6 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
     // })
     // product: ProductEntity;
 
-    @OneToMany(() => TransactionEntity, (transaction) => transaction.prescriptionRedemption, { cascade: true })
-    transactions: TransactionEntity[]; // Menambahkan relasi dengan TransactionEntity
+    @OneToOne(() => TransactionEntity, (transaction) => transaction.prescriptionRedemption, { cascade: true })
+    transaction: TransactionEntity; // Menambahkan relasi dengan TransactionEntity
 }
