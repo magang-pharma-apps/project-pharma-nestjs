@@ -40,5 +40,5 @@ export class CreateTransactionDto {
     items: CreateTransactionDetailDto[];
 
     @ApiProperty() // Menggunakan properti untuk id resep jika perlu
-    prescriptionId: number;
+    redemptionId: number;
 }

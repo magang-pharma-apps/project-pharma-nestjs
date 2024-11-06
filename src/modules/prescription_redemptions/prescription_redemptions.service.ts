@@ -23,7 +23,7 @@ export class PrescriptionRedemptionsService {
     // Membuat entitas PrescriptionRedemption dengan transaksi tunggal
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
       prescriptionId: data.prescriptionId,
-      price: data.price,
+      // price: data.price,
       isPaid: data.isPaid,
       transaction: {
           userId: data.transaction.userId,
@@ -35,7 +35,7 @@ export class PrescriptionRedemptionsService {
           subTotal: data.transaction.subTotal,
           grandTotal: data.transaction.grandTotal,
           paymentMethod: data.transaction.paymentMethod,
-          prescriptionId: data.prescriptionId,
+          redemptionId: data.transaction.redemptionId,
           // Membuat items untuk transaksi
           items: data.transaction.items.map(itemData => {
             const item = new TransactionDetailEntity();
@@ -63,7 +63,6 @@ export class PrescriptionRedemptionsService {
       relations: ['prescription'],
       select: {
         id: true,
-        price: true,
         prescription: {
           id: true,
           prescriptionCode: true,
@@ -79,23 +78,6 @@ export class PrescriptionRedemptionsService {
             status: true,
           },
         },
-        // product:{
-        //   id: true,
-        //   name: true,
-        //   purchasePrice: true,
-        //   sellingPrice: true,
-        //   expiryDate: true,
-        //   localImagePath: true,
-        //   drugClass: true,
-        //   category: {
-        //     name: true,
-        //     status: true,
-        //   },
-        //   unit: {
-        //     name: true,
-        //     status: true,
-        //   },
-        // },
       },
     });
 
@@ -118,7 +100,6 @@ export class PrescriptionRedemptionsService {
       relations: ['prescription'],
       select: {
         id: true,
-        price: true,
         prescription: {
           id: true,
           prescriptionCode: true,
@@ -134,23 +115,6 @@ export class PrescriptionRedemptionsService {
             status: true,
           },
         },
-        // product:{
-        //   id: true,
-        //   name: true,
-        //   purchasePrice: true,
-        //   sellingPrice: true,
-        //   expiryDate: true,
-        //   localImagePath: true,
-        //   drugClass: true,
-        //   category: {
-        //     name: true,
-        //     status: true,
-        //   },
-        //   unit: {
-        //     name: true,
-        //     status: true,
-        //   },
-        // },
       },
     });
 

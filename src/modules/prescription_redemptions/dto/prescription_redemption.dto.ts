@@ -11,8 +11,8 @@ export class PrescriptionRedemptionDtoOut {
     // @ApiProperty()
     // productId: number    
 
-    @ApiProperty()
-    price: number
+    // @ApiProperty()
+    // price: number
 
     @ApiProperty()
     isPaid: boolean
