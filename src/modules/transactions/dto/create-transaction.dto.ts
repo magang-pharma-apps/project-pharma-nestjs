@@ -1,9 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UUID } from "crypto";
-import { PaymentMethod } from "../entities/transaction.entity";
 import { CreateTransactionDetailDto } from "src/modules/transaction_details/dto/create-transaction_detail.dto";
 import { IsArray, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
+import { CategoryType, PaymentMethod, TransactionType } from "../enums/transaction.enums";
 
 export class CreateTransactionDto {
     @ApiPropertyOptional()
@@ -12,11 +12,11 @@ export class CreateTransactionDto {
     @ApiProperty()
     transactionDate: Date;
 
-    @ApiProperty()
-    transactionType: string;
+    @ApiProperty({ enum: TransactionType })
+    transactionType: TransactionType;
 
-    @ApiProperty()
-    categoryType: string;
+    @ApiProperty({ enum: CategoryType })
+    categoryType: CategoryType;
 
     @ApiProperty()
     note: string;
@@ -30,7 +30,7 @@ export class CreateTransactionDto {
     @ApiProperty()
     grandTotal: number;
 
-    @ApiProperty()
+    @ApiProperty({ enum: PaymentMethod })
     paymentMethod?: PaymentMethod;
 
     @ApiProperty({ type: [CreateTransactionDetailDto] })
