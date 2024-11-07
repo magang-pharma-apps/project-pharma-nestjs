@@ -158,7 +158,10 @@ export class PrescriptionRedemptionsService {
     const prescriptionRedemptions = this.prescriptionRedemptionRepository.createQueryBuilder('prescriptionRedemption')
       .leftJoinAndSelect('prescriptionRedemption.prescription', 'prescription')
       .leftJoinAndSelect('prescription.doctor', 'doctor')
+      .leftJoinAndSelect('prescription.customer', 'customer')
       .leftJoinAndSelect('prescriptionRedemption.transaction', 'transaction')
+      .leftJoinAndSelect('transaction.items', 'items')
+      .leftJoinAndSelect('items.product', 'product')
       .select([
         'prescriptionRedemption.id',
         'prescriptionRedemption.isPaid',
@@ -168,6 +171,8 @@ export class PrescriptionRedemptionsService {
         'prescription.prescriptionDate',
         'prescription.isRedeem',
         'doctor.name',
+        'customer.name',
+        'customer.age',
         'transaction.id',
         'transaction.userId',
         'transaction.transactionDate',
@@ -177,7 +182,13 @@ export class PrescriptionRedemptionsService {
         'transaction.tax',
         'transaction.subTotal',
         'transaction.grandTotal',
-        'transaction.paymentMethod',        
+        'transaction.paymentMethod',
+        'items.id',
+        'items.quantity',
+        'items.note',
+        'product.name',
+        'product.sellingPrice'
+      
 
       ]).where(
         'prescriptionRedemption.deletedAt IS NULL',
@@ -186,11 +197,25 @@ export class PrescriptionRedemptionsService {
 
     const data = await prescriptionRedemptions.getMany();
       console.log(data);
-    return data;
+
+    // Konversi sellingPrice menjadi float untuk setiap product dalam items
+  data.forEach((prescriptionRedemption) => {
+    if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
+      prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
+        if (item.product && item.product.sellingPrice) {
+          item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
+        }
+        return item;
+      });
+    }
+  });
+
+  return data;
 
 
-    // const data = prescriptionRedemptions.map((prescriptionRedemption) => {
-    //   if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
+    // const parsedData = data.map((prescriptionRedemption) => {
+
+      // if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
     //     prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
     //       if (item.product && item.product.sellingPrice) {
     //         item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
