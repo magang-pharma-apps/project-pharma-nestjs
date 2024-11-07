@@ -4,9 +4,10 @@ import { PrescriptionRedemptionsController } from './prescription_redemptions.co
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrescriptionRedemptionEntity } from './entities/prescription_redemption.entity';
 import { PrescriptionEntity } from '../prescriptions/entities/prescription.entity';
+import { TransactionEntity } from '../transactions/entities/transaction.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PrescriptionRedemptionEntity, PrescriptionEntity])],
+  imports: [TypeOrmModule.forFeature([PrescriptionRedemptionEntity, PrescriptionEntity, TransactionEntity])],
   controllers: [PrescriptionRedemptionsController],
   providers: [PrescriptionRedemptionsService],
 })

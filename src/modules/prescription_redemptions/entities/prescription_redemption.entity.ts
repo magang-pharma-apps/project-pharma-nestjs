@@ -20,6 +20,10 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
     @Column({ name: 'prescription_id' })
     prescriptionId: number;
 
+    @Column({ name: 'transacation_id', type: 'int', nullable: true })
+    transactionId: number;
+
+
     // @Column({ name: 'product_id' })
     // productId: number;
 
@@ -48,6 +52,8 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
     // })
     // product: ProductEntity;
 
-    @OneToOne(() => TransactionEntity, (transaction) => transaction.prescriptionRedemption, { cascade: true })
+    @OneToOne(() => TransactionEntity, { cascade: true })
+    @JoinColumn({ name: 'transacation_id', referencedColumnName: 'id' })
     transaction: TransactionEntity; // Menambahkan relasi dengan TransactionEntity
+    
 }

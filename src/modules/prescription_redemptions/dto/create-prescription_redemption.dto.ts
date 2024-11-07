@@ -19,6 +19,9 @@ export class CreatePrescriptionRedemptionDto {
     @ApiProperty()
     isRedeem: boolean;
 
+    @ApiProperty()
+    transactionId: number;
+
     // Ubah ini menjadi object, bukan array
     @ApiProperty({ type: CreateTransactionDto })
     @IsNotEmpty() // Menandakan bahwa transaksi wajib diisi

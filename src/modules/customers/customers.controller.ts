@@ -30,6 +30,7 @@ export class CustomersController {
     type: CreateCustomerDto
   })
 
+  // @Permission('create:customer')
   @Post()
   async create(@Body() createCustomerDto: CreateCustomerDto) {
     const customer = await this.customersService.create(createCustomerDto);
@@ -43,6 +44,7 @@ export class CustomersController {
     type: CustomerDtoOut
   })
 
+  // @Permission('read:customer')
   @Get()
   async findAll() {
     const customers = await this.customersService.findAll();
@@ -56,6 +58,7 @@ export class CustomersController {
     type: CustomerDtoOut
   })
 
+  // @Permission('read:customer')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const customer = await this.customersService.findOne(+id);
@@ -69,6 +72,7 @@ export class CustomersController {
     type: UpdateCustomerDto
   })
 
+  // @Permission('update:customer')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -82,6 +86,7 @@ export class CustomersController {
     return new ResponseFormatter(customer, 'Customer updated');
   }
 
+  // @Permission('delete:customer')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const customer = await this.customersService.remove(+id);

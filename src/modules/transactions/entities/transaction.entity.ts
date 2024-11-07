@@ -61,9 +61,6 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'payment_method', type: 'enum', enum: PaymentMethod, nullable: true })
     paymentMethod: PaymentMethod;
 
-    @Column({ name: 'redemption_id', nullable: true })
-    redemptionId: number;
-
     @ManyToOne(() => UserEntity)
     @JoinColumn({
         name: 'user_id',
@@ -72,12 +69,12 @@ export class TransactionEntity extends BaseEntity {
     })
     user: UserEntity;
 
-    @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transaction, { lazy: true })
-    @JoinColumn({
-        name: 'redemption_id',
-        referencedColumnName: 'id',
-    })
-    prescriptionRedemption: Promise<PrescriptionRedemptionEntity>; // Menambahkan relasi ke PrescriptionRedemptionEntity
+    // @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transaction, { lazy: true })
+    // @JoinColumn({
+    //     name: 'redemption_id',
+    //     referencedColumnName: 'id',
+    // })
+    // prescriptionRedemption: Promise<PrescriptionRedemptionEntity>; // Menambahkan relasi ke PrescriptionRedemptionEntity
 
     @OneToMany(() => TransactionDetailEntity, (transactionDetail) => transactionDetail.transaction, {cascade: true})
     items: TransactionDetailEntity[];
