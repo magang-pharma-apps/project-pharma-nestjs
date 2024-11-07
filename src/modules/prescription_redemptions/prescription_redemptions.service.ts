@@ -125,6 +125,7 @@ export class PrescriptionRedemptionsService {
             product: {
               id: true,
               name: true,
+              sellingPrice: true,
               status: true,
             },
             quantity: true,
@@ -143,7 +144,20 @@ export class PrescriptionRedemptionsService {
       throw new NotFoundException('No redeemed prescriptions found');
     }
 
-    return filteredData;
+    // Konversi sellingPrice menjadi float untuk setiap product dalam items
+    const data = filteredData.map((prescriptionRedemption) => {
+      if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
+        prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
+          if (item.product && item.product.sellingPrice) {
+            item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
+          }
+          return item;
+        });
+      }
+      return prescriptionRedemption;
+    });
+
+    return data;
   }
 
   async findOne(id: number) {
@@ -195,6 +209,7 @@ export class PrescriptionRedemptionsService {
             product: {
               id: true,
               name: true,
+              sellingPrice: true,
               status: true,
             },
             quantity: true,
@@ -206,6 +221,15 @@ export class PrescriptionRedemptionsService {
 
     if (!prescriptionRedemption || prescriptionRedemption.isRedeem === false) {
       throw new NotFoundException('Redeemed prescription not found');
+    }
+
+    if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
+      prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
+        if (item.product && item.product.sellingPrice) {
+          item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
+        }
+        return item;
+      });
     }
 
     return prescriptionRedemption;
