@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { DoctorDtoOut } from './dto/doctor.dto';
+import { Permission } from 'src/decorators/requires-permission.decorator';
 
 @ApiTags('Doctor')
 @ApiBearerAuth('accessToken')
@@ -30,6 +31,7 @@ export class DoctorsController {
     type: CreateDoctorDto
   })
 
+  // @Permission('creare:doctors')
   @Post()
   async create(@Body() createDoctorDto: CreateDoctorDto) {
     const doctor = await this.doctorsService.create(createDoctorDto);
@@ -43,6 +45,7 @@ export class DoctorsController {
     type: DoctorDtoOut
   })
 
+  // @Permission('read:doctors')
   @Get()
   async findAll() {
     const doctors = await this.doctorsService.findAll();
@@ -56,6 +59,7 @@ export class DoctorsController {
     type: DoctorDtoOut
   })
 
+  // @Permission('read:doctors')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const doctor = await this.doctorsService.findOne(+id);
@@ -69,6 +73,7 @@ export class DoctorsController {
     type: UpdateDoctorDto
   })
 
+  // @Permission('update:doctors')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -82,6 +87,7 @@ export class DoctorsController {
     return new ResponseFormatter(doctor, 'Doctor updated');
   }
 
+  // @Permission('delete:doctors')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const doctor = await this.doctorsService.remove(+id);

@@ -25,6 +25,13 @@ import { PrescriptionDtoOut } from './dto/prescription.dto';
 export class PrescriptionsController {
   constructor(private readonly prescriptionsService: PrescriptionsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Prescription data',
+    type: CreatePrescriptionDto,
+  })
+
+  // @Permission('create:prescription')
   @Post()
   async create(@Body() createPrescriptionDto: CreatePrescriptionDto) {
     const prescription = await this.prescriptionsService.create(createPrescriptionDto);
@@ -38,6 +45,7 @@ export class PrescriptionsController {
     type: PrescriptionDtoOut,
   })
 
+  // @Permission('read:prescription')
   @Get()
   async findAll() {
     const prescription = await this.prescriptionsService.findAll();
@@ -55,6 +63,7 @@ export class PrescriptionsController {
     type: PrescriptionDtoOut,
   })
 
+  // @Permission('read:prescription')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const prescription = await this.prescriptionsService.findOne(+id);
@@ -66,10 +75,18 @@ export class PrescriptionsController {
     return new ResponseFormatter(prescription, 'Prescription');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Prescription data',
+    type: UpdatePrescriptionDto,
+  })
+
+  // @Perission('update:prescription')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
-    @Body() updatePrescriptionDto: UpdatePrescriptionDto) {
+    @Body() updatePrescriptionDto: UpdatePrescriptionDto,
+  ) {
     const prescription = await this.prescriptionsService.update(+id, updatePrescriptionDto);
 
     if (!prescription) {
@@ -79,6 +96,7 @@ export class PrescriptionsController {
     return new ResponseFormatter(prescription, 'Prescription updated');
   }
 
+  // @Permission('delete:prescription')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const prescription = await this.prescriptionsService.remove(+id);
