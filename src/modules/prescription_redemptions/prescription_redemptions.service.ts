@@ -86,19 +86,23 @@ export class PrescriptionRedemptionsService {
       order: {
         id: 'DESC',
       },
-      relations: ['prescription', 'transaction', 'transaction.items'],
+      relations: ['prescription', 'prescription.doctor', 'prescription.customer', 'prescription.customer', 'transaction', 'transaction.items'],
       select: {
         id: true,
+        isPaid: true,
+        isRedeem: true,
         prescription: {
           id: true,
           prescriptionCode: true,
           prescriptionDate: true,
           isRedeem: true,
           doctor: {
+            id: true,
             name: true,
             status: true,
           },
           customer: {
+            id: true,
             name: true,
             age: true,
             status: true,
@@ -142,19 +146,23 @@ export class PrescriptionRedemptionsService {
       order: {
         id: 'DESC',
       },
-      relations: ['prescription', 'transaction', 'transaction.items'],
+      relations: ['prescription', 'prescription.doctor', 'prescription.customer', 'prescription.customer', 'transaction', 'transaction.items'],
       select: {
         id: true,
+        isPaid: true,
+        isRedeem: true,
         prescription: {
           id: true,
           prescriptionCode: true,
           prescriptionDate: true,
           isRedeem: true,
           doctor: {
+            id: true,
             name: true,
             status: true,
           },
           customer: {
+            id: true,
             name: true,
             age: true,
             status: true,
