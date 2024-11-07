@@ -78,8 +78,8 @@ export class PrescriptionRedemptionsService {
     
   }  
 
-  findAll() {
-    const prescriptionRedemptions = this.prescriptionRedemptionRepository.find({
+  async findAll() {
+    const prescriptionRedemptions = await this.prescriptionRedemptionRepository.find({
       where: {
         deletedAt: null,
       },
@@ -134,15 +134,20 @@ export class PrescriptionRedemptionsService {
       },
     });
 
-    if (!prescriptionRedemptions) {
-      throw new NotFoundException('PrescriptionRedemption not found');
+    // Filter the data based on isRedeem condition
+    const filteredData = prescriptionRedemptions.filter((prescriptionRedemption) => {
+      return prescriptionRedemption.isRedeem === true;
+    });
+
+    if (!filteredData || filteredData.length === 0) {
+      throw new NotFoundException('No redeemed prescriptions found');
     }
 
-    return prescriptionRedemptions;
+    return filteredData;
   }
 
-  findOne(id: number) {
-    const prescriptionRedemption = this.prescriptionRedemptionRepository.findOne({
+  async findOne(id: number) {
+    const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
       where: {
         id: id,
         deletedAt: null,
@@ -199,8 +204,8 @@ export class PrescriptionRedemptionsService {
       },
     });
 
-    if (!prescriptionRedemption) {
-      throw new NotFoundException('PrescriptionRedemption not found');
+    if (!prescriptionRedemption || prescriptionRedemption.isRedeem === false) {
+      throw new NotFoundException('Redeemed prescription not found');
     }
 
     return prescriptionRedemption;
