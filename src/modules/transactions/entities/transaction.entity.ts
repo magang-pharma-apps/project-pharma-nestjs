@@ -12,16 +12,22 @@ import {
     OneToMany, 
     PrimaryGeneratedColumn 
 } from "typeorm";
+import { CategoryType, PaymentMethod, TransactionType } from "../enums/transaction.enums";
 
 // export enum TransactionType {
-//     MASUK = 'masuk',
-//     KELUAR = 'keluar',
+//     GENERIC = 'Generic',
+//     PRESCRIPTION = 'Prescription',
 // }
 
-export enum PaymentMethod {
-    CASH = 'Cash',
-    DEBIT = 'Debit',
-  }
+// export enum CategoryType {
+//     IN = 'In',
+//     OUT = 'Out',
+// }
+
+// export enum PaymentMethod {
+//     CASH = 'Cash',
+//     DEBIT = 'Debit',
+//   }
 
 @Entity('transactions')
 export class TransactionEntity extends BaseEntity {
@@ -34,14 +40,11 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'transaction_date' })
     transactionDate: Date;
 
-    // @Column({ name: 'transaction_type', type: 'enum', enum: TransactionType })
-    // transaction_type: TransactionType;
+    @Column({ name: 'transaction_type', type: 'enum', enum: TransactionType, nullable: true })
+    transactionType: TransactionType;
 
-    @Column({ name: 'transaction_type' })
-    transactionType: string;
-
-    @Column({ name: 'category_type'})
-    categoryType: string;
+    @Column({ name: 'category_type', type: 'enum', enum: CategoryType, nullable: true })
+    categoryType: CategoryType;
 
     @Column({ name: 'note'})
     note: string;
@@ -69,12 +72,12 @@ export class TransactionEntity extends BaseEntity {
     })
     user: UserEntity;
 
-    @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transaction)
+    @ManyToOne(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.transaction, { lazy: true })
     @JoinColumn({
         name: 'redemption_id',
         referencedColumnName: 'id',
     })
-    prescriptionRedemption: PrescriptionRedemptionEntity; // Menambahkan relasi ke PrescriptionRedemptionEntity
+    prescriptionRedemption: Promise<PrescriptionRedemptionEntity>; // Menambahkan relasi ke PrescriptionRedemptionEntity
 
     @OneToMany(() => TransactionDetailEntity, (transactionDetail) => transactionDetail.transaction, {cascade: true})
     items: TransactionDetailEntity[];
@@ -82,3 +85,5 @@ export class TransactionEntity extends BaseEntity {
     @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.transaction)
     cardStockEntries: CardStockEntryEntity[];
 }
+export { CategoryType, PaymentMethod };
+

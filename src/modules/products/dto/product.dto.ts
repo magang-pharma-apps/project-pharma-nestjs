@@ -35,6 +35,6 @@ export class ProductDtoOut {
   @ApiPropertyOptional({ description: 'URL of the product image' })
   productImageUrl?: string;
 
-  @ApiPropertyOptional()
-  drugClass?: DrugClass;
+  @ApiProperty({ enum: DrugClass })
+  drugClass: DrugClass;
 }

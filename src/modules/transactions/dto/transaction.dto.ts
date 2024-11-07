@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UUID } from "crypto";
-import { PaymentMethod } from "../entities/transaction.entity";
+import { Transaction } from "typeorm";
+import { CategoryType, PaymentMethod, TransactionType } from "../enums/transaction.enums";
 // import { TransactionType } from "../entities/transaction.entity";
 
 export class TransactionDtoOut {
@@ -13,14 +14,11 @@ export class TransactionDtoOut {
     @ApiProperty()
     transactionDate: Date;
 
-    // @ApiProperty()
-    // transaction_type: TransactionType;
-
-    @ApiProperty()
-    transactionType: string;
+    @ApiProperty({ enum: TransactionType })
+    transactionType: TransactionType;
     
-    @ApiProperty()
-    categoryType: string;
+    @ApiProperty( { enum: CategoryType })
+    categoryType: CategoryType;
 
     @ApiProperty()
     note: string;
@@ -34,7 +32,7 @@ export class TransactionDtoOut {
     @ApiProperty()
     grandTotal: number;
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({ enum: PaymentMethod })
     paymentMethod?: PaymentMethod;
 
     @ApiProperty() // Menggunakan properti untuk id resep jika perlu

@@ -38,6 +38,6 @@ export class CreateProductDto {
   @ApiPropertyOptional({ description: 'URL of the product image' })
   productImageUrl?: string;  // Kolom opsional
 
-  @ApiProperty()
-  drugClass?: DrugClass; // Ubah tipe ini dari string menjadi DrugClass
+  @ApiProperty({ enum: DrugClass })
+  drugClass: DrugClass; // Ubah tipe ini dari string menjadi DrugClass
 }
