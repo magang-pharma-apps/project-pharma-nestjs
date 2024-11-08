@@ -21,12 +21,6 @@ export class PrescriptionRedemptionsService {
     private readonly transactionRepository: Repository<TransactionEntity>
   ) {}
 
-  // async create(data: CreatePrescriptionRedemptionDto) {
-  //   const prescriptionRedemption = this.prescriptionRedemptionRepository.create(data);
-
-  //   return await this.prescriptionRedemptionRepository.save(prescriptionRedemption);
-  // }
-
   // Metode untuk memperbarui status isRedeem pada Prescription
   async updatePrescriptionRedeemStatus(prescriptionId: number, isRedeem: boolean): Promise<void> {
     const prescription = await this.prescriptionRepository.findOne({
@@ -72,13 +66,11 @@ export class PrescriptionRedemptionsService {
 
     await this.transactionRepository.save(transactionRedeem);
 
-    // Membuat entitas PrescriptionRedemption dengan transaksi tunggal
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
       prescriptionId: data.prescriptionId,
-      // price: data.price,
       isPaid: data.isPaid,
       isRedeem: data.isRedeem,
-      transactionId: transactionRedeem.id,
+      transactionId: transactionRedeem.id, // mengambil id dari tabel transaksi bukan dari entitas
       transaction: transactionRedeem
     });
   
@@ -88,73 +80,6 @@ export class PrescriptionRedemptionsService {
   }  
 
   async findAll() {
-    // const prescriptionRedemptions = await this.prescriptionRedemptionRepository.find({
-    //   where: {
-    //     deletedAt: null,
-    //   },
-    //   order: {
-    //     id: 'DESC',
-    //   },
-    //   relations: ['prescription', 'prescription.doctor', 'prescription.customer', 'prescription.customer', 'transaction', 'transaction.items', 'transaction.items.product'],
-    //   select: {
-    //     id: true,
-    //     isPaid: true,
-    //     isRedeem: true,
-    //     prescription: {
-    //       id: true,
-    //       prescriptionCode: true,
-    //       prescriptionDate: true,
-    //       isRedeem: true,
-    //       doctor: {
-    //         id: true,
-    //         name: true,
-    //         status: true,
-    //       },
-    //       customer: {
-    //         id: true,
-    //         name: true,
-    //         age: true,
-    //         status: true,
-    //       },
-    //     },
-    //     transaction: {
-    //       id: true,
-    //       userId: true,
-    //       transactionDate: true,
-    //       transactionType: true,
-    //       categoryType: true,
-    //       note: true,
-    //       tax: true,
-    //       subTotal: true,
-    //       grandTotal: true,
-    //       paymentMethod: true,
-    //       redemptionId: true,
-    //       items: {
-    //         id: true,
-    //         product: {
-    //           id: true,
-    //           name: true,
-    //           sellingPrice: true,
-    //           status: true,
-    //         },
-    //         quantity: true,
-    //         note: true,
-    //       },
-    //     },
-    //   },
-    // });
-
-    // Filter the data based on isRedeem condition
-    // const filteredData = prescriptionRedemptions.filter((prescriptionRedemption) => {
-    //   return prescriptionRedemption.transaction !== null && prescriptionRedemption.isRedeem === true;
-    // });
-
-    // if (!filteredData || filteredData.length === 0) {
-    //   throw new NotFoundException('No redeemed prescriptions found');
-    // }
-
-    // Konversi sellingPrice menjadi float untuk setiap product dalam items
-   
     const prescriptionRedemptions = this.prescriptionRedemptionRepository.createQueryBuilder('prescriptionRedemption')
       .leftJoinAndSelect('prescriptionRedemption.prescription', 'prescription')
       .leftJoinAndSelect('prescription.doctor', 'doctor')
@@ -190,109 +115,77 @@ export class PrescriptionRedemptionsService {
         'product.sellingPrice'
       
 
-      ]).where(
-        'prescriptionRedemption.deletedAt IS NULL',
-      ).orderBy('prescriptionRedemption.id', 'DESC');
-
+      ]).where('prescriptionRedemption.deletedAt IS NULL',
+      ).andWhere('prescriptionRedemption.isRedeem = true',
+      ).orderBy('prescriptionRedemption.id', 'DESC',
+      );
 
     const data = await prescriptionRedemptions.getMany();
-      console.log(data);
+    console.log(data);
 
     // Konversi sellingPrice menjadi float untuk setiap product dalam items
-  data.forEach((prescriptionRedemption) => {
-    if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
-      prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
-        if (item.product && item.product.sellingPrice) {
-          item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
-        }
-        return item;
-      });
-    }
-  });
+    data.forEach((prescriptionRedemption) => {
+      if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
+        prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
+          if (item.product && item.product.sellingPrice) {
+            item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
+          }
+          return item;
+        });
+      }
+    });
 
-  return data;
-
-
-    // const parsedData = data.map((prescriptionRedemption) => {
-
-      // if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
-    //     prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
-    //       if (item.product && item.product.sellingPrice) {
-    //         item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
-    //       }
-    //       return item;
-    //     });
-    //   }
-    //   return prescriptionRedemption;
-    // });
-
-    // return data;
+    return data;
   }
 
   async findOne(id: number) {
-    const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['prescription', 'prescription.doctor', 'prescription.customer', 'prescription.customer', 'transaction', 'transaction.items', 'transaction.items.product'],
-      select: {
-        id: true,
-        isPaid: true,
-        isRedeem: true,
-        prescription: {
-          id: true,
-          prescriptionCode: true,
-          prescriptionDate: true,
-          isRedeem: true,
-          doctor: {
-            id: true,
-            name: true,
-            status: true,
-          },
-          customer: {
-            id: true,
-            name: true,
-            age: true,
-            status: true,
-          },
-          
-        },
-        transaction: {
-          id: true,
-          userId: true,
-          transactionDate: true,
-          transactionType: true,
-          categoryType: true,
-          note: true,
-          tax: true,
-          subTotal: true,
-          grandTotal: true,
-          paymentMethod: true,
-          items: {
-            id: true,
-            product: {
-              id: true,
-              name: true,
-              sellingPrice: true,
-              status: true,
-            },
-            quantity: true,
-            note: true,
-          },
-        },
-      },
-    });
+    const prescriptionRedemption = this.prescriptionRedemptionRepository.createQueryBuilder('prescriptionRedemption')
+      .leftJoinAndSelect('prescriptionRedemption.prescription', 'prescription')
+      .leftJoinAndSelect('prescription.doctor', 'doctor')
+      .leftJoinAndSelect('prescription.customer', 'customer')
+      .leftJoinAndSelect('prescriptionRedemption.transaction', 'transaction')
+      .leftJoinAndSelect('transaction.items', 'items')
+      .leftJoinAndSelect('items.product', 'product')
+      .select([
+        'prescriptionRedemption.id',
+        'prescriptionRedemption.isPaid',
+        'prescriptionRedemption.isRedeem',
+        'prescription.id',
+        'prescription.prescriptionCode',
+        'prescription.prescriptionDate',
+        'prescription.isRedeem',
+        'doctor.name',
+        'customer.name',
+        'customer.age',
+        'transaction.id',
+        'transaction.userId',
+        'transaction.transactionDate',
+        'transaction.transactionType',
+        'transaction.categoryType',
+        'transaction.note',
+        'transaction.tax',
+        'transaction.subTotal',
+        'transaction.grandTotal',
+        'transaction.paymentMethod',
+        'items.id',
+        'items.quantity',
+        'items.note',
+        'product.name',
+        'product.sellingPrice'
+      
 
-    if (!prescriptionRedemption || prescriptionRedemption.isRedeem === false) {
-      throw new NotFoundException('Redeemed prescription not found');
-    }
+      ]).where('prescriptionRedemption.id = :id', { id },
+      ).andWhere('prescriptionRedemption.deletedAt IS NULL',
+      ).andWhere('prescriptionRedemption.isRedeem = true',
+      ).orderBy('prescriptionRedemption.id', 'DESC',
+      );
 
-    if (prescriptionRedemption.transaction && prescriptionRedemption.transaction.items) {
-      prescriptionRedemption.transaction.items = prescriptionRedemption.transaction.items.map((item) => {
+    const data = await prescriptionRedemption.getOne();
+    console.log(data);
+
+    // Konversi sellingPrice menjadi float untuk setiap product dalam items
+    if (data.transaction && data.transaction.items) {
+      data.transaction.items = data.transaction.items.map((item) => {
         if (item.product && item.product.sellingPrice) {
           item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
         }
@@ -300,7 +193,8 @@ export class PrescriptionRedemptionsService {
       });
     }
 
-    return prescriptionRedemption;
+    return data;
+
   }
 
   async update(id: number, data: UpdatePrescriptionRedemptionDto) {
@@ -352,3 +246,7 @@ export class PrescriptionRedemptionsService {
 
 
 }
+function getOne() {
+  throw new Error('Function not implemented.');
+}
+
