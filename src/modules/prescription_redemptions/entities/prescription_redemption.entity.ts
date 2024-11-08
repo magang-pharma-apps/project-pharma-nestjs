@@ -23,13 +23,6 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
     @Column({ name: 'transacation_id', type: 'int', nullable: true })
     transactionId: number;
 
-
-    // @Column({ name: 'product_id' })
-    // productId: number;
-
-    // @Column({ name: 'price' })
-    // price: number;
-
     @Column({ name: 'is_paid', type: 'boolean', default: false })
     isPaid: boolean;
 
@@ -43,14 +36,6 @@ export class PrescriptionRedemptionEntity extends BaseEntityWithoutStatus {
         foreignKeyConstraintName: 'fk_prescription_id',
     })
     prescription: PrescriptionEntity;
-
-    // @ManyToOne(() => ProductEntity)
-    // @JoinColumn({
-    //     name: 'product_id',
-    //     referencedColumnName: 'id',
-    //     foreignKeyConstraintName: 'fk_product_id',
-    // })
-    // product: ProductEntity;
 
     @OneToOne(() => TransactionEntity, { cascade: true })
     @JoinColumn({ name: 'transacation_id', referencedColumnName: 'id' })

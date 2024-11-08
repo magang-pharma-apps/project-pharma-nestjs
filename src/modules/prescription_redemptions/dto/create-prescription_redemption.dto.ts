@@ -7,20 +7,14 @@ export class CreatePrescriptionRedemptionDto {
     @ApiProperty()
     prescriptionId: number;
 
-    // @ApiProperty()
-    // productId: number;
-
-    // @ApiProperty()
-    // price: number;
-
     @ApiProperty()
     isPaid: boolean;
 
     @ApiProperty()
     isRedeem: boolean;
 
-    @ApiProperty()
-    transactionId: number;
+    // @ApiProperty()
+    // transactionId: number;
 
     // Ubah ini menjadi object, bukan array
     @ApiProperty({ type: CreateTransactionDto })
