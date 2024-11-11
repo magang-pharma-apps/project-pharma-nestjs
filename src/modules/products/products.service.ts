@@ -28,7 +28,7 @@ export class ProductsService {
     return await this.productRepository.save(product);
   }
 
-  //Fungsi untuk mengunduh gambar
+  //untuk mengunduh gambar
   private async downloadImage(imageUrl: string): Promise<string> {
     const response = await axios({
       url: imageUrl,
@@ -56,42 +56,26 @@ export class ProductsService {
   }
 
   async findAll() {
-    const products = await this.productRepository.find({
-      where: {
-        deletedAt: null,
-        category: {
-          status: true,
-        },      
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['category', 'unit'],
-      select: {
-        id: true,
-        productCode: true,
-        name: true,
-        description: true,
-        purchasePrice: true,
-        sellingPrice: true,
-        expiryDate: true,
-        stockQuantity: true,
-        productImageUrl: true,
-        drugClass: true,
-        category: {
-          name: true,
-          status: true,
-        },
-        unit: {
-          name: true,
-          status: true,
-        },
-      },
-    });
-
-    if (!products) {
-      throw new NotFoundException('Products not found');
-    }
+    const products = await this.productRepository.createQueryBuilder('product')
+    .leftJoinAndSelect('product.category', 'category')
+    .leftJoinAndSelect('product.unit', 'unit')
+    .select([
+      'product.id',
+      'product.productCode',
+      'product.name',
+      'product.description',
+      'product.purchasePrice',
+      'product.sellingPrice',
+      'product.expiryDate',
+      'product.stockQuantity',
+      'product.productImageUrl',
+      'product.drugClass',
+      'category.name',
+      'unit.name',
+    ])
+    .where('product.deletedAt IS NULL')
+    .orderBy('product.id', 'DESC')
+    .getMany();
 
     const data = products.map((product) => {
       product.purchasePrice = parseFloat(product.purchasePrice.toString());
@@ -99,54 +83,40 @@ export class ProductsService {
       return product;
     });
 
+    console.log(data);
+  
     return data;
   }
 
   async findOne(id: number) {
-    const product = await this.productRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-        category : {
-          status: true,
-        },
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['category','unit'],
-      select: {
-        id: true,
-        productCode: true,
-        name: true,
-        description: true,
-        purchasePrice: true,
-        sellingPrice: true,
-        expiryDate: true,
-        stockQuantity: true,
-        productImageUrl: true,
-        drugClass: true,
-        category: {
-          name: true,
-          status: true,
-        },
-        unit: {
-          name: true,
-          status: true,
-        },
-      },
-    });
-
-    if (!product) {
-      throw new NotFoundException('Product not found');
+    const product = await this.productRepository.createQueryBuilder('product')
+    .leftJoinAndSelect('product.category', 'category')
+    .leftJoinAndSelect('product.unit', 'unit')
+    .select([
+      'product.id',
+      'product.productCode',
+      'product.name',
+      'product.description',
+      'product.purchasePrice',
+      'product.sellingPrice',
+      'product.expiryDate',
+      'product.stockQuantity',
+      'product.productImageUrl',
+      'product.drugClass',
+      'category.name',
+      'unit.name',
+    ])
+    .where('product.id = :id', { id })
+    .andWhere('product.deletedAt IS NULL')
+    .orderBy('product.id', 'DESC')
+    .getOne();
+    
+    if (product) {
+      product.purchasePrice = parseFloat(product.purchasePrice.toString());
+      product.sellingPrice = parseFloat(product.sellingPrice.toString());
     }
-
-    // const data = products.map((product) => {
-    //   product.purchasePrice = parseFloat(product.purchasePrice.toString());
-    //   product.sellingPrice = parseFloat(product.sellingPrice.toString());
-    //   return product;
-    // });
-
+    console.log(product);
+    
     return product;
   }
 

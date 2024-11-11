@@ -113,14 +113,12 @@ export class PrescriptionRedemptionsService {
         'items.note',
         'product.name',
         'product.sellingPrice'
-      
+      ])
+      .where('prescriptionRedemption.deletedAt IS NULL')
+      .andWhere('prescriptionRedemption.isRedeem = true')
+      .orderBy('prescriptionRedemption.id', 'DESC');
 
-      ]).where('prescriptionRedemption.deletedAt IS NULL',
-      ).andWhere('prescriptionRedemption.isRedeem = true',
-      ).orderBy('prescriptionRedemption.id', 'DESC',
-      );
-
-    const data = await prescriptionRedemptions.getMany();
+    const data = await prescriptionRedemptions.getMany(); 
     console.log(data);
 
     // Konversi sellingPrice menjadi float untuk setiap product dalam items
@@ -172,13 +170,12 @@ export class PrescriptionRedemptionsService {
         'items.note',
         'product.name',
         'product.sellingPrice'
-      
 
-      ]).where('prescriptionRedemption.id = :id', { id },
-      ).andWhere('prescriptionRedemption.deletedAt IS NULL',
-      ).andWhere('prescriptionRedemption.isRedeem = true',
-      ).orderBy('prescriptionRedemption.id', 'DESC',
-      );
+      ])
+      .where('prescriptionRedemption.id = :id', { id })
+      .andWhere('prescriptionRedemption.deletedAt IS NULL')
+      .andWhere('prescriptionRedemption.isRedeem = true')
+      .orderBy('prescriptionRedemption.id', 'DESC');
 
     const data = await prescriptionRedemption.getOne();
     console.log(data);
@@ -198,14 +195,12 @@ export class PrescriptionRedemptionsService {
   }
 
   async update(id: number, data: UpdatePrescriptionRedemptionDto) {
-    // Temukan PrescriptionRedemption berdasarkan ID
     const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
       where: {
         id: id,
         deletedAt: null,
       },
-      relations: ['prescription'], // Pastikan kita mendapatkan relasi ke Prescription
-    });
+   });
   
     if (!prescriptionRedemption) {
       throw new NotFoundException('PrescriptionRedemption not found');
@@ -218,7 +213,6 @@ export class PrescriptionRedemptionsService {
       await this.prescriptionRepository.save(prescription);  // Simpan perubahan ke Prescription
     }
   
-    // Terapkan perubahan lainnya pada PrescriptionRedemption
     Object.assign(prescriptionRedemption, data);
   
     // Simpan PrescriptionRedemption yang telah diperbarui
