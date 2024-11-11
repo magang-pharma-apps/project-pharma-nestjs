@@ -60,8 +60,8 @@ export class TransactionEntity extends BaseEntity {
     @Column({ name: 'payment_method', type: 'enum', enum: PaymentMethod, nullable: true })
     paymentMethod: PaymentMethod;
 
-    @Column({ name: 'transaction_number', nullable: true })
-    transactionNumber: string;
+    @Column({ name: 'transaction_number', type: 'int', nullable: true })
+    transactionNumber: number;
 
     @Column({ name: 'transaction_code', nullable: true })
     transactionCode: string;

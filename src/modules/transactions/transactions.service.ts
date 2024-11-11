@@ -13,8 +13,28 @@ export class TransactionsService {
   ) {}
 
   async create(data: CreateTransactionDto) {
+    const transactionDate = data.transactionDate instanceof Date
+    ? data.transactionDate
+    : new Date(data.transactionDate);
+
+  // Format tanggal transaksi
+    const formattedDate = transactionDate.toISOString().split('T')[0];
+
+    const lastTransaction = await this.transactionRepository.createQueryBuilder('transaction')
+      .where('DATE(transaction.transactionDate) = :date', { date: formattedDate })
+      .orderBy('transaction.transactionNumber', 'DESC')
+      .getOne();
+
+    const transactionNumber = lastTransaction
+      ? lastTransaction.transactionNumber + 1
+      : 1;
+
+    const transactionCode = `TRX${formattedDate.replace(/-/g, '')}-${String(transactionNumber).padStart(3, '0')}`;
+
     const transaction = this.transactionRepository.create({
       ...data,
+      transactionNumber,
+      transactionCode,
       items: data.items.map(item => ({
         ...item,
         transaction: undefined,
@@ -30,6 +50,8 @@ export class TransactionsService {
       .leftJoinAndSelect('items.product', 'product')
       .select([
         'transaction.id',
+        'transaction.transactionCode',
+        'transaction.transactionNumber',
         'transaction.userId',
         'transaction.transactionDate',
         'transaction.transactionType',
@@ -63,6 +85,8 @@ export class TransactionsService {
       .leftJoinAndSelect('items.product', 'product')
       .select([
         'transaction.id',
+        'transaction.transactionCode',
+        'transaction.transactionNumber',
         'transaction.userId',
         'transaction.transactionDate',
         'transaction.transactionType',

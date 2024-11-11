@@ -39,6 +39,9 @@ export class CreateTransactionDto {
     @Type(() => CreateTransactionDetailDto)
     items: CreateTransactionDetailDto[];
 
-    @ApiProperty() // Menggunakan properti untuk id resep jika perlu
-    redemptionId: number;
+    // @ApiProperty() // Menggunakan properti untuk id resep jika perlu
+    // transactionNumber: number;
+
+    // @ApiProperty() // Menggunakan properti untuk id resep jika perlu
+    // redemptionId: number;
 }
