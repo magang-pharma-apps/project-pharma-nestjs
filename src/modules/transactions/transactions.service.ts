@@ -27,6 +27,7 @@ export class TransactionsService {
   async findAll() {
     const transactions = await this.transactionRepository.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.items', 'items')
+      .leftJoinAndSelect('items.product', 'product')
       .select([
         'transaction.id',
         'transaction.userId',
@@ -42,6 +43,9 @@ export class TransactionsService {
         'items.productId',
         'items.quantity',
         'items.note',
+        'product.productCode',
+        'product.name',
+        'product.productImageUrl',
       ])
       .where('transaction.deletedAt IS NULL')
       .orderBy('transaction.id', 'DESC')
@@ -56,6 +60,7 @@ export class TransactionsService {
   async findOne(transaction_id: number) {
     const transaction = await this.transactionRepository.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.items', 'items')
+      .leftJoinAndSelect('items.product', 'product')
       .select([
         'transaction.id',
         'transaction.userId',
@@ -71,6 +76,9 @@ export class TransactionsService {
         'items.productId',
         'items.quantity',
         'items.note',
+        'product.productCode',
+        'product.name',
+        'product.productImageUrl',
       ])
       .where('transaction.id = :id', { id: transaction_id })
       .andWhere('transaction.deletedAt IS NULL')
