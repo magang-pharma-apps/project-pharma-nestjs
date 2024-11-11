@@ -19,27 +19,38 @@ export class UnitsService {
   }
 
   async findAll() {
-    const units = await this.unitRepository.find({
-      order: {
-        id: 'DESC',
-      },
-    });
+    const units = await this.unitRepository.createQueryBuilder('unit')
+      .select([
+        'unit.id',
+        'unit.name',
+        'unit.description',
+        'unit.status',
+      ])
+      .where('unit.deletedAt IS NULL')
+      .orderBy('unit.id', 'DESC')
 
-    return units;
+    const data = await units.getMany();
+    console.log(data);
+
+    return data;
   }
 
-  async findOne(units_id: number) {
-    const unit = await this.unitRepository.findOne({
-      where: {
-        id: units_id,
-      },
-    });
+  async findOne(unit_id: number) {
+    const unit = await this.unitRepository.createQueryBuilder('unit')
+      .select([
+        'unit.id',
+        'unit.name',
+        'unit.description',
+        'unit.status',
+      ])
+      .where('unit.deletedAt IS NULL')
+      .andWhere('unit.id = :id', { id: unit_id })
+      .orderBy('unit.id', 'DESC')
 
-    if (!unit) {
-      throw new NotFoundException('Unit not found');
-    }
+    const data = await unit.getOne();
+    console.log(data);
 
-    return unit;
+    return data;
   }
 
   async update(units_id: number, data: UpdateUnitDto) {

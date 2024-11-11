@@ -24,7 +24,9 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 @UseGuards(AuthGuard)
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.OK,

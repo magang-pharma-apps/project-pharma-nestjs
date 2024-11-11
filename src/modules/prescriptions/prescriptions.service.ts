@@ -19,75 +19,60 @@ export class PrescriptionsService {
   }
 
   async findAll() {
-    const prescription = await this.prescriptionRepository.find({
-      where: {
-        deletedAt: null,
-      },
-      order: {
-        isRedeem: 'ASC',
-      },
-      relations: ['doctor', 'customer'],
-      select: {
-        id: true,
-        prescriptionCode: true,
-        prescriptions: true,
-        prescriptionDate: true,
-        isRedeem: true,
-        doctor: {
-          name: true,
-          status: true,
-        },
-        customer: {
-          name: true,
-          age: true,
-          status: true,
-        },
-      },
-    });
+    const prescriptions = await this.prescriptionRepository.createQueryBuilder('prescription')
+      .leftJoinAndSelect('prescription.doctor', 'doctor')
+      .leftJoinAndSelect('prescription.customer', 'customer')
+      .select([
+        'prescription.id',
+        'prescription.prescriptionCode',
+        'prescription.prescriptions',
+        'prescription.prescriptionDate',
+        'prescription.isRedeem',
+        'doctor.name',
+        'doctor.status',
+        'customer.name',
+        'customer.age',
+        'customer.status',
+      ])
+      .where('prescription.deletedAt IS NULL')
+      .orderBy('prescription.isRedeem', 'ASC');
 
-    if (!prescription) {
-      throw new NotFoundException('Prescription not found');
-    }
+    const data = await prescriptions.getMany();
+    console.log(data);
 
-    return prescription;
+    return data;
   }
 
-  async findOne(id: number) {
-    const prescription = this.prescriptionRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-      },
-      relations: ['doctor', 'customer'],
-      select: {
-        id: true,
-        prescriptionCode: true,
-        prescriptions: true,
-        prescriptionDate: true,
-        isRedeem: true,
-        doctor: {
-          name: true,
-          status: true,
-        },
-        customer: {
-          name: true,
-          age: true,
-          status: true,
-        },
-      },
-    });
+  async findOne(prescription_id: number) {
+    const prescription = await this.prescriptionRepository.createQueryBuilder('prescription')
+      .leftJoinAndSelect('prescription.doctor', 'doctor')
+      .leftJoinAndSelect('prescription.customer', 'customer')
+      .select([
+        'prescription.id',
+        'prescription.prescriptionCode',
+        'prescription.prescriptions',
+        'prescription.prescriptionDate',
+        'prescription.isRedeem',
+        'doctor.name',
+        'doctor.status',
+        'customer.name',
+        'customer.age',
+        'customer.status',
+      ])
+      .where('prescription.deletedAt IS NULL')
+      .andWhere('prescription.id = :id', { id: prescription_id })
+      .orderBy('prescription.id', 'DESC');
 
-    if (!prescription) {
-      throw new NotFoundException('Prescription not found');    
-    }
+    const data = await prescription.getOne();
+    console.log(data);
 
-    return prescription;
+    return data;
   }
 
-  async update(id: number, data: UpdatePrescriptionDto) {
+  async update(prescription_id: number, data: UpdatePrescriptionDto) {
     const prescription = await this.prescriptionRepository.findOne({
       where: {
-        id: id,
+        id: prescription_id,
         deletedAt: null,
       },
     });
@@ -103,11 +88,11 @@ export class PrescriptionsService {
     return updatedPrescription;
   }
 
-  async remove(id: number) {
+  async remove(prescription_id: number) {
     const prescription = await this.prescriptionRepository.findOne({
       withDeleted: true,
       where: {
-        id: id,
+        id: prescription_id,
       },
     });
 

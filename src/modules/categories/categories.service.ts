@@ -57,27 +57,42 @@ export class CategoriesService {
   }
   
   async findAll() {
-    const categories = await this.categoryRepository.find({
-      order: {
-        id: 'DESC',
-      },
-    });
+    const categories = await this.categoryRepository.createQueryBuilder('category')
+      .select([
+        'category.id',
+        'category.name',
+        'category.description',
+        'category.categoryImageUrl',
+        'category.localImagePath',
+        'category.status',
+      ])
+      .where('category.deletedAt IS NULL')
+      .orderBy('category.id', 'DESC')
 
-    return categories;
+    const data = await categories.getMany();
+    console.log(data);
+
+    return data;
   }
 
-  async findOne(categories_id: number) {
-    const category = await this.categoryRepository.findOne({
-      where: {
-        id: categories_id,
-      },
-    });
+  async findOne(category_id: number) {
+    const category = await this.categoryRepository.createQueryBuilder('category')
+    .select([
+      'category.id',
+      'category.name',
+      'category.description',
+      'category.categoryImageUrl',
+      'category.localImagePath',
+      'category.status',
+    ])
+    .where('category.id = :id', { id: category_id })
+    .andWhere('category.deletedAt IS NULL')
+    .orderBy('category.id', 'DESC');
 
-    if (!category) {
-      throw new NotFoundException('Category not found');
-    }
+    const data = await category.getOne();
+    console.log(data);
 
-    return category;
+    return data;
   }
 
   async update(categories_id: number, data: UpdateCategoryDto) {

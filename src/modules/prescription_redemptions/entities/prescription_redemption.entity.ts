@@ -1,6 +1,5 @@
 import { BaseEntityWithoutStatus } from "src/config/common/BaseEntityWithoutStatus";
 import { PrescriptionEntity } from "src/modules/prescriptions/entities/prescription.entity";
-import { ProductEntity } from "src/modules/products/entities/product.entity";
 import { TransactionEntity } from "src/modules/transactions/entities/transaction.entity";
 import { 
     Column, 

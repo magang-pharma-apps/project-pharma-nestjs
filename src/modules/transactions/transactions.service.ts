@@ -25,27 +25,61 @@ export class TransactionsService {
   }
 
   async findAll() {
-    const transactions = await this.transactionRepository.find({
-      order: {
-        id: 'DESC',
-      },
-    });
+    const transactions = await this.transactionRepository.createQueryBuilder('transaction')
+      .leftJoinAndSelect('transaction.items', 'items')
+      .select([
+        'transaction.id',
+        'transaction.userId',
+        'transaction.transactionDate',
+        'transaction.transactionType',
+        'transaction.categoryType',
+        'transaction.note',
+        'transaction.tax',
+        'transaction.subTotal',
+        'transaction.grandTotal',
+        'transaction.paymentMethod',
+        'items.id',
+        'items.productId',
+        'items.quantity',
+        'items.note',
+      ])
+      .where('transaction.deletedAt IS NULL')
+      .orderBy('transaction.id', 'DESC')
 
-    return transactions;
+
+    const data = await transactions.getMany();
+    console.log(data);
+
+    return data;
   }
 
   async findOne(transaction_id: number) {
-    const transaction = await this.transactionRepository.findOne({
-      where: {
-        id: transaction_id,
-      },
-    });
+    const transaction = await this.transactionRepository.createQueryBuilder('transaction')
+      .leftJoinAndSelect('transaction.items', 'items')
+      .select([
+        'transaction.id',
+        'transaction.userId',
+        'transaction.transactionDate',
+        'transaction.transactionType',
+        'transaction.categoryType',
+        'transaction.note',
+        'transaction.tax',
+        'transaction.subTotal',
+        'transaction.grandTotal',
+        'transaction.paymentMethod',
+        'items.id',
+        'items.productId',
+        'items.quantity',
+        'items.note',
+      ])
+      .where('transaction.id = :id', { id: transaction_id })
+      .andWhere('transaction.deletedAt IS NULL')
+      .orderBy('transaction.id', 'DESC')
 
-    if (!transaction) {
-      throw new NotFoundException('Transaction not found');
-    }
+    const data = await transaction.getOne();
+    console.log(data);
 
-    return transaction;
+    return data;
   }
 
   async update(transaction_id: number, data: UpdateTransactionDto) {

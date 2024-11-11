@@ -27,6 +27,13 @@ export class PrescriptionRedemptionsController {
     private readonly prescriptionRedemptionsService: PrescriptionRedemptionsService
   ) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'PrescriptionRedemption data',
+    type: CreatePrescriptionRedemptionDto,
+  })
+
+  // @Permission('create:prescription-redemption')
   @Post()
   async create(@Body() createPrescriptionRedemptionDto: CreatePrescriptionRedemptionDto) {
     const { isRedeem, prescriptionId } = createPrescriptionRedemptionDto;
@@ -47,6 +54,7 @@ export class PrescriptionRedemptionsController {
     type: PrescriptionRedemptionDtoOut,
   })
 
+  // @Permission('read:prescription-redemption')
   @Get()
   async findAll() {
     const prescriptionRedemptions = await this.prescriptionRedemptionsService.findAll();
@@ -64,6 +72,7 @@ export class PrescriptionRedemptionsController {
     type: PrescriptionRedemptionDtoOut,
   })
 
+  // @Permission('read:prescription-redemption')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const prescriptionRedemption = await this.prescriptionRedemptionsService.findOne(+id);
@@ -75,6 +84,14 @@ export class PrescriptionRedemptionsController {
     return new ResponseFormatter(prescriptionRedemption, 'PrescriptionRedemption found');
   }
 
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'PrescriptionRedemption data',
+    type: UpdatePrescriptionRedemptionDto,
+  })
+
+  // @Permission('update:prescription-redemption')
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -88,6 +105,7 @@ export class PrescriptionRedemptionsController {
     return new ResponseFormatter(prescriptionRedemption, 'PrescriptionRedemption updated');
   }
 
+  // @Permission('delete:prescription-redemption')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const prescriptionRedemption = await this.prescriptionRedemptionsService.remove(+id);
