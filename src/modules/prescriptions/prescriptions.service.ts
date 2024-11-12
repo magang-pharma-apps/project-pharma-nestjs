@@ -43,7 +43,7 @@ export class PrescriptionsService {
     return data;
   }
 
-  async findOne(prescription_id: number) {
+  async findOne(prescriptions_id: number) {
     const prescription = await this.prescriptionRepository.createQueryBuilder('prescription')
       .leftJoinAndSelect('prescription.doctor', 'doctor')
       .leftJoinAndSelect('prescription.customer', 'customer')
@@ -60,7 +60,7 @@ export class PrescriptionsService {
         'customer.status',
       ])
       .where('prescription.deletedAt IS NULL')
-      .andWhere('prescription.id = :id', { id: prescription_id })
+      .andWhere('prescription.id = :id', { id: prescriptions_id })
       .orderBy('prescription.id', 'DESC');
 
     const data = await prescription.getOne();
@@ -69,10 +69,10 @@ export class PrescriptionsService {
     return data;
   }
 
-  async update(prescription_id: number, data: UpdatePrescriptionDto) {
+  async update(prescriptions_id: number, data: UpdatePrescriptionDto) {
     const prescription = await this.prescriptionRepository.findOne({
       where: {
-        id: prescription_id,
+        id: prescriptions_id,
         deletedAt: null,
       },
     });
@@ -88,11 +88,11 @@ export class PrescriptionsService {
     return updatedPrescription;
   }
 
-  async remove(prescription_id: number) {
+  async remove(prescriptions_id: number) {
     const prescription = await this.prescriptionRepository.findOne({
       withDeleted: true,
       where: {
-        id: prescription_id,
+        id: prescriptions_id,
       },
     });
 

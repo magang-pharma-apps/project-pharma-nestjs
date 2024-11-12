@@ -36,7 +36,7 @@ export class SuppliersService {
     return data;
   }
 
-  async findOne(supplier_id: number) {
+  async findOne(suppliers_id: number) {
     const supplier = await this.supplierRepository.createQueryBuilder('supplier')
       .select([
         'supplier.id',
@@ -46,7 +46,7 @@ export class SuppliersService {
         'supplier.address',
     ])
       .where('supplier.deletedAt IS NULL')
-      .andWhere('supplier.id = :supplier_id', { supplier_id })
+      .andWhere('supplier.id = :supplier_id', { suppliers_id })
       .orderBy('supplier.id', 'DESC')
 
     const data = await supplier.getOne();
@@ -55,10 +55,10 @@ export class SuppliersService {
     return data;
   }
 
-  async update(supplier_id: number, data: UpdateSupplierDto) {
+  async update(suppliers_id: number, data: UpdateSupplierDto) {
     const supplier = await this.supplierRepository.findOne({
       where: {
-        id: supplier_id,
+        id: suppliers_id,
       },
     });
 
@@ -71,11 +71,11 @@ export class SuppliersService {
     return await this.supplierRepository.save(supplier);
   }
 
-  async remove(supplier_id: number) {
+  async remove(suppliers_id: number) {
     const supplier = await this.supplierRepository.findOne({
       withDeleted: true,
       where: {
-        id: supplier_id,
+        id: suppliers_id,
       },
     });
 

@@ -35,7 +35,7 @@ export class UnitsService {
     return data;
   }
 
-  async findOne(unit_id: number) {
+  async findOne(units_id: number) {
     const unit = await this.unitRepository.createQueryBuilder('unit')
       .select([
         'unit.id',
@@ -44,7 +44,7 @@ export class UnitsService {
         'unit.status',
       ])
       .where('unit.deletedAt IS NULL')
-      .andWhere('unit.id = :id', { id: unit_id })
+      .andWhere('unit.id = :id', { id: units_id })
       .orderBy('unit.id', 'DESC')
 
     const data = await unit.getOne();

@@ -35,7 +35,7 @@ export class CustomersService {
     return data;
   }
 
-  async findOne(customer_id: number) {
+  async findOne(customers_id: number) {
     const customer = await this.customersRepository.createQueryBuilder('customer')
       .select([
         'customer.id',
@@ -43,7 +43,7 @@ export class CustomersService {
         'customer.age',
         'customer.address',
       ])
-      .where('customer.id = :id', { id: customer_id })
+      .where('customer.id = :id', { id: customers_id })
       .andWhere('customer.deletedAt IS NULL')
       .orderBy('customer.id', 'DESC')
 
@@ -53,10 +53,10 @@ export class CustomersService {
     return data;
   }
 
-  async update(customer_id: number, data: UpdateCustomerDto) {
+  async update(customers_id: number, data: UpdateCustomerDto) {
     const customer = await this.customersRepository.findOne({
       where: {
-        id: customer_id,
+        id: customers_id,
       },
     });
 
@@ -69,11 +69,11 @@ export class CustomersService {
     return await this.customersRepository.save(customer);
   }
 
-  async remove(customer_id: number) {
+  async remove(customers_id: number) {
     const customer = await this.customersRepository.findOne({
       withDeleted: true,
       where: {
-        id: customer_id,
+        id: customers_id,
       },  
     });
 
