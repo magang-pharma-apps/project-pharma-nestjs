@@ -19,27 +19,40 @@ export class DoctorsService {
   }
 
   async findAll() {
-    const doctors = await this.doctorsRepository.find({
-      order: {
-        id: 'DESC',
-      }, 
-    });
+    const doctors = await this.doctorsRepository.createQueryBuilder('doctor')
+      .select([
+        'doctor.id',
+        'doctor.name',
+        'doctor.specialization',
+        'doctor.phoneNumber',
+        'doctor.email'
+      ])
+      .where('doctor.deletedAt IS NULL')
+      .orderBy('doctor.id', 'DESC')
 
-    return doctors;
+    const data = await doctors.getMany();
+    console.log(data);
+
+    return data;
   }
 
   async findOne(doctor_id: number) {
-    const doctor = await this.doctorsRepository.findOne({
-      where: {
-        id: doctor_id,
-      }, 
-    });
+    const doctor = await this.doctorsRepository.createQueryBuilder('doctor')
+      .select([
+        'doctor.id',
+        'doctor.name',
+        'doctor.specialization',
+        'doctor.phoneNumber',
+        'doctor.email'
+    ])
+      .where('doctor.deletedAt IS NULL')
+      .andWhere('doctor.id = :id', { id: doctor_id })
+      .orderBy('doctor.id', 'DESC')
 
-    if (!doctor) {
-      throw new NotFoundException('Doctor not found');
-    }
+    const data = await doctor.getOne();
+    console.log(data);
 
-    return doctor;
+    return data;
   }
 
   async update(doctor_id: number, data: UpdateDoctorDto) {

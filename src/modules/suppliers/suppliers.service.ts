@@ -19,27 +19,40 @@ export class SuppliersService {
   }
 
   async findAll() {
-    const suppliers = await this.supplierRepository.find({
-      order: {
-        id: 'DESC',
-      },
-    });
+    const suppliers = await this.supplierRepository.createQueryBuilder('supplier')
+      .select([
+        'supplier.id',
+        'supplier.name',
+        'supplier.contactNumber',
+        'supplier.email',
+        'supplier.address',
+      ])
+      .where('supplier.deletedAt IS NULL')
+      .orderBy('supplier.id', 'DESC')
 
-    return suppliers;
+    const data = await suppliers.getMany();
+    console.log(data);
+
+    return data;
   }
 
   async findOne(supplier_id: number) {
-    const supplier = await this.supplierRepository.findOne({
-      where: {
-        id: supplier_id,
-      },
-    });
+    const supplier = await this.supplierRepository.createQueryBuilder('supplier')
+      .select([
+        'supplier.id',
+        'supplier.name',
+        'supplier.contactNumber',
+        'supplier.email',
+        'supplier.address',
+    ])
+      .where('supplier.deletedAt IS NULL')
+      .andWhere('supplier.id = :supplier_id', { supplier_id })
+      .orderBy('supplier.id', 'DESC')
 
-    if (!supplier) {
-      throw new NotFoundException('Supplier not found');
-    }
+    const data = await supplier.getOne();
+    console.log(data);
 
-    return supplier;
+    return data;
   }
 
   async update(supplier_id: number, data: UpdateSupplierDto) {

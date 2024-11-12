@@ -19,69 +19,50 @@ export class TransactionDetailsService {
   }
 
   async findAll() {
-    const transactionDetails = await this.transactionDetailRepository.find({
-      where: {
-        deletedAt: null,
-        transaction: {
-          status: true
-        },
-      },
-      order: {
-        id: 'DESC'
-      },
-      relations: ['product', 'transaction'],
-      select: {
-        id: true,
-        quantity: true,
-        note: true,
-        product: {
-          name: true,
-          status: true
-        },
-        transaction: {
-          status: true
-        },
-      },
-    });
+    const transactionDetails = await this.transactionDetailRepository.createQueryBuilder('transactionDetail')
+      .leftJoinAndSelect('transactionDetail.product', 'product')
+      .leftJoinAndSelect('transactionDetail.transaction', 'transaction')
+      .select([
+        'transactionDetail.id',
+        'transactionDetail.quantity',
+        'transactionDetail.note',
+        'product.name',
+        'product.status',
+        'transaction.status'
+      ])
+      .where('transactionDetail.deletedAt IS NULL')
+      .andWhere('product.status = :status', { status: true })
+      .andWhere('transaction.status = :status', { status: true })
+      .orderBy('transactionDetail.id', 'DESC');
 
-    if (!transactionDetails) {
-      throw new NotFoundException('TransactionDetails not found');
-    }
+    const data = await transactionDetails.getMany();
+    console.log(data);
 
-    return transactionDetails;
+    return data;
   }
 
   async findOne(id: number) {
-    const transactionDetail = await this.transactionDetailRepository.findOne({
-      where: {
-        deletedAt: null,
-        transaction: {
-          status: true
-        },
-      },
-      order: {
-        id: 'DESC'
-      },
-      relations: ['product', 'transaction'],
-      select: {
-        id: true,
-        quantity: true,
-        note: true,
-        product: {
-          name: true,
-          status: true
-        },
-        transaction: {
-          status: true
-        },
-      },
-    });
+    const transactionDetail = await this.transactionDetailRepository.createQueryBuilder('transactionDetail')
+      .leftJoinAndSelect('transactionDetail.product', 'product')
+      .leftJoinAndSelect('transactionDetail.transaction', 'transaction')
+      .select([
+        'transactionDetail.id',
+        'transactionDetail.quantity',
+        'transactionDetail.note',
+        'product.name',
+        'product.status',
+        'transaction.status'
+      ])
+      .where('transactionDetail.deletedAt IS NULL')
+      .andWhere('product.status = :status', { status: true })
+      .andWhere('transaction.status = :status', { status: true })
+      .andWhere('transactionDetail.id = :id', { id })
+      .orderBy('transactionDetail.id', 'DESC');
 
-    if (!transactionDetail) {
-      throw new NotFoundException('TransactionDetail not found');
-    }
+    const data = await transactionDetail.getOne();
+    console.log(data);
 
-    return transactionDetail;
+    return data;
   }
 
   async update(id: number, data: UpdateTransactionDetailDto) {

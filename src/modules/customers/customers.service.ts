@@ -19,27 +19,38 @@ export class CustomersService {
   }
 
   async findAll() {
-    const customers = await this.customersRepository.find({
-      order: {
-        id: 'DESC',
-      },
-    });
+    const customers = await this.customersRepository.createQueryBuilder('customer')
+      .select([
+        'customer.id',
+        'customer.name',
+        'customer.age',
+        'customer.address',
+      ])
+      .where('customer.deletedAt IS NULL')
+      .orderBy('customer.id', 'DESC')
 
-    return customers;
+    const data = await customers.getMany();
+    console.log(data);
+
+    return data;
   }
 
   async findOne(customer_id: number) {
-    const customer = await this.customersRepository.findOne({
-      where: {
-        id: customer_id,
-      },
-    });
+    const customer = await this.customersRepository.createQueryBuilder('customer')
+      .select([
+        'customer.id',
+        'customer.name',
+        'customer.age',
+        'customer.address',
+      ])
+      .where('customer.id = :id', { id: customer_id })
+      .andWhere('customer.deletedAt IS NULL')
+      .orderBy('customer.id', 'DESC')
 
-    if (!customer) {
-      throw new NotFoundException('Customer not found');
-    }
+    const data = await customer.getOne();
+    console.log(data);
 
-    return customer;
+    return data;
   }
 
   async update(customer_id: number, data: UpdateCustomerDto) {
