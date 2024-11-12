@@ -48,6 +48,7 @@ export class TransactionsService {
     const transactions = await this.transactionRepository.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.items', 'items')
       .leftJoinAndSelect('items.product', 'product')
+      .leftJoinAndSelect('transaction.user', 'user')
       .select([
         'transaction.id',
         'transaction.transactionCode',
@@ -61,6 +62,7 @@ export class TransactionsService {
         'transaction.subTotal',
         'transaction.grandTotal',
         'transaction.paymentMethod',
+        'user.username',
         'items.id',
         'items.productId',
         'items.quantity',
@@ -83,6 +85,7 @@ export class TransactionsService {
     const transaction = await this.transactionRepository.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.items', 'items')
       .leftJoinAndSelect('items.product', 'product')
+      .leftJoinAndSelect('transaction.user', 'user')
       .select([
         'transaction.id',
         'transaction.transactionCode',
@@ -96,6 +99,7 @@ export class TransactionsService {
         'transaction.subTotal',
         'transaction.grandTotal',
         'transaction.paymentMethod',
+        'user.username',
         'items.id',
         'items.productId',
         'items.quantity',
