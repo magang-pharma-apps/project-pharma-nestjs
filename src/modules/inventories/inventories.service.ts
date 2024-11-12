@@ -19,72 +19,52 @@ export class InventoriesService {
   }
 
   async findAll() {
-    const inventories = await this.inventoryRepository.find({
-      where: {
-        deletedAt: null,
-        warehouse: {
-          status: true,
-        },
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['product', 'warehouse'],
-      select: {
-        id: true,
-        quantityInStock: true,
-        note: true,
-        product: {
-          name: true,
-          status: true,
-        },
-        warehouse: {
-          name: true,
-          status: true,
-        },
-      },
-    });
+    const inventories = await this.inventoryRepository.createQueryBuilder('inventory')
+      .leftJoinAndSelect('inventory.product', 'product')
+      .leftJoinAndSelect('inventory.warehouse', 'warehouse')
+      .select([
+        'inventory.id',
+        'inventory.quantityInStock',
+        'inventory.note',
+        'product.name',
+        'product.status',
+        'warehouse.name',
+        'warehouse.status',
+      ])
+      .where('inventory.deletedAt IS NULL')
+      .andWhere('product.status = :status', { status: true })
+      .andWhere('warehouse.status = :status', { status: true })
+      .orderBy('inventory.id', 'DESC')
 
-    if (!inventories) {
-      throw new NotFoundException('Inventories not found');
-    }
+    const data = await inventories.getMany();
+    console.log(data);
 
-    return inventories;
+    return data;
   }
 
   async findOne(id: number) {
-    const inventory = await this.inventoryRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-        warehouse: {
-          status: true,
-      },
-    },
-    order: {
-      id: 'DESC',
-    },
-    relations: ['product', 'warehouse'],
-    select: {
-      id: true,
-      quantityInStock: true,
-      note: true,
-      product: {
-        name: true,
-        status: true,
-      },
-      warehouse: {
-        name: true,
-        status: true,
-      },
-    },
-  });
+    const inventory = await this.inventoryRepository.createQueryBuilder('inventory')
+      .leftJoinAndSelect('inventory.product', 'product')
+      .leftJoinAndSelect('inventory.warehouse', 'warehouse')
+      .select([
+        'inventory.id',
+        'inventory.quantityInStock',
+        'inventory.note',
+        'product.name',
+        'product.status',
+        'warehouse.name',
+        'warehouse.status',
+      ])
+      .where('inventory.deletedAt IS NULL')
+      .andWhere('product.status = :status', { status: true })
+      .andWhere('warehouse.status = :status', { status: true })
+      .andWhere('inventory.id = :id', { id })
+      .orderBy('inventory.id', 'DESC')
 
-    if (!inventory) {
-      throw new NotFoundException('Inventory not found');
-    }
+    const data = await inventory.getOne();
+    console.log(data);
 
-    return inventory;
+    return data;
   }
     
   async update(id: number, data: UpdateInventoryDto) {

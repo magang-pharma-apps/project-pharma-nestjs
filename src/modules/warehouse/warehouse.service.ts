@@ -19,70 +19,48 @@ export class WarehouseService {
   }
 
   async findAll() {
-    const warehouses = await this.warehouseRepository.find({
-      where: {
-        deletedAt: null,
-        supplier: {
-          status: true
-        },
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['supplier'],
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        supplier: {
-          name: true,
-          contactNumber: true,
-          email: true,
-          address: true,
-          status: true,
-        },
-      },
-    });
+    const warehouses = await this.warehouseRepository.createQueryBuilder('warehouse')
+      .leftJoinAndSelect('warehouse.supplier', 'supplier')
+      .select([
+        'warehouse.id',
+        'warehouse.name',
+        'warehouse.location',
+        'warehouse.supplierId',
+        'supplier.name',
+        'supplier.contactNumber',
+        'supplier.email',
+        'supplier.address',
+      ])
+      .where('warehouse.deletedAt IS NULL')
+      .orderBy('warehouse.id', 'DESC')
 
-    if (!warehouses) {
-      throw new NotFoundException('Warehouses not found');
-    }
+    const data = await warehouses.getMany();
+    console.log(data);
 
-    return warehouses;
+    return data;
   }
 
   async findOne(id: number) {
-    const warehouse = await this.warehouseRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-        supplier: {
-          status: true
-        },
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['supplier'],
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        supplier: {
-          name: true,
-          contactNumber: true,
-          email: true,
-          address: true,
-          status: true,
-        },
-      },
-    });
+    const warehouse = await this.warehouseRepository.createQueryBuilder('warehouse')
+      .leftJoinAndSelect('warehouse.supplier', 'supplier')
+      .select([
+        'warehouse.id',
+        'warehouse.name',
+        'warehouse.location',
+        'warehouse.supplierId',
+        'supplier.name',
+        'supplier.contactNumber',
+        'supplier.email',
+        'supplier.address',
+      ])
+      .where('warehouse.deletedAt IS NULL')
+      .andWhere('warehouse.id = :id', { id })
+      .orderBy('warehouse.id', 'DESC')
 
-    if (!warehouse) {
-      throw new NotFoundException('Warehouse not found');
-    }
+    const data = await warehouse.getOne();
+    console.log(data);
 
-    return warehouse;
+    return data;
   }
 
   async update(id: number, data: UpdateWarehouseDto) {
