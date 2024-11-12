@@ -71,9 +71,13 @@ export class ProductsService {
       'product.productImageUrl',
       'product.drugClass',
       'category.name',
+      'category.status',
       'unit.name',
+      'unit.status',
     ])
     .where('product.deletedAt IS NULL')
+    .andWhere('category.status = :status', { status: true })
+    .andWhere('unit.status = :status', { status: true })
     .orderBy('product.id', 'DESC')
     .getMany();
 
@@ -104,10 +108,14 @@ export class ProductsService {
       'product.productImageUrl',
       'product.drugClass',
       'category.name',
+      'category.status',
       'unit.name',
+      'unit.status',
     ])
     .where('product.id = :id', { id })
     .andWhere('product.deletedAt IS NULL')
+    .andWhere('category.status = :status', { status: true })
+    .andWhere('unit.status = :status', { status: true })
     .orderBy('product.id', 'DESC')
     .getOne();
     

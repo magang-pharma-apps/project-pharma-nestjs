@@ -95,7 +95,7 @@ export class TransactionsService {
     return data;
   }
 
-  async findOne(transaction_id: number) {
+  async findOne(transactions_id: number) {
     const transaction = await this.transactionRepository.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.items', 'items')
       .leftJoinAndSelect('items.product', 'product')
@@ -123,7 +123,7 @@ export class TransactionsService {
         'product.sellingPrice',
         'product.productImageUrl',
       ])
-      .where('transaction.id = :id', { id: transaction_id })
+      .where('transaction.id = :id', { id: transactions_id })
       .andWhere('transaction.deletedAt IS NULL')
       .orderBy('transaction.id', 'DESC')
 
@@ -143,10 +143,10 @@ export class TransactionsService {
     return data;
   }
 
-  async update(transaction_id: number, data: UpdateTransactionDto) {
+  async update(transactions_id: number, data: UpdateTransactionDto) {
     const transaction = await this.transactionRepository.findOne({
       where: {
-        id: transaction_id,
+        id: transactions_id,
       },
     });
 
@@ -159,11 +159,11 @@ export class TransactionsService {
     return await this.transactionRepository.save(transaction);
   }
 
-  async remove(transaction_id: number) {
+  async remove(transactions_id: number) {
     const transaction = await this.transactionRepository.findOne({
       withDeleted: true,
       where: {
-        id: transaction_id,
+        id: transactions_id,
       },
     });
 

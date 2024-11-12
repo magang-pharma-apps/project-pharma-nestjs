@@ -75,7 +75,7 @@ export class CategoriesService {
     return data;
   }
 
-  async findOne(category_id: number) {
+  async findOne(categories_id: number) {
     const category = await this.categoryRepository.createQueryBuilder('category')
     .select([
       'category.id',
@@ -85,7 +85,7 @@ export class CategoriesService {
       'category.localImagePath',
       'category.status',
     ])
-    .where('category.id = :id', { id: category_id })
+    .where('category.id = :id', { id: categories_id })
     .andWhere('category.deletedAt IS NULL')
     .orderBy('category.id', 'DESC');
 

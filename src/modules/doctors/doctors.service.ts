@@ -36,7 +36,7 @@ export class DoctorsService {
     return data;
   }
 
-  async findOne(doctor_id: number) {
+  async findOne(doctors_id: number) {
     const doctor = await this.doctorsRepository.createQueryBuilder('doctor')
       .select([
         'doctor.id',
@@ -46,7 +46,7 @@ export class DoctorsService {
         'doctor.email'
     ])
       .where('doctor.deletedAt IS NULL')
-      .andWhere('doctor.id = :id', { id: doctor_id })
+      .andWhere('doctor.id = :id', { id: doctors_id })
       .orderBy('doctor.id', 'DESC')
 
     const data = await doctor.getOne();
@@ -55,10 +55,10 @@ export class DoctorsService {
     return data;
   }
 
-  async update(doctor_id: number, data: UpdateDoctorDto) {
+  async update(doctors_id: number, data: UpdateDoctorDto) {
     const doctor = await this.doctorsRepository.findOne({
       where: {
-        id: doctor_id,
+        id: doctors_id,
       }, 
     });
 
@@ -71,11 +71,11 @@ export class DoctorsService {
     return await this.doctorsRepository.save(doctor);
   }
 
-  async remove(doctor_id: number) {
+  async remove(doctors_id: number) {
     const doctor = await this.doctorsRepository.findOne({
       withDeleted: true,
       where: {
-        id: doctor_id,
+        id: doctors_id,
       },
     });
 
