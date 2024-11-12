@@ -69,6 +69,7 @@ export class TransactionsService {
         'items.note',
         'product.productCode',
         'product.name',
+        'product.sellingPrice',
         'product.productImageUrl',
       ])
       .where('transaction.deletedAt IS NULL')
@@ -76,6 +77,19 @@ export class TransactionsService {
 
 
     const data = await transactions.getMany();
+
+    // Konversi sellingPrice menjadi float untuk setiap produk dalam items menggunakan map
+    data.forEach((transaction) => {
+      if (transaction.items) {
+        transaction.items = transaction.items.map((item) => {
+          if (item.product && item.product.sellingPrice) {
+            item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
+          }
+          return item;
+        });
+      }
+    });
+
     console.log(data);
 
     return data;
@@ -106,6 +120,7 @@ export class TransactionsService {
         'items.note',
         'product.productCode',
         'product.name',
+        'product.sellingPrice',
         'product.productImageUrl',
       ])
       .where('transaction.id = :id', { id: transaction_id })
@@ -114,6 +129,16 @@ export class TransactionsService {
 
     const data = await transaction.getOne();
     console.log(data);
+
+    // Konversi sellingPrice menjadi float untuk setiap produk dalam items menggunakan map
+    if (data && data.items) {
+      data.items = data.items.map((item) => {
+        if (item.product && item.product.sellingPrice) {
+          item.product.sellingPrice = parseFloat(item.product.sellingPrice.toString());
+        }
+        return item;
+      });
+    }
 
     return data;
   }
