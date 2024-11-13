@@ -12,58 +12,55 @@ export class CardStockEntriesService {
     private readonly cardStockEntryRepository: Repository<CardStockEntryEntity>,
   ) {}
   
-  async create(createCardStockEntryDto: CreateCardStockEntryDto) {
-    const cardStockEntry = this.cardStockEntryRepository.create(createCardStockEntryDto);
+  async create(data: CreateCardStockEntryDto) {
+    const cardStockEntry = this.cardStockEntryRepository.create(data);
     
     return await this.cardStockEntryRepository.save(cardStockEntry);
   }
 
   async findAll() {
-    const cardStockEntries = await this.cardStockEntryRepository.find({
-      where: {
-        deletedAt: null
-      },
-      order: {
-        id: 'DESC'
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        product: {
-          name: true
-        },
-      }
-    })
+    const cardStockEntries = await this.cardStockEntryRepository.createQueryBuilder('cardStockEntry')
+      .leftJoinAndSelect('cardStockEntry.product', 'product')
+      .leftJoinAndSelect('cardStockEntry.transaction', 'transaction')
+      .select([
+        'cardStockEntry.id',
+        'cardStockEntry.changeType',
+        'cardStockEntry.quantityChange',
+        'cardStockEntry.dateCardStock',
+        'cardStockEntry.reason',
+        'product.name',
+        'transaction.id',
+      ])
+      .where('cardStockEntry.deletedAt IS NULL')
+      .orderBy('cardStockEntry.id', 'DESC')
 
-    if (!cardStockEntries) {
-      throw new NotFoundException('Card stock entries not found');
-    }
-    return cardStockEntries
+    const data = await cardStockEntries.getMany();
+    console.log(data);
+
+    return data;
   }
 
   async findOne(id: number) {
-    const cardStockEntry = await this.cardStockEntryRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null
-      },
-      order: {
-        id: 'DESC'
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        product: {
-          name: true
-        },
-      }
-    });
+    const cardStockEntry = await this.cardStockEntryRepository.createQueryBuilder('cardStockEntry')
+      .leftJoinAndSelect('cardStockEntry.product', 'product')
+      .leftJoinAndSelect('cardStockEntry.transaction', 'transaction')
+      .select([
+        'cardStockEntry.id',
+        'cardStockEntry.changeType',
+        'cardStockEntry.quantityChange',
+        'cardStockEntry.dateCardStock',
+        'cardStockEntry.reason',
+        'product.name',
+        'transaction.id',
+      ])
+      .where('cardStockEntry.deletedAt IS NULL')
+      .andWhere('cardStockEntry.id = :id', { id: id })
+      .orderBy('cardStockEntry.id', 'DESC')
 
-    if (!cardStockEntry) {
-      throw new NotFoundException('Card stock entry not found');
-    }
+    const data = await cardStockEntry.getOne();
+    console.log(data);
 
-    return cardStockEntry
+    return data;
   }
 
   async update(id: number, data: UpdateCardStockEntryDto) {

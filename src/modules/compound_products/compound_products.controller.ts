@@ -24,8 +24,17 @@ import { Permission } from 'src/decorators/requires-permission.decorator';
 @UseGuards(AuthGuard)
 @Controller('compound-products')
 export class CompoundProductsController {
-  constructor(private readonly compoundProductsService: CompoundProductsService) {}
+  constructor(
+    private readonly compoundProductsService: CompoundProductsService
+  ) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Compound product data',
+    type: CreateCompoundProductDto,
+  })
+
+  // @Permission('create:compound product')
   @Post()
   async create(@Body() createCompoundProductDto: CreateCompoundProductDto) {
     const compoundProduct = await this.compoundProductsService.create(createCompoundProductDto);
@@ -39,7 +48,7 @@ export class CompoundProductsController {
     type: CompoundProductDtoOut,
   })
 
-  @Permission('read:compound-products')
+  @Permission('read:compound product')
   @Get()
   async findAll() {
     const compoundProducts = await this.compoundProductsService.findAll();
@@ -57,6 +66,7 @@ export class CompoundProductsController {
     type: CompoundProductDtoOut,
   })
 
+  // @Permission('read:compound product')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const compoundProduct = await this.compoundProductsService.findOne(+id);
@@ -68,6 +78,13 @@ export class CompoundProductsController {
     return new ResponseFormatter(compoundProduct, 'Compound product found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Compound product data',
+    type: UpdateCompoundProductDto,
+  })
+
+  // @Permission('update:compound product')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -82,6 +99,7 @@ export class CompoundProductsController {
     return new ResponseFormatter(compoundProduct, 'Compound product updated');
   }
 
+  // @Permission('delete:compound product')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const compoundProduct = await this.compoundProductsService.remove(+id);

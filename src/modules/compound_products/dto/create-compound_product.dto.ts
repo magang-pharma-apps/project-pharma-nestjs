@@ -1,27 +1,28 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
+import { UUID } from "crypto";
 
 export class CreateCompoundProductDto {
 
     @ApiPropertyOptional()
-    user_id: number;
+    userId: UUID;
 
     @ApiProperty()
-    product_id: number
+    productId: number
 
     @ApiProperty()
-    compound_name: string
+    compoundName: string
 
     @ApiProperty()
-    formula_description: string
+    formulaDescription: string
 
     @ApiProperty()
-    compound_price: number
+    compoundPrice: number
 
     @ApiProperty()
     quantity: number
 
     @ApiProperty()
-    expiry_date: Date
+    expiryDate: Date
 
     // @ApiProperty()
     // status: boolean

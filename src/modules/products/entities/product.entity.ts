@@ -14,6 +14,7 @@ import { UnitEntity } from 'src/modules/units/entities/unit.entity';
 import { CompoundProductEntity } from 'src/modules/compound_products/entities/compound_product.entity';
 import { CardStockEntryEntity } from 'src/modules/card_stock_entries/entities/card_stock_entry.entity';
 import { PrescriptionRedemptionEntity } from 'src/modules/prescription_redemptions/entities/prescription_redemption.entity';
+import { StockOpnameEntryEntity } from 'src/modules/stock_opname_entries/entities/stock_opname_entry.entity';
 
 // Definisi enum untuk DrugClass
 export enum DrugClass {
@@ -90,6 +91,9 @@ export class ProductEntity extends BaseEntity {
 
   @OneToMany(() => CardStockEntryEntity, (cardStockEntry) => cardStockEntry.product)
   cardStockEntries: CardStockEntryEntity[];
+
+  @OneToMany(() => StockOpnameEntryEntity, (stockOpnameEntry) => stockOpnameEntry.product)
+  stockOpnameEntries: StockOpnameEntryEntity[];
 
   // @OneToMany(() => PrescriptionRedemptionEntity, (prescriptionRedemption) => prescriptionRedemption.product)
   // prescriptionRedemptions: PrescriptionRedemptionEntity[];

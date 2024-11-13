@@ -19,55 +19,79 @@ export class CompoundProductsService {
   }
 
   async findAll() {
-    const compoundProducts = await this.compoundProductRepository.find({
-      where: {
-        deletedAt: null, 
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        quantity: true,
-        product: {
-          name: true,
-          purchasePrice: true,
-        }
+    const compoundProducts = await this.compoundProductRepository.createQueryBuilder('compound_product')
+      .leftJoinAndSelect('compound_product.product', 'product')
+      .select([
+        'compound_product.id',
+        'compound_product.productId',
+        'compound_product.userId',
+        'compound_product.compoundName',
+        'compound_product.formulaDescription',
+        'compound_product.compoundPrice',
+        'compound_product.quantity',
+        'compound_product.expiryDate',
+        'product.productCode',
+        'product.name',
+        'product.description',
+        'product.purchasePrice',
+        'product.sellingPrice',
+        'product.expiryDate',
+        'product.stockQuantity',
+        'product.productImageUrl',
+        'product.drugClass',
+      ])
+      .where('compound_product.deletedAt IS NULL')
+      .orderBy('compound_product.id', 'DESC')
+      .getMany();
+
+    const data = compoundProducts.map((compoundProduct) => {
+      if (compoundProduct.product) {
+        compoundProduct.product.purchasePrice = parseFloat(compoundProduct.product.purchasePrice.toString());
+        compoundProduct.product.sellingPrice = parseFloat(compoundProduct.product.sellingPrice.toString());
       }
+      return compoundProduct;
     });
 
-    if (!compoundProducts) {
-      throw new NotFoundException('Compound products not found');
-    }
-    return compoundProducts;
+    console.log(data);
+
+    return data;
   }
 
   async findOne(id: number) {
-    const compoundProduct = await this.compoundProductRepository.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        quantity: true,
-        product: {
-          name: true,
-          purchasePrice: true,
-        },
+    const compoundProduct = await this.compoundProductRepository.createQueryBuilder('compound_product')
+      .leftJoinAndSelect('compound_product.product', 'product')
+      .select([
+        'compound_product.id',
+        'compound_product.productId',
+        'compound_product.userId',
+        'compound_product.compoundName',
+        'compound_product.formulaDescription',
+        'compound_product.compoundPrice',
+        'compound_product.quantity',
+        'compound_product.expiryDate',
+        'product.productCode',
+        'product.name',
+        'product.description',
+        'product.purchasePrice',
+        'product.sellingPrice',
+        'product.expiryDate',
+        'product.stockQuantity',
+        'product.productImageUrl',
+        'product.drugClass',
+      ])
+      .where('compound_product.deletedAt IS NULL')
+      .andWhere('compound_product.id = :id', { id })
+      .orderBy('compound_product.id', 'DESC')
+      .getOne();
+
+      if (compoundProduct && compoundProduct.product) {
+        compoundProduct.product.purchasePrice = parseFloat(compoundProduct.product.purchasePrice.toString());
+        compoundProduct.product.sellingPrice = parseFloat(compoundProduct.product.sellingPrice.toString());
       }
-    });
-
-    if (!compoundProduct) {
-      throw new NotFoundException('Compound product not found');
-    }
-
-    return compoundProduct;
+  
+      console.log(compoundProduct);
+  
+      return compoundProduct;
   }
 
   async update(id: number, data: UpdateCompoundProductDto) {

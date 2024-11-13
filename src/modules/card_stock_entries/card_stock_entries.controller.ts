@@ -26,6 +26,13 @@ import { Not } from 'typeorm';
 export class CardStockEntriesController {
   constructor(private readonly cardStockEntriesService: CardStockEntriesService) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Card stock entry data',
+    type: CreateCardStockEntryDto,
+  })
+
+  // @Permission('create:card stock entry')
   @Post()
   async create(@Body() createCardStockEntryDto: CreateCardStockEntryDto) {
     const cardStockEntry = await this.cardStockEntriesService.create(createCardStockEntryDto);
@@ -39,6 +46,7 @@ export class CardStockEntriesController {
     type: CardStockEntryDtoOut,
   })
 
+  // @Permission('read:card stock entry')
   @Get()
   async findAll() {
     const cardStockEntries = await this.cardStockEntriesService.findAll();
@@ -56,6 +64,7 @@ export class CardStockEntriesController {
     type: CardStockEntryDtoOut,
   })
 
+  // @Permission('read:card stock entry')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const cardStockEntry = await this.cardStockEntriesService.findOne(+id);
@@ -67,6 +76,13 @@ export class CardStockEntriesController {
     return new ResponseFormatter(cardStockEntry, 'Card stock entry found.');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Card stock entry data',
+    type: UpdateCardStockEntryDto,
+  })
+
+  // @Permission('update:card stock entry')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -81,6 +97,7 @@ export class CardStockEntriesController {
     return new ResponseFormatter(cardStockEntry, 'Card stock entry updated.');
   }
 
+  // @Permission('delete:card stock entry')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const cardStockEntry = await this.cardStockEntriesService.remove(+id);
