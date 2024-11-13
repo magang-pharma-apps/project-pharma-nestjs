@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { ChangeType } from "../entities/card_stock_entry.entity";
 
 export class CreateCardStockEntryDto {
 
@@ -8,8 +9,8 @@ export class CreateCardStockEntryDto {
     @ApiProperty()
     tansactionId: number;
 
-    @ApiProperty()
-    changeType: boolean;
+    @ApiProperty({ enum: ChangeType})
+    changeType: ChangeType;
 
     @ApiProperty()
     quantityChange: number;

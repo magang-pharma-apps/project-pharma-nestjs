@@ -10,28 +10,33 @@ import {
     Transaction
 } from "typeorm";
 
+export enum ChangeType {
+    IN = 'In',
+    OUT = 'Out',
+}
+
 @Entity('card_stock_entries')
 export class CardStockEntryEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column({ name: 'product_id' })
-    productId: number
+    productId: number;
 
     @Column({ name: 'transaction_id' })
-    transactionId: number
+    transactionId: number;
 
-    @Column({ name: 'change_type', type: 'boolean' })
-    changeType: boolean
+    @Column({ name: 'change_type', type: 'enum', enum: ChangeType, default: 'In' })
+    changeType: ChangeType;
 
     @Column({ name: 'quantity_change' })
-    quantityChange: number
+    quantityChange: number;
 
     @Column({ name: 'date_card_stock' })
-    dateCardStock: Date
+    dateCardStock: Date;
 
     @Column({ name: 'reason' })
-    reason: string
+    reason: string;
 
     @ManyToOne(() => ProductEntity)
     @JoinColumn({
