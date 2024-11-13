@@ -14,7 +14,7 @@ export class StockOpnameEntryDtoOut {
     physicalStock: number;
   
     @ApiProperty()
-    opnameDate: number;
+    opnameDate: Date;
   
     @ApiProperty()
     discrepancy: number;

@@ -26,6 +26,13 @@ import { Not } from 'typeorm';
 export class StockOpnameEntriesController {
   constructor(private readonly stockOpnameEntriesService: StockOpnameEntriesService) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Stock Opname Entry data',
+    type: CreateStockOpnameEntryDto,
+  })
+
+  // @Permission('create:stock opname entry')
   @Post()
   async create(@Body() createStockOpnameEntryDto: CreateStockOpnameEntryDto) {
     const stockOpnameEntry = await this.stockOpnameEntriesService.create(createStockOpnameEntryDto);
@@ -39,6 +46,7 @@ export class StockOpnameEntriesController {
     type: StockOpnameEntryDtoOut
   })
 
+  // @Permission('read:stock opname entry')
   @Get()
   async findAll() {
     const stockOpnameEntries = await this.stockOpnameEntriesService.findAll();
@@ -56,6 +64,7 @@ export class StockOpnameEntriesController {
     type: StockOpnameEntryDtoOut
   })
 
+  // @Permission('read:stock opname entry')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const stockOpnameEntry = await this.stockOpnameEntriesService.findOne(+id);
@@ -67,6 +76,13 @@ export class StockOpnameEntriesController {
     return new ResponseFormatter(stockOpnameEntry, 'Stock Opname Entry found');
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Stock Opname Entry data',
+    type: UpdateStockOpnameEntryDto,
+  })
+
+  // @Permission('update:stock opname entry')
   @Patch(':id')
   async update(
     @Param('id') id: string, 
@@ -81,6 +97,7 @@ export class StockOpnameEntriesController {
     return new ResponseFormatter(stockOpnameEntry, 'Stock Opname Entry updated');
   }
 
+  // @Permission('delete:stock opname entry')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const stockOpnameEntry = await this.stockOpnameEntriesService.remove(+id);

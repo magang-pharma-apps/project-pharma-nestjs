@@ -1,3 +1,4 @@
+import { UUID } from "crypto";
 import { BaseEntity } from "src/config/common/BaseEntity";
 import { UserEntity } from "src/modules/auth/entities/user.entity";
 import { ProductEntity } from "src/modules/products/entities/product.entity";
@@ -18,7 +19,7 @@ export class CompoundProductEntity extends BaseEntity {
     productId: number;
 
     @Column({ name: 'user_id' })
-    user_id: number;
+    userId: UUID;
 
     @Column({ name: 'compound_name' })
     compoundName: string;

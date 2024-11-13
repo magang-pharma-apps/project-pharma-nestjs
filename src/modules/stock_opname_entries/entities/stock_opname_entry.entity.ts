@@ -1,23 +1,32 @@
 import { BaseEntity } from "src/config/common/BaseEntity";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ProductEntity } from "src/modules/products/entities/product.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "stock_opname_entries" })
 export class StockOpnameEntryEntity extends  BaseEntity{
     @PrimaryGeneratedColumn( { name: 'id' } )
-    id: number
+    id: number;
 
     @Column({ name: 'product_id' })
-    productId: number
+    productId: number;
 
     @Column({ name: 'recorded_stock' })
-    recordedStock: number
+    recordedStock: number;
 
     @Column({ name: 'physical_stock' })
-    physicalStock: number
+    physicalStock: number;
 
     @Column({ name: 'opname_date' })
-    opnameDate: number
+    opnameDate: Date;
 
     @Column({ name: 'discrepancy' })
-    discrepancy: number
+    discrepancy: number;
+
+    @ManyToOne(() => ProductEntity)
+    @JoinColumn({
+        name: 'product_id',
+        referencedColumnName: 'id',
+        foreignKeyConstraintName: 'fk_product_id',
+    })
+    product: ProductEntity;
 }

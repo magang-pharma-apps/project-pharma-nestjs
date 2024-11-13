@@ -2,16 +2,16 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateStockOpnameEntryDto {
     @ApiProperty()
-    product_id: number;
+    productId: number;
 
     @ApiProperty()
-    recorded_stock: number;
+    recordedStock: number;
 
     @ApiProperty()
-    physical_stock: number;
+    physicalStock: number;
 
     @ApiProperty()
-    opname_date: number;
+    opnameDate: Date;
 
     @ApiProperty()
     discrepancy: number;

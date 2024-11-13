@@ -1,26 +1,27 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { UUID } from "crypto";
 
 export class CompoundProductDtoOut {
     @ApiPropertyOptional()
     id: number;
 
     @ApiPropertyOptional()
-    product_id: number;
+    productId: number;
 
     @ApiPropertyOptional()
-    user_id: number;
+    userId: UUID;
 
     @ApiProperty()
-    compound_name: string;
+    compoundName: string;
 
     @ApiProperty()
-    formula_description: string;
+    formulaDescription: string;
 
     @ApiProperty()
     quantity: number;
 
     @ApiProperty()
-    expiry_date: Date;
+    expiryDate: Date;
 
     // @ApiProperty()
     // status: boolean

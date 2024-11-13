@@ -19,61 +19,44 @@ export class StockOpnameEntriesService {
   }
 
   async findAll() {
-    const stockOpnameEntries = await this.stockOpnameEntriesService.find({
-      where: {
-        deletedAt: null,
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        recordedStock: true,
-        physicalStock: true,
-        opnameDate: true,
-        discrepancy: true,
-        // product: {
-        //   name: true,
-        // },
-      },
-    });
+    const stockOpnameEntries = await this.stockOpnameEntriesService.createQueryBuilder('stockOpnameEntry')
+    .leftJoinAndSelect('stockOpnameEntry.product', 'product')
+    .select([
+      'stockOpnameEntry.id',
+      'stockOpnameEntry.recordedStock',
+      'stockOpnameEntry.physicalStock',
+      'stockOpnameEntry.opnameDate',
+      'stockOpnameEntry.discrepancy',
+      'product.name',
+    ])
+    .where('stockOpnameEntry.deletedAt IS NULL')
+    .orderBy('stockOpnameEntry.id', 'DESC')
 
-    if (!stockOpnameEntries) {
-      throw new NotFoundException('StockOpnameEntries not found');
-    }
+    const data = await stockOpnameEntries.getMany();
+    console.log(data);
 
-    return stockOpnameEntries;
+    return data;
   }
 
   async findOne(id: number) {
-    const stockOpnameEntry = await this.stockOpnameEntriesService.findOne({
-      where: {
-        id: id,
-        deletedAt: null,
-      },
-      order: {
-        id: 'DESC',
-      },
-      relations: ['product'],
-      select: {
-        id: true,
-        recordedStock: true,
-        physicalStock: true,
-        opnameDate: true,
-        discrepancy: true,
-        // product: {
-        //   name: true,
-        // },
-      },
-    });
+    const stockOpnameEntry = await this.stockOpnameEntriesService.createQueryBuilder('stockOpnameEntry')
+    .leftJoinAndSelect('stockOpnameEntry.product', 'product')
+    .select([
+      'stockOpnameEntry.id',
+      'stockOpnameEntry.recordedStock',
+      'stockOpnameEntry.physicalStock',
+      'stockOpnameEntry.opnameDate',
+      'stockOpnameEntry.discrepancy',
+      'product.name',
+    ])
+    .where('stockOpnameEntry.deletedAt IS NULL')
+    .andWhere('stockOpnameEntry.id = :id', { id: id })
+    .orderBy('stockOpnameEntry.id', 'DESC')
 
-      if (!stockOpnameEntry) {
-        throw new NotFoundException('StockOpnameEntry not found');
-      }
+    const data = await stockOpnameEntry.getOne();
+    console.log(data);
 
-      return stockOpnameEntry;
-
+    return data;
   }
 
   async update(id: number, data: UpdateStockOpnameEntryDto) {
