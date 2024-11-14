@@ -18,7 +18,7 @@ export class CategoryEntity extends BaseEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  @Column({ name: 'image_url', type: 'varchar', nullable: true })
+  @Column({ name: 'image_url', type: 'varchar' })
   categoryImageUrl: string;
 
   @Column({ name: 'local_image_path', type: 'varchar', nullable: true })

@@ -55,7 +55,7 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'unit_id', nullable: true })
   unitId: number;
 
-  @Column({ name: 'image_url', type: 'varchar', nullable: true })
+  @Column({ name: 'image_url', type: 'varchar' })
   productImageUrl: string;
 
   @Column({ name: 'local_image_path', type: 'varchar', nullable: true })
