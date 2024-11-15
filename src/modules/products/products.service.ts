@@ -137,6 +137,21 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
+    // Cek jika productImageUrl berubah
+  if (data.productImageUrl && data.productImageUrl !== product.productImageUrl) {
+    // Hapus gambar lokal lama jika ada
+    if (product.localImagePath) {
+      const oldImagePath = path.join(process.cwd(), 'public', product.localImagePath);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+
+    // Unduh gambar baru
+    const newImagePath = await this.downloadImage(data.productImageUrl);
+    product.localImagePath = newImagePath;
+  }
+
     Object.assign(product, data);
 
     const updatedProduct = await this.productRepository.save(product);
