@@ -104,10 +104,25 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
 
-    if (data.categoryImageUrl && data.categoryImageUrl !== category.categoryImageUrl) {
-      const imagePath = await this.downloadImage(data.categoryImageUrl);
-      category.localImagePath = imagePath; // Update path lokal jika URL berubah
+    // if (data.categoryImageUrl && data.categoryImageUrl !== category.categoryImageUrl) {
+    //   const imagePath = await this.downloadImage(data.categoryImageUrl);
+    //   category.localImagePath = imagePath; // Update path lokal jika URL berubah
+    // }
+
+    // Cek jika categoryImageUrl berubah
+  if (data.categoryImageUrl && data.categoryImageUrl !== category.categoryImageUrl) {
+    // Hapus gambar lokal lama jika ada
+    if (category.localImagePath) {
+      const oldImagePath = path.join(process.cwd(), 'public', category.localImagePath);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
     }
+
+    // Unduh gambar baru
+    const newImagePath = await this.downloadImage(data.categoryImageUrl);
+    category.localImagePath = newImagePath;
+  }
 
     Object.assign(category, data);
     
