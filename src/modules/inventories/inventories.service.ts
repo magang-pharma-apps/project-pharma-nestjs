@@ -31,8 +31,7 @@ export class InventoriesService {
         'warehouse.name',
         'warehouse.status',
       ])
-      .where('inventory.deletedAt IS NULL')
-      .andWhere('product.status = :status', { status: true })
+      .where('product.status = :status', { status: true })
       .andWhere('warehouse.status = :status', { status: true })
       .orderBy('inventory.id', 'DESC')
 
@@ -55,8 +54,7 @@ export class InventoriesService {
         'warehouse.name',
         'warehouse.status',
       ])
-      .where('inventory.deletedAt IS NULL')
-      .andWhere('product.status = :status', { status: true })
+      .where('product.status = :status', { status: true })
       .andWhere('warehouse.status = :status', { status: true })
       .andWhere('inventory.id = :id', { id })
       .orderBy('inventory.id', 'DESC')
@@ -71,7 +69,6 @@ export class InventoriesService {
     const inventory = await this.inventoryRepository.findOne({
       where: {
         id: id,
-        deletedAt: null,
       },
     });
 
@@ -88,7 +85,6 @@ export class InventoriesService {
 
   async remove(id: number) {
     const inventory = await this.inventoryRepository.findOne({
-      withDeleted: true,
       where: {
         id: id,
       },
@@ -98,8 +94,8 @@ export class InventoriesService {
       throw new NotFoundException('Inventory not found');
     }
 
-    const deletedInventory = await this.inventoryRepository.softRemove(inventory);
+    await this.inventoryRepository.remove(inventory);
 
-    return deletedInventory;
+    return inventory;
   }
 }

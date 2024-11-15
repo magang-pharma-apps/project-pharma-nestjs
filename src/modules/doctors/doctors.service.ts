@@ -27,7 +27,6 @@ export class DoctorsService {
         'doctor.phoneNumber',
         'doctor.email'
       ])
-      .where('doctor.deletedAt IS NULL')
       .orderBy('doctor.id', 'DESC')
 
     const data = await doctors.getMany();
@@ -45,8 +44,7 @@ export class DoctorsService {
         'doctor.phoneNumber',
         'doctor.email'
     ])
-      .where('doctor.deletedAt IS NULL')
-      .andWhere('doctor.id = :id', { id: doctors_id })
+      .where('doctor.id = :id', { id: doctors_id })
       .orderBy('doctor.id', 'DESC')
 
     const data = await doctor.getOne();
@@ -73,7 +71,6 @@ export class DoctorsService {
 
   async remove(doctors_id: number) {
     const doctor = await this.doctorsRepository.findOne({
-      withDeleted: true,
       where: {
         id: doctors_id,
       },
@@ -83,6 +80,8 @@ export class DoctorsService {
       throw new NotFoundException('Doctor not found');
     }
 
-    return await this.doctorsRepository.softRemove(doctor);
+    await this.doctorsRepository.remove(doctor);
+
+    return doctor;
   }
 }

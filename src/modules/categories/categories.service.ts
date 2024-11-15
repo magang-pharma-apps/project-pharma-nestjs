@@ -66,7 +66,6 @@ export class CategoriesService {
         'category.localImagePath',
         'category.status',
       ])
-      .where('category.deletedAt IS NULL')
       .orderBy('category.id', 'DESC')
 
     const data = await categories.getMany();
@@ -86,7 +85,6 @@ export class CategoriesService {
       'category.status',
     ])
     .where('category.id = :id', { id: categories_id })
-    .andWhere('category.deletedAt IS NULL')
     .orderBy('category.id', 'DESC');
 
     const data = await category.getOne();
@@ -118,7 +116,6 @@ export class CategoriesService {
 
   async remove(categories_id: number) {
     const category = await this.categoryRepository.findOne({
-      withDeleted: true,
       where: {
         id: categories_id,
       },
@@ -128,6 +125,8 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
 
-    return await this.categoryRepository.softRemove(category);
+    await this.categoryRepository.remove(category);
+
+    return category;
   }
 }

@@ -4,12 +4,15 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionEntity } from './entities/transaction.entity';
 import { Repository } from 'typeorm';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectRepository(TransactionEntity)
     private readonly transactionRepository: Repository<TransactionEntity>,
+
+    private readonly productService: ProductsService,
   ) {}
 
   async create(data: CreateTransactionDto) {
@@ -40,6 +43,11 @@ export class TransactionsService {
         transaction: undefined,
       }))
     });
+
+    // Update stok produk
+    for (const item of data.items) {
+      await this.productService.reduceStock(item.productId, item.quantity);
+    }
 
     return await this.transactionRepository.save(transaction);
   }
@@ -72,7 +80,6 @@ export class TransactionsService {
         'product.sellingPrice',
         'product.productImageUrl',
       ])
-      .where('transaction.deletedAt IS NULL')
       .orderBy('transaction.id', 'DESC')
 
 
@@ -124,7 +131,6 @@ export class TransactionsService {
         'product.productImageUrl',
       ])
       .where('transaction.id = :id', { id: transactions_id })
-      .andWhere('transaction.deletedAt IS NULL')
       .orderBy('transaction.id', 'DESC')
 
     const data = await transaction.getOne();
@@ -161,7 +167,6 @@ export class TransactionsService {
 
   async remove(transactions_id: number) {
     const transaction = await this.transactionRepository.findOne({
-      withDeleted: true,
       where: {
         id: transactions_id,
       },
@@ -171,7 +176,8 @@ export class TransactionsService {
       throw new NotFoundException('Transaction not found');
     }
 
-    return await this.transactionRepository.softRemove(transaction);
-  
+    await this.transactionRepository.remove(transaction);
+
+    return transaction;
   }
 }

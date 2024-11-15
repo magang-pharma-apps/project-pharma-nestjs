@@ -16,8 +16,8 @@ export abstract class BaseEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz', nullable: true })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
-  deletedAt: Date;
+  // @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
+  // deletedAt: Date;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy: string;

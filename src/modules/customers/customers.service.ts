@@ -26,7 +26,6 @@ export class CustomersService {
         'customer.age',
         'customer.address',
       ])
-      .where('customer.deletedAt IS NULL')
       .orderBy('customer.id', 'DESC')
 
     const data = await customers.getMany();
@@ -44,7 +43,6 @@ export class CustomersService {
         'customer.address',
       ])
       .where('customer.id = :id', { id: customers_id })
-      .andWhere('customer.deletedAt IS NULL')
       .orderBy('customer.id', 'DESC')
 
     const data = await customer.getOne();
@@ -71,7 +69,6 @@ export class CustomersService {
 
   async remove(customers_id: number) {
     const customer = await this.customersRepository.findOne({
-      withDeleted: true,
       where: {
         id: customers_id,
       },  
@@ -81,6 +78,8 @@ export class CustomersService {
       throw new NotFoundException('Customer not found');
     }
 
-    return await this.customersRepository.remove(customer);
+    await this.customersRepository.remove(customer);
+
+    return customer;
   }
 }
