@@ -27,7 +27,6 @@ export class SuppliersService {
         'supplier.email',
         'supplier.address',
       ])
-      .where('supplier.deletedAt IS NULL')
       .orderBy('supplier.id', 'DESC')
 
     const data = await suppliers.getMany();
@@ -45,8 +44,7 @@ export class SuppliersService {
         'supplier.email',
         'supplier.address',
     ])
-      .where('supplier.deletedAt IS NULL')
-      .andWhere('supplier.id = :supplier_id', { suppliers_id })
+      .where('supplier.id = :supplier_id', { suppliers_id })
       .orderBy('supplier.id', 'DESC')
 
     const data = await supplier.getOne();
@@ -73,7 +71,6 @@ export class SuppliersService {
 
   async remove(suppliers_id: number) {
     const supplier = await this.supplierRepository.findOne({
-      withDeleted: true,
       where: {
         id: suppliers_id,
       },
@@ -83,6 +80,8 @@ export class SuppliersService {
       throw new NotFoundException('Supplier not found');
     }
 
-    return await this.supplierRepository.softRemove(supplier);
+    await this.supplierRepository.remove(supplier);
+
+    return supplier;
   }
 }

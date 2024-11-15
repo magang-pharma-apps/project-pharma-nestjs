@@ -33,16 +33,21 @@ export class ProductImagesService {
     const productImages = await this.productImagesRepository.find({
       where: {
         product_id: product_id,
-        product: {
-          deletedAt: null,
-        },
+        // product: {
+        //   deletedAt: null,
+        // },
       },
       relations: ['product', 'product.category'],
     });
 
-    const deleteAt = productImages[0]?.product?.deletedAt;
+    // const deleteAt = productImages[0]?.product?.deletedAt;
 
-    if (!productImages || deleteAt !== null) {
+    // if (!productImages || deleteAt !== null) {
+    //   throw new NotFoundException('Product images not found.');
+    // }
+
+    // Jika tidak ada gambar produk ditemukan, lemparkan exception
+    if (!productImages || productImages.length === 0) {
       throw new NotFoundException('Product images not found.');
     }
 

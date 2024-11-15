@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -75,8 +75,7 @@ export class ProductsService {
       'unit.name',
       'unit.status',
     ])
-    .where('product.deletedAt IS NULL')
-    .andWhere('category.status = :status', { status: true })
+    .where('category.status = :status', { status: true })
     .andWhere('unit.status = :status', { status: true })
     .orderBy('product.id', 'DESC')
     .getMany();
@@ -113,7 +112,6 @@ export class ProductsService {
       'unit.status',
     ])
     .where('product.id = :id', { id })
-    .andWhere('product.deletedAt IS NULL')
     .andWhere('category.status = :status', { status: true })
     .andWhere('unit.status = :status', { status: true })
     .orderBy('product.id', 'DESC')
@@ -132,7 +130,6 @@ export class ProductsService {
     const product = await this.productRepository.findOne({
       where: {
         id: id,
-        deletedAt: null,
       },
     });
 
@@ -149,7 +146,6 @@ export class ProductsService {
 
   async remove(id: number) {
     const product = await this.productRepository.findOne({
-      withDeleted: true,
       where: {
         id: id,
       },
@@ -159,8 +155,28 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
-    const deletedProduct = await this.productRepository.softRemove(product);
+    await this.productRepository.remove(product);
 
-    return deletedProduct;
+    return product;
+  }
+
+  async reduceStock(productId: number, quantity: number) {
+    const product = await this.productRepository.findOne({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    if (product.stockQuantity - quantity < 0) {
+      throw new BadRequestException('Insufficient stock quantity');
+    }
+
+    product.stockQuantity -= quantity;
+    await this.productRepository.save(product);
+
   }
 }
