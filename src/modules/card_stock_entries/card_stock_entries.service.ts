@@ -28,6 +28,7 @@ export class CardStockEntriesService {
         'cardStockEntry.quantityChange',
         'cardStockEntry.dateCardStock',
         'cardStockEntry.reason',
+        'product.id',
         'product.name',
         'transaction.id',
       ])
@@ -49,6 +50,7 @@ export class CardStockEntriesService {
         'cardStockEntry.quantityChange',
         'cardStockEntry.dateCardStock',
         'cardStockEntry.reason',
+        'product.id',
         'product.name',
         'transaction.id',
       ])

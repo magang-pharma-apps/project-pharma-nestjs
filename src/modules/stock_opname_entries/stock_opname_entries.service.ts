@@ -27,6 +27,7 @@ export class StockOpnameEntriesService {
       'stockOpnameEntry.physicalStock',
       'stockOpnameEntry.opnameDate',
       'stockOpnameEntry.discrepancy',
+      'product.id',
       'product.name',
     ])
     .orderBy('stockOpnameEntry.id', 'DESC')
@@ -46,6 +47,7 @@ export class StockOpnameEntriesService {
       'stockOpnameEntry.physicalStock',
       'stockOpnameEntry.opnameDate',
       'stockOpnameEntry.discrepancy',
+      'product.id',
       'product.name',
     ])
     .where('stockOpnameEntry.id = :id', { id: id })
