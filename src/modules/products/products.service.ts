@@ -70,8 +70,10 @@ export class ProductsService {
       'product.stockQuantity',
       'product.productImageUrl',
       'product.drugClass',
+      'category.id',
       'category.name',
       'category.status',
+      'unit.id',
       'unit.name',
       'unit.status',
     ])
@@ -106,8 +108,10 @@ export class ProductsService {
       'product.stockQuantity',
       'product.productImageUrl',
       'product.drugClass',
+      'category.id',
       'category.name',
       'category.status',
+      'unit.id',
       'unit.name',
       'unit.status',
     ])

@@ -26,8 +26,10 @@ export class InventoriesService {
         'inventory.id',
         'inventory.quantityInStock',
         'inventory.note',
+        'product.id',
         'product.name',
         'product.status',
+        'warehouse.id',
         'warehouse.name',
         'warehouse.status',
       ])
@@ -49,8 +51,10 @@ export class InventoriesService {
         'inventory.id',
         'inventory.quantityInStock',
         'inventory.note',
+        'product.id',
         'product.name',
         'product.status',
+        'warehouse.id',
         'warehouse.name',
         'warehouse.status',
       ])

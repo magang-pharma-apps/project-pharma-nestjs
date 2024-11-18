@@ -23,13 +23,14 @@ export class CompoundProductsService {
       .leftJoinAndSelect('compound_product.product', 'product')
       .select([
         'compound_product.id',
-        'compound_product.productId',
+        // 'compound_product.productId',
         'compound_product.userId',
         'compound_product.compoundName',
         'compound_product.formulaDescription',
         'compound_product.compoundPrice',
         'compound_product.quantity',
         'compound_product.expiryDate',
+        'product.id',
         'product.productCode',
         'product.name',
         'product.description',
@@ -61,13 +62,14 @@ export class CompoundProductsService {
       .leftJoinAndSelect('compound_product.product', 'product')
       .select([
         'compound_product.id',
-        'compound_product.productId',
+        // 'compound_product.productId',
         'compound_product.userId',
         'compound_product.compoundName',
         'compound_product.formulaDescription',
         'compound_product.compoundPrice',
         'compound_product.quantity',
         'compound_product.expiryDate',
+        'product.id',
         'product.productCode',
         'product.name',
         'product.description',

@@ -26,6 +26,7 @@ export class TransactionDetailsService {
         'transactionDetail.id',
         'transactionDetail.quantity',
         'transactionDetail.note',
+        'product.id',
         'product.name',
         'product.status',
         'transaction.status'
@@ -48,6 +49,7 @@ export class TransactionDetailsService {
         'transactionDetail.id',
         'transactionDetail.quantity',
         'transactionDetail.note',
+        'product.id',
         'product.name',
         'product.status',
         'transaction.status'

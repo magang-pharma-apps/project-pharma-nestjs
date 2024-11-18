@@ -87,6 +87,7 @@ export class PrescriptionRedemptionsService {
       .leftJoinAndSelect('prescriptionRedemption.transaction', 'transaction')
       .leftJoinAndSelect('transaction.items', 'items')
       .leftJoinAndSelect('items.product', 'product')
+      .leftJoinAndSelect('transaction.user', 'user')
       .select([
         'prescriptionRedemption.id',
         'prescriptionRedemption.isPaid',
@@ -95,11 +96,15 @@ export class PrescriptionRedemptionsService {
         'prescription.prescriptionCode',
         'prescription.prescriptionDate',
         'prescription.isRedeem',
+        'doctor.id',
         'doctor.name',
+        'customer.id',
         'customer.name',
         'customer.age',
         'transaction.id',
-        'transaction.userId',
+        'transaction.transactionCode',
+        'transaction.transactionNumber',
+        // 'transaction.userId',
         'transaction.transactionDate',
         'transaction.transactionType',
         'transaction.categoryType',
@@ -108,9 +113,11 @@ export class PrescriptionRedemptionsService {
         'transaction.subTotal',
         'transaction.grandTotal',
         'transaction.paymentMethod',
+        'user.username',
         'items.id',
         'items.quantity',
         'items.note',
+        'product.id',
         'product.name',
         'product.sellingPrice'
       ])
@@ -143,6 +150,7 @@ export class PrescriptionRedemptionsService {
       .leftJoinAndSelect('prescriptionRedemption.transaction', 'transaction')
       .leftJoinAndSelect('transaction.items', 'items')
       .leftJoinAndSelect('items.product', 'product')
+      .leftJoinAndSelect('transaction.user', 'user')
       .select([
         'prescriptionRedemption.id',
         'prescriptionRedemption.isPaid',
@@ -151,11 +159,15 @@ export class PrescriptionRedemptionsService {
         'prescription.prescriptionCode',
         'prescription.prescriptionDate',
         'prescription.isRedeem',
+        'doctor.id',
         'doctor.name',
+        'customer.id',
         'customer.name',
         'customer.age',
         'transaction.id',
-        'transaction.userId',
+        'transaction.transactionCode',
+        'transaction.transactionNumber',
+        // 'transaction.userId',
         'transaction.transactionDate',
         'transaction.transactionType',
         'transaction.categoryType',
@@ -164,12 +176,13 @@ export class PrescriptionRedemptionsService {
         'transaction.subTotal',
         'transaction.grandTotal',
         'transaction.paymentMethod',
+        'user.username',
         'items.id',
         'items.quantity',
         'items.note',
+        'product.id',
         'product.name',
         'product.sellingPrice'
-
       ])
       .where('prescriptionRedemption.id = :id', { id })
       .andWhere('prescriptionRedemption.isRedeem = true')
