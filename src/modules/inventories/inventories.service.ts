@@ -21,20 +21,20 @@ export class InventoriesService {
   async findAll() {
     const inventories = await this.inventoryRepository.createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.product', 'product')
-      .leftJoinAndSelect('inventory.warehouse', 'warehouse')
+      // .leftJoinAndSelect('inventory.warehouse', 'warehouse')
       .select([
         'inventory.id',
-        'inventory.quantityInStock',
+        // 'inventory.quantityInStock',
         'inventory.note',
         'product.id',
         'product.name',
         'product.status',
-        'warehouse.id',
-        'warehouse.name',
-        'warehouse.status',
+        // 'warehouse.id',
+        // 'warehouse.name',
+        // 'warehouse.status',
       ])
       .where('product.status = :status', { status: true })
-      .andWhere('warehouse.status = :status', { status: true })
+      // .andWhere('warehouse.status = :status', { status: true })
       .orderBy('inventory.id', 'DESC')
 
     const data = await inventories.getMany();
@@ -46,20 +46,20 @@ export class InventoriesService {
   async findOne(id: number) {
     const inventory = await this.inventoryRepository.createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.product', 'product')
-      .leftJoinAndSelect('inventory.warehouse', 'warehouse')
+      // .leftJoinAndSelect('inventory.warehouse', 'warehouse')
       .select([
         'inventory.id',
-        'inventory.quantityInStock',
+        // 'inventory.quantityInStock',
         'inventory.note',
         'product.id',
         'product.name',
         'product.status',
-        'warehouse.id',
-        'warehouse.name',
-        'warehouse.status',
+        // 'warehouse.id',
+        // 'warehouse.name',
+        // 'warehouse.status',
       ])
       .where('product.status = :status', { status: true })
-      .andWhere('warehouse.status = :status', { status: true })
+      // .andWhere('warehouse.status = :status', { status: true })
       .andWhere('inventory.id = :id', { id })
       .orderBy('inventory.id', 'DESC')
 

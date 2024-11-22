@@ -32,6 +32,6 @@ export class WarehouseEntity extends BaseEntity {
     })
     supplier: SupplierEntity;
 
-    @OneToMany(() => InventoryEntity, (inventory) => inventory.warehouse)
-    inventories: InventoryEntity[];
+    // @OneToMany(() => InventoryEntity, (inventory) => inventory.warehouse)
+    // inventories: InventoryEntity[];
 }
