@@ -31,16 +31,22 @@ export class TransactionDetailsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Transaction detail data',
-    type: CreateTransactionDetailDto,
+    type: [CreateTransactionDetailDto],
   })
 
   // @Permission('create:transaction-detail')
   @Post()
-  async create(@Body() createTransactionDetailDto: CreateTransactionDetailDto) {
-    const transactionDetail = await this.transactionDetailsService.create(createTransactionDetailDto);
+  async create(@Body() createTransactionDetailDto: CreateTransactionDetailDto | CreateTransactionDetailDto[]) {
+    const transactionDetails = await this.transactionDetailsService.create(createTransactionDetailDto);
 
-    return new ResponseFormatter(transactionDetail, 'Transaction Detail created');
+    // Kembalikan data dalam bentuk array agar konsisten
+    const formattedResponse = Array.isArray(transactionDetails)
+      ? transactionDetails
+      : [transactionDetails];
+
+    return new ResponseFormatter(formattedResponse, 'Transaction Details created');
   }
+
 
   @ApiResponse({
     status: HttpStatus.OK,

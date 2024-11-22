@@ -12,10 +12,16 @@ export class TransactionDetailsService {
     private readonly transactionDetailRepository: Repository<TransactionDetailEntity>
   ) {}
 
-  async create(data: CreateTransactionDetailDto) {
-    const transactionDetail = this.transactionDetailRepository.create(data);
-    
-    return await this.transactionDetailRepository.save(transactionDetail);
+  async create(data: CreateTransactionDetailDto | CreateTransactionDetailDto[]) {
+   // Jika data adalah array, buat banyak item
+  if (Array.isArray(data)) {
+    const transactionDetails = this.transactionDetailRepository.create(data);
+    return await this.transactionDetailRepository.save(transactionDetails);
+  }
+  
+  // Jika data adalah objek tunggal, buat satu item
+  const transactionDetail = this.transactionDetailRepository.create(data);
+  return await this.transactionDetailRepository.save(transactionDetail);
   }
 
   async findAll() {
