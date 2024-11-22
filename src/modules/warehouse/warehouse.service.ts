@@ -31,6 +31,7 @@ export class WarehouseService {
         'supplier.email',
         'supplier.address',
       ])
+      .where('warehouse.deletedAt IS NULL')
       .orderBy('warehouse.id', 'DESC')
 
     const data = await warehouses.getMany();
@@ -53,6 +54,7 @@ export class WarehouseService {
         'supplier.address',
       ])
       .where('warehouse.id = :id', { id })
+      .andWhere('warehouse.deletedAt IS NULL')
       .orderBy('warehouse.id', 'DESC')
 
     const data = await warehouse.getOne();
@@ -65,6 +67,7 @@ export class WarehouseService {
     const warehouse = await this.warehouseRepository.findOne({
       where: {
         id: id,
+        deletedAt: null,
       },
     });
 
@@ -81,6 +84,7 @@ export class WarehouseService {
 
   async remove(id: number) {
     const warehouse = await this.warehouseRepository.findOne({
+      withDeleted: true,
       where: {
         id: id,
       },
@@ -90,8 +94,8 @@ export class WarehouseService {
       throw new NotFoundException('Warehouse not found');
     }
 
-    await this.warehouseRepository.remove(warehouse);
+    const deletedWarehouse = await this.warehouseRepository.softRemove(warehouse);
 
-    return warehouse;
+    return deletedWarehouse;
   }
 }

@@ -12,7 +12,7 @@ export class SupplierEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'name', unique: true })
+  @Column({ name: 'name'})
   name: string;
 
   @Column({ name: 'contact_number' })

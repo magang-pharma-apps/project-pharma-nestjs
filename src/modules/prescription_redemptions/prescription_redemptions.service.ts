@@ -122,6 +122,7 @@ export class PrescriptionRedemptionsService {
         'product.sellingPrice'
       ])
       .where('prescriptionRedemption.isRedeem = true')
+      .andWhere('prescriptionRedemption.deletedAt IS NULL')
       .orderBy('prescriptionRedemption.id', 'DESC');
 
     const data = await prescriptionRedemptions.getMany(); 
@@ -185,6 +186,7 @@ export class PrescriptionRedemptionsService {
         'product.sellingPrice'
       ])
       .where('prescriptionRedemption.id = :id', { id })
+      .andWhere('prescriptionRedemption.deletedAt IS NULL')
       .andWhere('prescriptionRedemption.isRedeem = true')
       .orderBy('prescriptionRedemption.id', 'DESC');
 
@@ -209,6 +211,7 @@ export class PrescriptionRedemptionsService {
     const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
       where: {
         id: id,
+        deletedAt: null
       },
    });
   
@@ -233,6 +236,7 @@ export class PrescriptionRedemptionsService {
 
   async remove(id: number) {
     const prescriptionRedemption = await this.prescriptionRedemptionRepository.findOne({
+      withDeleted: true,
       where: {
         id: id,
       },
@@ -242,14 +246,8 @@ export class PrescriptionRedemptionsService {
       throw new NotFoundException('PrescriptionRedemption not found');
     }
 
-    await this.prescriptionRedemptionRepository.remove(prescriptionRedemption);
+    const deletedPrescriptionRedemption = await this.prescriptionRedemptionRepository.softRemove(prescriptionRedemption);
 
-    return prescriptionRedemption;
+    return deletedPrescriptionRedemption;
   }
-
-
 }
-function getOne() {
-  throw new Error('Function not implemented.');
-}
-

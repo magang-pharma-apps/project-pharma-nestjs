@@ -32,6 +32,7 @@ export class CardStockEntriesService {
         'product.name',
         'transaction.id',
       ])
+      .where('cardStockEntry.deletedAt IS NULL')
       .orderBy('cardStockEntry.id', 'DESC')
 
     const data = await cardStockEntries.getMany();
@@ -54,7 +55,8 @@ export class CardStockEntriesService {
         'product.name',
         'transaction.id',
       ])
-      .where('cardStockEntry.id = :id', { id: id })
+      .where('cardStockEntry.deletedAt IS NULL')
+      .andWhere('cardStockEntry.id = :id', { id: id })
       .orderBy('cardStockEntry.id', 'DESC')
 
     const data = await cardStockEntry.getOne();
@@ -67,6 +69,7 @@ export class CardStockEntriesService {
     const cardStockEntry = await this.cardStockEntryRepository.findOne({
       where: {
         id: id,
+        deletedAt: null
       },
       
     });
@@ -84,6 +87,7 @@ export class CardStockEntriesService {
 
   async remove(id: number) {
     const cardStockEntry = await this.cardStockEntryRepository.findOne({
+      withDeleted: true,
       where: {
         id: id
       },
@@ -94,8 +98,7 @@ export class CardStockEntriesService {
       throw new NotFoundException('Card stock entry not found');
     } 
 
-    await this.cardStockEntryRepository.remove(cardStockEntry);  
-
-    return cardStockEntry;
-  }
+    return await this.cardStockEntryRepository.softRemove(cardStockEntry);
+    // await this.cardStockEntryRepository.remove(cardStockEntry);  
+    }
 }

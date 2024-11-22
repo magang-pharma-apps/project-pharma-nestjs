@@ -13,7 +13,7 @@ export class UnitEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: 'name', unique: true })
+    @Column({ name: 'name' })
     name: string;
 
     @Column({ name: 'description', nullable: true })

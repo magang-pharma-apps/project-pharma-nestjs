@@ -30,6 +30,7 @@ export class StockOpnameEntriesService {
       'product.id',
       'product.name',
     ])
+    .where('stockOpnameEntry.deletedAt IS NULL')
     .orderBy('stockOpnameEntry.id', 'DESC')
 
     const data = await stockOpnameEntries.getMany();
@@ -51,6 +52,7 @@ export class StockOpnameEntriesService {
       'product.name',
     ])
     .where('stockOpnameEntry.id = :id', { id: id })
+    .andWhere('stockOpnameEntry.deletedAt IS NULL')
     .orderBy('stockOpnameEntry.id', 'DESC')
 
     const data = await stockOpnameEntry.getOne();
@@ -63,6 +65,7 @@ export class StockOpnameEntriesService {
     const stockOpnameEntry = await this.stockOpnameEntriesService.findOne({
       where: {
         id: id,
+        deletedAt: null,
       },
     });
 
@@ -79,6 +82,7 @@ export class StockOpnameEntriesService {
 
   async remove(id: number) {
     const stockOpnameEntry = await this.stockOpnameEntriesService.findOne({
+      withDeleted: true,
       where: {
         id: id,
       },
@@ -88,8 +92,8 @@ export class StockOpnameEntriesService {
       throw new NotFoundException('StockOpnameEntry not found');
     }
 
-    await this.stockOpnameEntriesService.remove(stockOpnameEntry);
+    const deletedStockOpnameEntry = await this.stockOpnameEntriesService.softRemove(stockOpnameEntry);
 
-    return stockOpnameEntry;
+    return deletedStockOpnameEntry;
   }
 }

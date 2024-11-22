@@ -41,6 +41,7 @@ export class CompoundProductsService {
         'product.productImageUrl',
         'product.drugClass',
       ])
+      .where('compound_product.deletedAt IS NULL')
       .orderBy('compound_product.id', 'DESC')
       .getMany();
 
@@ -80,7 +81,8 @@ export class CompoundProductsService {
         'product.productImageUrl',
         'product.drugClass',
       ])
-      .where('compound_product.id = :id', { id })
+      .where('compound_product.deletedAt IS NULL')
+      .andWhere('compound_product.id = :id', { id })
       .orderBy('compound_product.id', 'DESC')
       .getOne();
 
@@ -98,6 +100,7 @@ export class CompoundProductsService {
     const compoundProduct = await this.compoundProductRepository.findOne({
       where: {
         id: id,
+        deletedAt: Not(null),
       },
     });
 
@@ -116,6 +119,7 @@ export class CompoundProductsService {
 
   async remove(id: number) {
     const compoundProduct = await this.compoundProductRepository.findOne({
+      withDeleted: true,
       where: {
         id: id,
       },
@@ -125,11 +129,11 @@ export class CompoundProductsService {
       throw new NotFoundException('Compound product not found');
     }
 
-    await this.compoundProductRepository.remove(
+    const deletedCompoundProduct = await this.compoundProductRepository.softRemove(
       compoundProduct
     );
 
-    return compoundProduct;
+    return deletedCompoundProduct;
     
   }
 }

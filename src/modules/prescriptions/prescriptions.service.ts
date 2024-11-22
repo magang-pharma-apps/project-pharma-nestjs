@@ -36,6 +36,7 @@ export class PrescriptionsService {
         'customer.age',
         'customer.status',
       ])
+      .where('prescription.deletedAt IS NULL')
       .orderBy('prescription.isRedeem', 'ASC');
 
     const data = await prescriptions.getMany();
@@ -63,6 +64,7 @@ export class PrescriptionsService {
         'customer.status',
       ])
       .where('prescription.id = :id', { id: prescriptions_id })
+      .andWhere('prescription.deletedAt IS NULL')
       .orderBy('prescription.id', 'DESC');
 
     const data = await prescription.getOne();
@@ -75,6 +77,7 @@ export class PrescriptionsService {
     const prescription = await this.prescriptionRepository.findOne({
       where: {
         id: prescriptions_id,
+        deletedAt: null,
       },
     });
 
@@ -91,6 +94,7 @@ export class PrescriptionsService {
 
   async remove(prescriptions_id: number) {
     const prescription = await this.prescriptionRepository.findOne({
+      withDeleted: true,
       where: {
         id: prescriptions_id,
       },
@@ -100,8 +104,8 @@ export class PrescriptionsService {
       throw new NotFoundException('Prescription not found');
     }
 
-    await this.prescriptionRepository.remove(prescription);
+    const deletedPrescription = await this.prescriptionRepository.softRemove(prescription);
 
-    return prescription;
+    return deletedPrescription;
   }
 }
