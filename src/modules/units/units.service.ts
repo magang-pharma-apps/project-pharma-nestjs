@@ -26,6 +26,7 @@ export class UnitsService {
         'unit.description',
         'unit.status',
       ])
+      .where('unit.deletedAt IS NULL')
       .orderBy('unit.id', 'DESC')
 
     const data = await units.getMany();
@@ -43,6 +44,7 @@ export class UnitsService {
         'unit.status',
       ])
       .where('unit.id = :id', { id: units_id })
+      .andWhere('unit.deletedAt IS NULL')
       .orderBy('unit.id', 'DESC')
 
     const data = await unit.getOne();
@@ -69,6 +71,7 @@ export class UnitsService {
 
   async remove(units_id: number) {
     const unit = await this.unitRepository.findOne({
+      withDeleted: true,
       where: {
         id: units_id,
       }
@@ -78,8 +81,6 @@ export class UnitsService {
       throw new NotFoundException('Unit not found');
     }
 
-    await this.unitRepository.remove(unit);
-
-    return unit;
+    return await this.unitRepository.softRemove(unit);
   }
 }

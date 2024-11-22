@@ -80,6 +80,7 @@ export class TransactionsService {
         'product.sellingPrice',
         'product.productImageUrl',
       ])
+      .where('transaction.deletedAt IS NULL')
       .orderBy('transaction.id', 'DESC')
 
 
@@ -131,6 +132,7 @@ export class TransactionsService {
         'product.productImageUrl',
       ])
       .where('transaction.id = :id', { id: transactions_id })
+      .andWhere('transaction.deletedAt IS NULL')
       .orderBy('transaction.id', 'DESC')
 
     const data = await transaction.getOne();
@@ -167,6 +169,7 @@ export class TransactionsService {
 
   async remove(transactions_id: number) {
     const transaction = await this.transactionRepository.findOne({
+      withDeleted: true,
       where: {
         id: transactions_id,
       },
@@ -176,8 +179,6 @@ export class TransactionsService {
       throw new NotFoundException('Transaction not found');
     }
 
-    await this.transactionRepository.remove(transaction);
-
-    return transaction;
+    return await this.transactionRepository.softRemove(transaction);
   }
 }

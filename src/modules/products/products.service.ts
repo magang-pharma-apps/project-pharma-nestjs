@@ -79,6 +79,7 @@ export class ProductsService {
     ])
     .where('category.status = :status', { status: true })
     .andWhere('unit.status = :status', { status: true })
+    .andWhere('product.deletedAt IS NULL')
     .orderBy('product.id', 'DESC')
     .getMany();
 
@@ -116,6 +117,7 @@ export class ProductsService {
       'unit.status',
     ])
     .where('product.id = :id', { id })
+    .andWhere('product.deletedAt IS NULL')
     .andWhere('category.status = :status', { status: true })
     .andWhere('unit.status = :status', { status: true })
     .orderBy('product.id', 'DESC')
@@ -134,6 +136,7 @@ export class ProductsService {
     const product = await this.productRepository.findOne({
       where: {
         id: id,
+        deletedAt: null,
       },
     });
 
@@ -165,6 +168,7 @@ export class ProductsService {
 
   async remove(id: number) {
     const product = await this.productRepository.findOne({
+      withDeleted: true,
       where: {
         id: id,
       },
@@ -174,9 +178,9 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
-    await this.productRepository.remove(product);
+    const deletedProduct = await this.productRepository.softRemove(product);
 
-    return product;
+    return deletedProduct;
   }
 
   async reduceStock(productId: number, quantity: number) {

@@ -31,7 +31,7 @@ export class ProductEntity extends BaseEntity {
   @Column({ name: 'product_code', unique: true })
   productCode: string;
 
-  @Column({ name: 'name', unique: true })
+  @Column({ name: 'name' })
   name: string;
 
   @Column({ name: 'description', nullable: true })

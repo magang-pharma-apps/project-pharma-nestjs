@@ -39,6 +39,7 @@ export class TransactionDetailsService {
       ])
       .where('product.status = :status', { status: true })
       .andWhere('transaction.status = :status', { status: true })
+      .andWhere('transactionDetail.deletedAt IS NULL')
       .orderBy('transactionDetail.id', 'DESC');
 
     const data = await transactionDetails.getMany();
@@ -62,6 +63,7 @@ export class TransactionDetailsService {
       ])
       .where('product.status = :status', { status: true })
       .andWhere('transaction.status = :status', { status: true })
+      .andWhere('transactionDetail.deletedAt IS NULL')
       .andWhere('transactionDetail.id = :id', { id })
       .orderBy('transactionDetail.id', 'DESC');
 
@@ -75,6 +77,7 @@ export class TransactionDetailsService {
     const transactionDetail = await this.transactionDetailRepository.findOne({
       where: {
         id: id,
+        deletedAt: null
       },
     });
 
@@ -91,6 +94,7 @@ export class TransactionDetailsService {
 
   async remove(id: number) {
     const transactionDetail = await this.transactionDetailRepository.findOne({
+      withDeleted: true,
       where: {
         id: id
       },
@@ -100,8 +104,8 @@ export class TransactionDetailsService {
       throw new NotFoundException('TransactionDetail not found');
     }
 
-    await this.transactionDetailRepository.remove(transactionDetail);
+    const deletedTransactionDetail = await this.transactionDetailRepository.softRemove(transactionDetail);
 
-    return transactionDetail;
+    return deletedTransactionDetail;
   }
 }
