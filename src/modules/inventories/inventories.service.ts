@@ -78,10 +78,13 @@ export class InventoriesService {
       // .leftJoinAndSelect('inventory.warehouse', 'warehouse')
       .select([
         'inventory.id',
-        // 'inventory.quantityInStock',
+        'inventory.inventoryType',
+        'inventory.inventoryDate',
         'inventory.note',
+        'inventory.noteItem',
         'product.id',
         'product.name',
+        'product.stockQuantity',
         'product.status',
         // 'warehouse.id',
         // 'warehouse.name',
@@ -91,11 +94,32 @@ export class InventoriesService {
       .andWhere('inventory.deletedAt IS NULL')
       // .andWhere('warehouse.status = :status', { status: true })
       .orderBy('inventory.id', 'DESC')
+      .getMany()
 
-    const data = await inventories.getMany();
-    console.log(data);
+    const inventoryList = inventories.map((inventory) => ({
+      id: inventory.id,
+      inventoryType: inventory.inventoryType,
+      inventoryDate: inventory.inventoryDate,
+      note: inventory.note,
+      items: [
+        {
+          productId: inventory.product.id,
+          productName: inventory.product.name,
+          noteItem: inventory.noteItem,
+        },
+      ],
+    }));
 
-    return data;
+    console.log(inventoryList);
+
+    return {
+      inventories: inventoryList,
+    };
+
+    // const data = await inventories.getMany();
+    // console.log(data);
+
+    // return data;
   }
 
   async findOne(id: number) {
@@ -104,10 +128,13 @@ export class InventoriesService {
       // .leftJoinAndSelect('inventory.warehouse', 'warehouse')
       .select([
         'inventory.id',
-        // 'inventory.quantityInStock',
+        'inventory.inventoryType',
+        'inventory.inventoryDate',
         'inventory.note',
+        'inventory.noteItem',
         'product.id',
         'product.name',
+        'product.stockQuantity',
         'product.status',
         // 'warehouse.id',
         // 'warehouse.name',
@@ -117,12 +144,34 @@ export class InventoriesService {
       .andWhere('inventory.deletedAt IS NULL')
       // .andWhere('warehouse.status = :status', { status: true })
       .andWhere('inventory.id = :id', { id })
-      .orderBy('inventory.id', 'DESC')
+      .getOne();
 
-    const data = await inventory.getOne();
-    console.log(data);
+    if (!inventory) {
+      throw new NotFoundException('Inventory not found');
+    }
 
-    return data;
+    const inventoryDetails = {
+      id: inventory.id,
+      inventoryType: inventory.inventoryType,
+      inventoryDate: inventory.inventoryDate,
+      note: inventory.note,
+      items: [
+        {
+          productId: inventory.product.id,
+          productName: inventory.product.name,
+          noteItem: inventory.noteItem,
+        },
+      ],
+    };
+
+    console.log(inventoryDetails);
+
+    return inventoryDetails;
+
+    // const data = await inventory.getOne();
+    // console.log(data);
+
+    // return data;
   }
     
   async update(id: number, data: UpdateInventoryDto) {

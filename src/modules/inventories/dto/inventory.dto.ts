@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { InventoryType } from "../entities/inventory.entity";
+import { InventoryItemDto } from "./create-inventory.dto";
 
 export class InventoryDtoOut {
     @ApiPropertyOptional()
@@ -19,4 +20,7 @@ export class InventoryDtoOut {
 
     @ApiProperty()
     note: string;
+
+    @ApiProperty({ type: [InventoryItemDto] }) // Menambahkan array items
+    items: InventoryItemDto[];
 }
