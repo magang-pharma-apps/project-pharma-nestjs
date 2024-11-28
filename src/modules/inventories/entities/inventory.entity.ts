@@ -32,8 +32,14 @@ export class InventoryEntity extends BaseEntity {
     @Column({ name: 'inventory_type', type: 'enum', enum: InventoryType, nullable: true })
     inventoryType: InventoryType;
 
+    @Column({ name: 'note_item' })
+    noteItem: string;
+
     @Column({ name: 'note' })
     note: string;
+
+    @Column({ name: 'inventory_date'})
+    inventoryDate: Date; // Menyimpan tanggal inventory
 
     @ManyToOne(() => ProductEntity)
     @JoinColumn({

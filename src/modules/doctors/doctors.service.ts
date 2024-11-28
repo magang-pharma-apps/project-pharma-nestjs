@@ -57,7 +57,6 @@ export class DoctorsService {
 
   async update(doctors_id: number, data: UpdateDoctorDto) {
     const doctor = await this.doctorsRepository.findOne({
-      withDeleted: true,
       where: {
         id: doctors_id,
       }, 
@@ -74,6 +73,7 @@ export class DoctorsService {
 
   async remove(doctors_id: number) {
     const doctor = await this.doctorsRepository.findOne({
+      withDeleted: true,
       where: {
         id: doctors_id,
       },

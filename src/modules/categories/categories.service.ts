@@ -97,7 +97,6 @@ export class CategoriesService {
 
   async update(categories_id: number, data: UpdateCategoryDto) {
     const category = await this.categoryRepository.findOne({
-      withDeleted: true,
       where: { 
         id: categories_id,
       },
@@ -134,6 +133,7 @@ export class CategoriesService {
 
   async remove(categories_id: number) {
     const category = await this.categoryRepository.findOne({
+      withDeleted: true,
       where: {
         id: categories_id,
       },
