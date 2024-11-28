@@ -178,6 +178,17 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
 
+    // const productAll = await this.productRepository.find({
+    //   where: { 
+    //     unitId: product.unitId,
+    //   }
+    // });
+
+    // if (productAll.length > 0) {
+
+    //   await this.productRepository.softRemove(productAll); 
+    // }
+
     const deletedProduct = await this.productRepository.softRemove(product);
 
     return deletedProduct;

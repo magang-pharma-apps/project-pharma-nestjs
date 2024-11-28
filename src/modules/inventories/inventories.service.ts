@@ -1,21 +1,75 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InventoryEntity } from './entities/inventory.entity';
-import { Repository } from 'typeorm';
+import { InventoryEntity, InventoryType } from './entities/inventory.entity';
+import { In, Repository } from 'typeorm';
+import { ProductEntity } from '../products/entities/product.entity';
 
 @Injectable()
 export class InventoriesService {
   constructor(
     @InjectRepository(InventoryEntity)
     private readonly inventoryRepository: Repository<InventoryEntity>,
+
+    @InjectRepository(ProductEntity)
+    private readonly productRepository: Repository<ProductEntity>,
   ) {}
 
-  async create(data: CreateInventoryDto) {
-    const inventory = this.inventoryRepository.create(data);
+  // async create(data: CreateInventoryDto) {
+  //   const inventory = this.inventoryRepository.create(data);
 
-    return await this.inventoryRepository.save(inventory);
+  //   return await this.inventoryRepository.save(inventory);
+  // }
+
+  async create(data: CreateInventoryDto) {
+    const { item, inventoryDate, inventoryType, note } = data;
+
+    const inventoryItems: InventoryEntity[] = [];
+
+    for (const inventoryItem of item) {
+      // 1. Update atau validasi stok produk
+      const product = await this.productRepository.findOne({
+        where: { id: inventoryItem.productId },
+      });
+
+      if (!product) {
+        throw new NotFoundException(`Product with ID ${inventoryItem.productId} not found.`);
+      }
+
+      // Update stok berdasarkan tipe inventory
+      if (inventoryType === InventoryType.IN) {
+        product.stockQuantity += inventoryItem.quantity; // Tambah stok
+      } else if (inventoryType === InventoryType.OUT) {
+        if (product.stockQuantity < inventoryItem.quantity) {
+          throw new BadRequestException(
+            `Insufficient stock for product ID ${inventoryItem.productId}.`,
+          );
+        }
+        product.stockQuantity -= inventoryItem.quantity; // Kurangi stok
+      }
+
+      // Simpan perubahan stok produk
+      await this.productRepository.save(product);
+
+      // 2. Buat entitas inventory baru
+      const inventory = new InventoryEntity();
+      inventory.productId = inventoryItem.productId;
+      inventory.inventoryType = inventoryType;
+      inventory.noteItem = inventoryItem.noteItem;
+      inventory.note = note;
+      inventory.inventoryDate = inventoryDate;
+
+      inventoryItems.push(inventory);
+    }
+
+    // 3. Simpan semua entitas inventory
+    await this.inventoryRepository.save(inventoryItems);
+
+    return {
+      message: 'Inventory successfully created and stock updated',
+      inventoryItems,
+    };
   }
 
   async findAll() {
