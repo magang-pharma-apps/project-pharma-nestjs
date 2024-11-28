@@ -3,7 +3,7 @@ import { IsNotEmpty } from "class-validator";
 import { InventoryType } from "../entities/inventory.entity";
 
 // DTO untuk item dalam inventory
-class InventoryItemDto {
+export class InventoryItemDto {
     @ApiProperty()
     productId: number;
   
