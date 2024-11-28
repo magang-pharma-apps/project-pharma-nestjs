@@ -23,11 +23,11 @@ export class InventoriesService {
   // }
 
   async create(data: CreateInventoryDto) {
-    const { item, inventoryDate, inventoryType, note } = data;
+    const { items, inventoryDate, inventoryType, note } = data;
 
     const inventoryItems: InventoryEntity[] = [];
 
-    for (const inventoryItem of item) {
+    for (const inventoryItem of items) {
       // 1. Update atau validasi stok produk
       const product = await this.productRepository.findOne({
         where: { id: inventoryItem.productId },
