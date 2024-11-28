@@ -7,8 +7,8 @@ class InventoryItemDto {
     @ApiProperty()
     productId: number;
   
-    @ApiProperty()
-    productName: string;
+    // @ApiProperty()
+    // productName: string;
   
     @ApiProperty()
     quantity: number;
@@ -28,7 +28,7 @@ export class CreateInventoryDto {
     // quantityInStock: number;
 
     @ApiProperty({ type: [InventoryItemDto] })
-    item: InventoryItemDto[]; // Menyimpan array produk (item)
+    items: InventoryItemDto[]; // Menyimpan array produk (item)
 
     @ApiProperty()
     inventoryDate: Date; // Tanggal inventory
