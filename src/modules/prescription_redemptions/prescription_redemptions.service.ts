@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { TransactionDetailEntity } from '../transaction_details/entities/transaction_detail.entity';
 import { PrescriptionEntity } from '../prescriptions/entities/prescription.entity';
 import { TransactionEntity } from '../transactions/entities/transaction.entity';
+import { TransactionsService } from '../transactions/transactions.service';
 
 @Injectable()
 export class PrescriptionRedemptionsService {
@@ -18,7 +19,9 @@ export class PrescriptionRedemptionsService {
     private readonly prescriptionRepository: Repository<PrescriptionEntity>,
 
     @InjectRepository(TransactionEntity)
-    private readonly transactionRepository: Repository<TransactionEntity>
+    private readonly transactionRepository: Repository<TransactionEntity>,
+
+    private readonly transactionsService: TransactionsService,
   ) {}
 
   // Metode untuk memperbarui status isRedeem pada Prescription
