@@ -8,6 +8,9 @@ import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class TransactionsService {
+  someMethod(transaction: CreateTransactionDto) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(TransactionEntity)
     private readonly transactionRepository: Repository<TransactionEntity>,

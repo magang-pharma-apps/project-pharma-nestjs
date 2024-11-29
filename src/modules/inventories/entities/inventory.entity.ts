@@ -38,6 +38,9 @@ export class InventoryEntity extends BaseEntity {
     @Column({ name: 'note' })
     note: string;
 
+    @Column({ name: 'qtyItem', nullable: true })
+    qtyItem: number;
+
     @Column({ name: 'inventory_date'})
     inventoryDate: Date; // Menyimpan tanggal inventory
 
