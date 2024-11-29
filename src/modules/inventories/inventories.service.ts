@@ -96,7 +96,7 @@ export class InventoriesService {
       .orderBy('inventory.id', 'DESC')
       .getMany()
 
-    const inventoryList = inventories.map((inventory) => ({
+    const data = inventories.map((inventory) => ({
       id: inventory.id,
       inventoryType: inventory.inventoryType,
       inventoryDate: inventory.inventoryDate,
@@ -110,11 +110,9 @@ export class InventoriesService {
       ],
     }));
 
-    console.log(inventoryList);
+    console.log(data);
 
-    return {
-      inventories: inventoryList,
-    };
+    return data;
 
     // const data = await inventories.getMany();
     // console.log(data);
@@ -150,7 +148,7 @@ export class InventoriesService {
       throw new NotFoundException('Inventory not found');
     }
 
-    const inventoryDetails = {
+    const data = {
       id: inventory.id,
       inventoryType: inventory.inventoryType,
       inventoryDate: inventory.inventoryDate,
@@ -164,9 +162,9 @@ export class InventoriesService {
       ],
     };
 
-    console.log(inventoryDetails);
+    console.log(data);
 
-    return inventoryDetails;
+    return data;
 
     // const data = await inventory.getOne();
     // console.log(data);
