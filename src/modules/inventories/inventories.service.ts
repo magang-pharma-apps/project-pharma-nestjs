@@ -3,7 +3,7 @@ import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InventoryEntity, InventoryType } from './entities/inventory.entity';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ProductEntity } from '../products/entities/product.entity';
 
 @Injectable()
@@ -39,14 +39,14 @@ export class InventoriesService {
 
       // Update stok berdasarkan tipe inventory
       if (inventoryType === InventoryType.IN) {
-        product.stockQuantity += inventoryItem.quantity; // Tambah stok
+        product.stockQuantity += inventoryItem.qtyItem; // Tambah stok
       } else if (inventoryType === InventoryType.OUT) {
-        if (product.stockQuantity < inventoryItem.quantity) {
+        if (product.stockQuantity < inventoryItem.qtyItem) {
           throw new BadRequestException(
             `Insufficient stock for product ID ${inventoryItem.productId}.`,
           );
         }
-        product.stockQuantity -= inventoryItem.quantity; // Kurangi stok
+        product.stockQuantity -= inventoryItem.qtyItem; // Kurangi stok
       }
 
       // Simpan perubahan stok produk
@@ -58,6 +58,7 @@ export class InventoriesService {
       inventory.inventoryType = inventoryType;
       inventory.noteItem = inventoryItem.noteItem;
       inventory.note = note;
+      inventory.qtyItem = inventoryItem.qtyItem;
       inventory.inventoryDate = inventoryDate;
 
       inventoryItems.push(inventory);
@@ -82,6 +83,7 @@ export class InventoriesService {
         'inventory.inventoryDate',
         'inventory.note',
         'inventory.noteItem',
+        'inventory.qtyItem',
         'product.id',
         'product.name',
         'product.stockQuantity',
@@ -92,9 +94,8 @@ export class InventoriesService {
       ])
       .where('product.status = :status', { status: true })
       .andWhere('inventory.deletedAt IS NULL')
-      // .andWhere('warehouse.status = :status', { status: true })
       .orderBy('inventory.id', 'DESC')
-      .getMany()
+      .getMany();
 
     const data = inventories.map((inventory) => ({
       id: inventory.id,
@@ -103,9 +104,13 @@ export class InventoriesService {
       note: inventory.note,
       items: [
         {
-          productId: inventory.product.id,
-          productName: inventory.product.name,
+          product: {
+            id: inventory.product.id,
+            name: inventory.product.name,
+            stockQuantity: inventory.product.stockQuantity,
+          },
           noteItem: inventory.noteItem,
+          qtyItem: inventory.qtyItem,
         },
       ],
     }));
@@ -130,6 +135,7 @@ export class InventoriesService {
         'inventory.inventoryDate',
         'inventory.note',
         'inventory.noteItem',
+        'inventory.qtyItem',
         'product.id',
         'product.name',
         'product.stockQuantity',
@@ -155,9 +161,13 @@ export class InventoriesService {
       note: inventory.note,
       items: [
         {
-          productId: inventory.product.id,
-          productName: inventory.product.name,
+          product: {
+            id: inventory.product.id,
+            name: inventory.product.name,
+            stockQuantity: inventory.product.stockQuantity,
+          },
           noteItem: inventory.noteItem,
+          qtyItem: inventory.qtyItem,
         },
       ],
     };

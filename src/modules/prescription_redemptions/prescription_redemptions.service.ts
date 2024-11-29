@@ -67,6 +67,8 @@ export class PrescriptionRedemptionsService {
 
     })
 
+    await this.transactionsService.someMethod(data.transaction);
+
     await this.transactionRepository.save(transactionRedeem);
 
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
