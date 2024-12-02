@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsNotEmpty } from "class-validator";
-import { InventoryType } from "../entities/inventory.entity";
+import { InventoryType, ReasonType } from "../entities/inventory.entity";
 import { Type } from "class-transformer";
 import { CreateProductDto } from "src/modules/products/dto/create-product.dto";
 
@@ -43,6 +43,9 @@ export class CreateInventoryDto {
 
     @ApiProperty({ enum: InventoryType })
     inventoryType: InventoryType;
+
+    @ApiProperty({enum: ReasonType})
+    reasonType?: ReasonType;
 
     @ApiProperty()
     note: string;

@@ -8,16 +8,19 @@ import {
   Delete, 
   NotFoundException,
   UseGuards,
-  HttpStatus
+  HttpStatus,
+  Query,
+  BadRequestException
 } from '@nestjs/common';
 import { InventoriesService } from './inventories.service';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { ResponseFormatter } from 'src/config/response_formatter';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { InventoryDtoOut } from './dto/inventory.dto';
 import { Permission } from 'src/decorators/requires-permission.decorator';
+import { InventoryType, ReasonType } from './entities/inventory.entity';
 
 @ApiTags('Inventories')
 @ApiBearerAuth('accessToken')
@@ -48,8 +51,23 @@ export class InventoriesController {
 
   @Permission('read:inventory')
   @Get()
-  async findAll() {
-    const inventories = await this.inventoriesService.findAll();
+  @ApiQuery({ name: 'inventoryType', required: false, enum: InventoryType, description: 'Filter by inventory type (IN/OUT)' })
+  @ApiQuery({ name: 'reasonType', required: false, enum: ReasonType, description: 'Filter by reason type (PURCHASE, REPLACEMENT, BONUS, EXPIRED, DAMAGED, LOST)' })
+  async findAll(
+    @Query('inventoryType') inventoryType?: InventoryType,
+    @Query('reasonType') reasonType?: ReasonType,
+  ) {
+    // Jika inventoryType ada, pastikan reasonType sesuai
+    if (inventoryType && reasonType) {
+      if (inventoryType === InventoryType.IN && !['Purchase', 'Replacement', 'Bonus'].includes(reasonType)) {
+        throw new BadRequestException('Invalid reasonType for IN inventory');
+      }
+      if (inventoryType === InventoryType.OUT && !['Expired', 'Damage', 'Lost'].includes(reasonType)) {
+        throw new BadRequestException('Invalid reasonType for OUT inventory');
+      }
+    }
+
+    const inventories = await this.inventoriesService.findAll(inventoryType, reasonType);
 
     if (!inventories) {
       return new NotFoundException('Inventories not found');
