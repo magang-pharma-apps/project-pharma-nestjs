@@ -59,7 +59,7 @@ export class TransactionsService {
     }
 
     const savedTransaction = await this.transactionRepository.save(transaction);
-    console.log('Saved Transaction:', savedTransaction);  // Log di sini
+    console.log('Saved Transaction testing:', savedTransaction);  // Log di sini
 
     return savedTransaction;
 
