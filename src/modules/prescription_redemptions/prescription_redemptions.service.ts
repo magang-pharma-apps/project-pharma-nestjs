@@ -8,6 +8,7 @@ import { TransactionDetailEntity } from '../transaction_details/entities/transac
 import { PrescriptionEntity } from '../prescriptions/entities/prescription.entity';
 import { TransactionEntity } from '../transactions/entities/transaction.entity';
 import { TransactionsService } from '../transactions/transactions.service';
+import { ProductEntity } from '../products/entities/product.entity';
 
 @Injectable()
 export class PrescriptionRedemptionsService {
@@ -20,6 +21,9 @@ export class PrescriptionRedemptionsService {
 
     @InjectRepository(TransactionEntity)
     private readonly transactionRepository: Repository<TransactionEntity>,
+
+    @InjectRepository(ProductEntity)  // Menambahkan repository untuk Product
+    private readonly productRepository: Repository<ProductEntity>,
 
     private readonly transactionsService: TransactionsService,
   ) {}
@@ -39,37 +43,36 @@ export class PrescriptionRedemptionsService {
   }
 
   async create(data: CreatePrescriptionRedemptionDto) {
-    const { isRedeem, prescriptionId } = data;
+    const { isRedeem, prescriptionId, transaction } = data;
 
     // Jika isRedeem = true, update status isRedeem di Prescription
     if (isRedeem) {
       await this.updatePrescriptionRedeemStatus(prescriptionId, true);
     }
 
-    const transactionRedeem = this.transactionRepository.create({
-      userId: data.transaction.userId,
-          transactionDate: data.transaction.transactionDate,
-          transactionType: data.transaction.transactionType,
-          categoryType: data.transaction.categoryType,
-          note: data.transaction.note,
-          tax: data.transaction.tax,
-          subTotal: data.transaction.subTotal,
-          grandTotal: data.transaction.grandTotal,
-          paymentMethod: data.transaction.paymentMethod,
-          // Membuat items untuk transaksi
-          items: data.transaction.items.map(itemData => {
-            const item = new TransactionDetailEntity();
-            item.productId = itemData.productId;
-            item.quantity = itemData.quantity;
-            item.note = itemData.note;
-            return item;
-          }),
+    const transactionRedeem = await this.transactionsService.create(transaction);
 
-    })
+    // const transactionRedeem = this.transactionRepository.create({
+    //   userId: data.transaction.userId,
+    //       transactionDate: data.transaction.transactionDate,
+    //       transactionType: data.transaction.transactionType,
+    //       categoryType: data.transaction.categoryType,
+    //       note: data.transaction.note,
+    //       tax: data.transaction.tax,
+    //       subTotal: data.transaction.subTotal,
+    //       grandTotal: data.transaction.grandTotal,
+    //       paymentMethod: data.transaction.paymentMethod,
+    //       // Membuat items untuk transaksi
+    //       items: data.transaction.items.map(itemData => {
+    //         const item = new TransactionDetailEntity();
+    //         item.productId = itemData.productId;
+    //         item.quantity = itemData.quantity;
+    //         item.note = itemData.note;
+    //         return item;
+    //       }),
+    // })
 
-    await this.transactionsService.someMethod(data.transaction);
-
-    await this.transactionRepository.save(transactionRedeem);
+    // await this.transactionRepository.save(transactionRedeem);
 
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
       prescriptionId: data.prescriptionId,
@@ -82,7 +85,7 @@ export class PrescriptionRedemptionsService {
     // Simpan PrescriptionRedemption beserta transaksi dan item
     return await this.prescriptionRedemptionRepository.save(prescriptionRedemption);
     
-  }  
+  }   
 
   async findAll() {
     const prescriptionRedemptions = this.prescriptionRedemptionRepository.createQueryBuilder('prescriptionRedemption')

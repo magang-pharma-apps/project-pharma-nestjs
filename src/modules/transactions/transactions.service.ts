@@ -8,9 +8,6 @@ import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class TransactionsService {
-  someMethod(transaction: CreateTransactionDto) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(TransactionEntity)
     private readonly transactionRepository: Repository<TransactionEntity>,
@@ -25,17 +22,23 @@ export class TransactionsService {
 
   // Format tanggal transaksi
     const formattedDate = transactionDate.toISOString().split('T')[0];
+    console.log(formattedDate);
 
     const lastTransaction = await this.transactionRepository.createQueryBuilder('transaction')
       .where('DATE(transaction.transactionDate) = :date', { date: formattedDate })
+      .andWhere('transaction.transactionNumber IS NOT NULL')
       .orderBy('transaction.transactionNumber', 'DESC')
       .getOne();
+
+    console.log(lastTransaction);
 
     const transactionNumber = lastTransaction
       ? lastTransaction.transactionNumber + 1
       : 1;
 
     const transactionCode = `TRX${formattedDate.replace(/-/g, '')}-${String(transactionNumber).padStart(3, '0')}`;
+
+    console.log(transactionCode);
 
     const transaction = this.transactionRepository.create({
       ...data,
@@ -47,12 +50,20 @@ export class TransactionsService {
       }))
     });
 
+    console.log(transaction);
+
     // Update stok produk
     for (const item of data.items) {
+      console.log(item.productId, item.quantity);
       await this.productService.reduceStock(item.productId, item.quantity);
     }
 
-    return await this.transactionRepository.save(transaction);
+    const savedTransaction = await this.transactionRepository.save(transaction);
+    console.log('Saved Transaction:', savedTransaction);  // Log di sini
+
+    return savedTransaction;
+
+    // return await this.transactionRepository.save(transaction);
   }
 
   async findAll() {

@@ -12,7 +12,17 @@ import {
 export enum InventoryType {
     IN = 'In',
     OUT = 'Out',
-    ADJUST = 'Adjust',
+    // ADJUST = 'Adjust',
+}
+
+export enum ReasonType {
+    PURCHASE = 'Purchase',
+    // STOCK_ADJUSTMENT = 'Stock Adjustment',
+    REPLACEMENT = 'Replacement',
+    BONUS = 'Bonus',
+    EXPIRED = 'Expired',
+    DAMAGE = 'Damage',
+    LOST = 'Lost',
 }
 
 @Entity('inventories')
@@ -31,6 +41,9 @@ export class InventoryEntity extends BaseEntity {
 
     @Column({ name: 'inventory_type', type: 'enum', enum: InventoryType, nullable: true })
     inventoryType: InventoryType;
+
+    @Column({ name: 'reason_type', type: 'enum', enum: ReasonType, nullable: true })
+    reasonType: ReasonType;
 
     @Column({ name: 'note_item' })
     noteItem: string;

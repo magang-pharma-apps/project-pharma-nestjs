@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InventoryEntity, InventoryType } from './entities/inventory.entity';
+import { InventoryEntity, InventoryType, ReasonType } from './entities/inventory.entity';
 import { Repository } from 'typeorm';
 import { ProductEntity } from '../products/entities/product.entity';
 
@@ -23,12 +23,16 @@ export class InventoriesService {
   // }
 
   async create(data: CreateInventoryDto) {
-    const { items, inventoryDate, inventoryType, note } = data;
+    const { items, inventoryDate, inventoryType, note, reasonType } = data;
 
+    if (!reasonType) {
+      throw new BadRequestException('Reason is required for inventory');
+    }
+    
     const inventoryItems: InventoryEntity[] = [];
 
     for (const inventoryItem of items) {
-      // 1. Update atau validasi stok produk
+      // validasi produk
       const product = await this.productRepository.findOne({
         where: { id: inventoryItem.productId },
       });
@@ -52,10 +56,11 @@ export class InventoriesService {
       // Simpan perubahan stok produk
       await this.productRepository.save(product);
 
-      // 2. Buat entitas inventory baru
+      // Buat entitas inventory baru
       const inventory = new InventoryEntity();
       inventory.productId = inventoryItem.productId;
       inventory.inventoryType = inventoryType;
+      inventory.reasonType = reasonType;
       inventory.noteItem = inventoryItem.noteItem;
       inventory.note = note;
       inventory.qtyItem = inventoryItem.qtyItem;
@@ -64,7 +69,7 @@ export class InventoriesService {
       inventoryItems.push(inventory);
     }
 
-    // 3. Simpan semua entitas inventory
+    // Simpan semua entitas inventory
     await this.inventoryRepository.save(inventoryItems);
 
     return {
@@ -73,13 +78,14 @@ export class InventoriesService {
     };
   }
 
-  async findAll() {
-    const inventories = await this.inventoryRepository.createQueryBuilder('inventory')
+  async findAll(inventoryType?: InventoryType, reasonType?: ReasonType) {
+    const query = await this.inventoryRepository.createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.product', 'product')
       // .leftJoinAndSelect('inventory.warehouse', 'warehouse')
       .select([
         'inventory.id',
         'inventory.inventoryType',
+        // 'inventory.reasonType',
         'inventory.inventoryDate',
         'inventory.note',
         'inventory.noteItem',
@@ -94,12 +100,31 @@ export class InventoriesService {
       ])
       .where('product.status = :status', { status: true })
       .andWhere('inventory.deletedAt IS NULL')
-      .orderBy('inventory.id', 'DESC')
-      .getMany();
+      // .andWhere('inventory.inventoryType = :inventoryType', { inventoryType: 'Out' })
+      .orderBy('inventory.id', 'DESC');
+
+    if (inventoryType) {
+      query.andWhere('inventory.inventoryType = :inventoryType', { inventoryType });
+
+      // if (reasonType) {
+      //   query.andWhere('inventory.reasonType = :reasonType', { reasonType });
+      // }
+      // Filter reasonType berdasarkan inventoryType
+    if (inventoryType === InventoryType.IN && reasonType) {
+      query.andWhere('inventory.reasonType IN (:...reasonType)', { reasonType: ['Purchase', 'Replacement', 'Bonus'] });
+    }
+
+    if (inventoryType === InventoryType.OUT && reasonType) {
+      query.andWhere('inventory.reasonType IN (:...reasonType)', { reasonType: ['Expired', 'Damage', 'Lost'] });
+    }
+    }
+
+    const inventories = await query.getMany();
 
     const data = inventories.map((inventory) => ({
       id: inventory.id,
       inventoryType: inventory.inventoryType,
+      reasonType: inventory.reasonType,
       inventoryDate: inventory.inventoryDate,
       note: inventory.note,
       items: [

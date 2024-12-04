@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { InventoryType } from "../entities/inventory.entity";
+import { InventoryType, ReasonType } from "../entities/inventory.entity";
 import { InventoryItemDto } from "./create-inventory.dto";
 
 export class InventoryDtoOut {
@@ -15,8 +15,14 @@ export class InventoryDtoOut {
     // @ApiProperty()
     // quantityInStock: number;
 
+    @ApiProperty()
+    inventoryDate: Date;
+
     @ApiProperty({ enum: InventoryType })
     inventoryType: InventoryType;
+
+    @ApiProperty({enum: ReasonType})
+    reasonType?: ReasonType;
 
     @ApiProperty()
     note: string;
