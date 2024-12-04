@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsNotEmpty } from "class-validator";
 import { InventoryType, ReasonType } from "../entities/inventory.entity";
 import { Type } from "class-transformer";
-import { CreateProductDto } from "src/modules/products/dto/create-product.dto";
 
 // DTO untuk item dalam inventory
 export class InventoryItemDto {
