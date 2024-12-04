@@ -85,7 +85,7 @@ export class InventoriesService {
       .select([
         'inventory.id',
         'inventory.inventoryType',
-        // 'inventory.reasonType',
+        'inventory.reasonType',
         'inventory.inventoryDate',
         'inventory.note',
         'inventory.noteItem',
@@ -103,22 +103,20 @@ export class InventoriesService {
       // .andWhere('inventory.inventoryType = :inventoryType', { inventoryType: 'Out' })
       .orderBy('inventory.id', 'DESC');
 
-    if (inventoryType) {
-      query.andWhere('inventory.inventoryType = :inventoryType', { inventoryType });
-
-      // if (reasonType) {
-      //   query.andWhere('inventory.reasonType = :reasonType', { reasonType });
-      // }
-      // Filter reasonType berdasarkan inventoryType
-    if (inventoryType === InventoryType.IN && reasonType) {
-      query.andWhere('inventory.reasonType IN (:...reasonType)', { reasonType: ['Purchase', 'Replacement', 'Bonus'] });
-    }
-
-    if (inventoryType === InventoryType.OUT && reasonType) {
-      query.andWhere('inventory.reasonType IN (:...reasonType)', { reasonType: ['Expired', 'Damage', 'Lost'] });
-    }
-    }
-
+      if (inventoryType) {
+        query.andWhere('inventory.inventoryType = :inventoryType', { inventoryType });
+      
+        if (reasonType) {
+          query.andWhere('inventory.reasonType = :reasonType', { reasonType });
+        } else {
+          if (inventoryType === InventoryType.IN) {
+            query.andWhere('(inventory.reasonType IS NULL OR inventory.reasonType IN (:...reasonTypes))', { reasonTypes: ['Purchase', 'Replacement', 'Bonus'] });
+          } else if (inventoryType === InventoryType.OUT) {
+            query.andWhere('(inventory.reasonType IS NULL OR inventory.reasonType IN (:...reasonTypes))', { reasonTypes: ['Expired', 'Damage', 'Lost'] });
+          }
+        }
+      }
+      
     const inventories = await query.getMany();
 
     const data = inventories.map((inventory) => ({
