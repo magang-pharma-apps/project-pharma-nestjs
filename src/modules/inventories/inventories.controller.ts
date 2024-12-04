@@ -57,22 +57,24 @@ export class InventoriesController {
     @Query('inventoryType') inventoryType?: InventoryType,
     @Query('reasonType') reasonType?: ReasonType,
   ) {
-    // Jika inventoryType ada, pastikan reasonType sesuai
+
+    const validReasonTypes = {
+      [InventoryType.IN]: ['Purchase', 'Replacement', 'Bonus'],
+      [InventoryType.OUT]: ['Expired', 'Damage', 'Lost'],
+    };
+    
     if (inventoryType && reasonType) {
-      if (inventoryType === InventoryType.IN && !['Purchase', 'Replacement', 'Bonus'].includes(reasonType)) {
-        throw new BadRequestException('Invalid reasonType for IN inventory');
-      }
-      if (inventoryType === InventoryType.OUT && !['Expired', 'Damage', 'Lost'].includes(reasonType)) {
-        throw new BadRequestException('Invalid reasonType for OUT inventory');
+      const validForType = validReasonTypes[inventoryType] || [];
+      if (!validForType.includes(reasonType)) {
+        throw new BadRequestException(`Invalid reasonType for ${inventoryType} inventory`);
       }
     }
-
+  
     const inventories = await this.inventoriesService.findAll(inventoryType, reasonType);
-
-    if (!inventories) {
-      return new NotFoundException('Inventories not found');
+    if (!inventories || inventories.length === 0) {
+      throw new NotFoundException('No inventories found');
     }
-
+  
     return new ResponseFormatter(inventories, 'Inventories found');
   }
 
