@@ -9,11 +9,12 @@ import {
   UseGuards,
   HttpStatus,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { ResponseFormatter } from 'src/config/response_formatter';
 import { ProductDtoOut } from './dto/product.dto';
@@ -50,10 +51,14 @@ export class ProductsController {
 
   @Permission('read:product')
   @Get()
-  async findAll() {
-    const products = await this.productsService.findAll();
+  @ApiQuery({ name: 'categoryId', required: false })
+  async findAll(
+    @Query('categoryId') categoryId?: number
+  ) {
+    
+    const products = await this.productsService.findAll(categoryId);
 
-    if (!products) {
+    if (!products || products.length === 0) {
       return new NotFoundException('Products not found');
     }
 

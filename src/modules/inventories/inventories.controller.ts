@@ -71,6 +71,7 @@ export class InventoriesController {
     }
   
     const inventories = await this.inventoriesService.findAll(inventoryType, reasonType);
+    
     if (!inventories || inventories.length === 0) {
       throw new NotFoundException('No inventories found');
     }

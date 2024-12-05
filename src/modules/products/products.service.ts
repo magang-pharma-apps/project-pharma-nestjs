@@ -55,8 +55,8 @@ export class ProductsService {
     });
   }
 
-  async findAll() {
-    const products = await this.productRepository.createQueryBuilder('product')
+  async findAll(categoryId?: number) {
+    const queryProducts = await this.productRepository.createQueryBuilder('product')
     .leftJoinAndSelect('product.category', 'category')
     .leftJoinAndSelect('product.unit', 'unit')
     .select([
@@ -81,7 +81,13 @@ export class ProductsService {
     .andWhere('unit.status = :status', { status: true })
     .andWhere('product.deletedAt IS NULL')
     .orderBy('product.id', 'DESC')
-    .getMany();
+    // .getMany();
+
+    if (categoryId) {
+      queryProducts.andWhere('category.id = :categoryId', { categoryId });
+    }
+
+    const products = await queryProducts.getMany();
 
     const data = products.map((product) => {
       product.purchasePrice = parseFloat(product.purchasePrice.toString());
