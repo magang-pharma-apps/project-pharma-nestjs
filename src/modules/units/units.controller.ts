@@ -8,6 +8,7 @@ import {
   Delete, 
   UseGuards,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { UnitsService } from './units.service';
 import { CreateUnitDto } from './dto/create-unit.dto';
@@ -63,6 +64,10 @@ export class UnitsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const unit = await this.unitsService.findOne(+id);
+
+    if (!unit) {
+      return new NotFoundException('Unit not found');
+    }
 
     return new ResponseFormatter(unit, 'Unit found');
   }

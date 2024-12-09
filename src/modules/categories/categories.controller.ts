@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -63,6 +64,10 @@ export class CategoriesController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const category = await this.categoriesService.findOne(+id);
+
+    if (!category) {
+      return new NotFoundException('Category not found');
+    }
 
     return new ResponseFormatter(category, 'Category found');
   }
