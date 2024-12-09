@@ -10,17 +10,17 @@ export class StockOpnameEntryEntity extends  BaseEntity{
     @Column({ name: 'product_id' })
     productId: number;
 
-    @Column({ name: 'recorded_stock' })
-    recordedStock: number;
-
     @Column({ name: 'physical_stock' })
     physicalStock: number;
+
+    @Column({ name: 'discrepancy' })
+    discrepancy: number;
 
     @Column({ name: 'opname_date' })
     opnameDate: Date;
 
-    @Column({ name: 'discrepancy' })
-    discrepancy: number;
+    @Column({ name: 'note' })
+    note: string;
 
     @ManyToOne(() => ProductEntity)
     @JoinColumn({

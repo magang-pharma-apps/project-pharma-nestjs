@@ -6,8 +6,8 @@ export class InventoryDtoOut {
     @ApiPropertyOptional()
     id: number;
 
-    @ApiProperty()
-    productId: number;
+    // @ApiProperty()
+    // productId: number;
 
     // @ApiProperty()
     // warehouseId: number;
