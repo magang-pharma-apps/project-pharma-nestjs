@@ -1,21 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { OpnameItemDto } from "./create-stock_opname_entry.dto";
 
 export class StockOpnameEntryDtoOut {
     @ApiPropertyOptional()
     id: number;
   
     @ApiProperty()
-    productId: number;
-
-    @ApiProperty()
-    recordedStock: number;
-  
-    @ApiProperty()
-    physicalStock: number;
-  
-    @ApiProperty()
     opnameDate: Date;
   
     @ApiProperty()
-    discrepancy: number;
+    note: string;
+
+    @ApiProperty({ type: [OpnameItemDto] })
+    items: OpnameItemDto[];
 }

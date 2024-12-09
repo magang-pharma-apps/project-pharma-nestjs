@@ -4,9 +4,10 @@ import { StockOpnameEntriesController } from './stock_opname_entries.controller'
 import { Type } from 'class-transformer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StockOpnameEntryEntity } from './entities/stock_opname_entry.entity';
+import { ProductEntity } from '../products/entities/product.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StockOpnameEntryEntity])],
+  imports: [TypeOrmModule.forFeature([StockOpnameEntryEntity, ProductEntity])],
   controllers: [StockOpnameEntriesController],
   providers: [StockOpnameEntriesService],
 })

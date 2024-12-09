@@ -4,22 +4,56 @@ import { UpdateStockOpnameEntryDto } from './dto/update-stock_opname_entry.dto';
 import { Repository } from 'typeorm';
 import { StockOpnameEntryEntity } from './entities/stock_opname_entry.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ProductEntity } from '../products/entities/product.entity';
 
 @Injectable()
 export class StockOpnameEntriesService {
   constructor(
     @InjectRepository(StockOpnameEntryEntity)
-    private readonly stockOpnameEntriesService: Repository<StockOpnameEntryEntity>,
+    private readonly stockOpnameEntriesRepository: Repository<StockOpnameEntryEntity>,
+
+    @InjectRepository(ProductEntity)
+    private readonly productsRepository: Repository<ProductEntity>,
   ) {}
   
   async create(data: CreateStockOpnameEntryDto) {
-    const stockOpnameEntry = this.stockOpnameEntriesService.create(data);
+    const { items, opnameDate, note } = data;
 
-    return await this.stockOpnameEntriesService.save(stockOpnameEntry);
+    const opnameItems: StockOpnameEntryEntity[] = [];
+
+    for (const item of items) {
+      // validasi produk
+      const product = await this.productsRepository.findOne({
+        where: { id: item.productId },
+      });
+
+      if (!product) {
+        throw new NotFoundException(`Product with ID ${item.productId} not found.`);
+      }
+
+      product.stockQuantity = item.physicalStock;
+      await this.productsRepository.save(product);
+
+      const stockOpnameEntry = this.stockOpnameEntriesRepository.create({
+        productId: item.productId,
+        physicalStock: item.physicalStock,
+        discrepancy: item.discrepancy,
+        opnameDate,
+        note,
+      });
+  
+      // Tambahkan ke daftar untuk disimpan
+      opnameItems.push(stockOpnameEntry);
+    }
+  
+    // Simpan semua Stock Opname Entries sekaligus
+    const savedStockOpnameEntries = await this.stockOpnameEntriesRepository.save(opnameItems);
+  
+    return savedStockOpnameEntries;
   }
 
   async findAll() {
-    const stockOpnameEntries = await this.stockOpnameEntriesService.createQueryBuilder('stockOpnameEntry')
+    const stockOpnameEntries = await this.stockOpnameEntriesRepository.createQueryBuilder('stockOpnameEntry')
     .leftJoinAndSelect('stockOpnameEntry.product', 'product')
     .select([
       'stockOpnameEntry.id',
@@ -40,7 +74,7 @@ export class StockOpnameEntriesService {
   }
 
   async findOne(id: number) {
-    const stockOpnameEntry = await this.stockOpnameEntriesService.createQueryBuilder('stockOpnameEntry')
+    const stockOpnameEntry = await this.stockOpnameEntriesRepository.createQueryBuilder('stockOpnameEntry')
     .leftJoinAndSelect('stockOpnameEntry.product', 'product')
     .select([
       'stockOpnameEntry.id',
@@ -62,7 +96,7 @@ export class StockOpnameEntriesService {
   }
 
   async update(id: number, data: UpdateStockOpnameEntryDto) {
-    const stockOpnameEntry = await this.stockOpnameEntriesService.findOne({
+    const stockOpnameEntry = await this.stockOpnameEntriesRepository.findOne({
       where: {
         id: id,
         deletedAt: null,
@@ -75,13 +109,13 @@ export class StockOpnameEntriesService {
 
     Object.assign(stockOpnameEntry, data);
 
-    const updatedStockOpnameEntry = this.stockOpnameEntriesService.save(stockOpnameEntry);
+    const updatedStockOpnameEntry = this.stockOpnameEntriesRepository.save(stockOpnameEntry);
 
     return updatedStockOpnameEntry;
   }
 
   async remove(id: number) {
-    const stockOpnameEntry = await this.stockOpnameEntriesService.findOne({
+    const stockOpnameEntry = await this.stockOpnameEntriesRepository.findOne({
       withDeleted: true,
       where: {
         id: id,
@@ -92,7 +126,7 @@ export class StockOpnameEntriesService {
       throw new NotFoundException('StockOpnameEntry not found');
     }
 
-    const deletedStockOpnameEntry = await this.stockOpnameEntriesService.softRemove(stockOpnameEntry);
+    const deletedStockOpnameEntry = await this.stockOpnameEntriesRepository.softRemove(stockOpnameEntry);
 
     return deletedStockOpnameEntry;
   }
