@@ -79,7 +79,7 @@ export class InventoriesService {
   }
 
   async findAll(inventoryType?: InventoryType, reasonType?: ReasonType) {
-    const query = await this.inventoryRepository.createQueryBuilder('inventory')
+    const queryInventories = await this.inventoryRepository.createQueryBuilder('inventory')
       .leftJoinAndSelect('inventory.product', 'product')
       // .leftJoinAndSelect('inventory.warehouse', 'warehouse')
       .select([
@@ -104,20 +104,20 @@ export class InventoriesService {
       .orderBy('inventory.id', 'DESC');
 
       if (inventoryType) {
-        query.andWhere('inventory.inventoryType = :inventoryType', { inventoryType });
+        queryInventories.andWhere('inventory.inventoryType = :inventoryType', { inventoryType });
       
         if (reasonType) {
-          query.andWhere('inventory.reasonType = :reasonType', { reasonType });
+          queryInventories.andWhere('inventory.reasonType = :reasonType', { reasonType });
         } else {
           if (inventoryType === InventoryType.IN) {
-            query.andWhere('(inventory.reasonType IS NULL OR inventory.reasonType IN (:...reasonTypes))', { reasonTypes: ['Purchase', 'Replacement', 'Bonus'] });
+            queryInventories.andWhere('(inventory.reasonType IS NULL OR inventory.reasonType IN (:...reasonTypes))', { reasonTypes: ['Purchase', 'Replacement', 'Bonus'] });
           } else if (inventoryType === InventoryType.OUT) {
-            query.andWhere('(inventory.reasonType IS NULL OR inventory.reasonType IN (:...reasonTypes))', { reasonTypes: ['Expired', 'Damage', 'Lost'] });
+            queryInventories.andWhere('(inventory.reasonType IS NULL OR inventory.reasonType IN (:...reasonTypes))', { reasonTypes: ['Expired', 'Damage', 'Lost'] });
           }
         }
       }
       
-    const inventories = await query.getMany();
+    const inventories = await queryInventories.getMany();
 
     const data = inventories.map((inventory) => ({
       id: inventory.id,

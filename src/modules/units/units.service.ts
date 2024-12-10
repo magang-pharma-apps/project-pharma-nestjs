@@ -45,9 +45,13 @@ export class UnitsService {
       ])
       .where('unit.id = :id', { id: units_id })
       .andWhere('unit.deletedAt IS NULL')
-      .orderBy('unit.id', 'DESC')
 
     const data = await unit.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Unit not found');
+    }
+
     console.log(data);
 
     return data;

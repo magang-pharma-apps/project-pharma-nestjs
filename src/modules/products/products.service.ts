@@ -126,8 +126,11 @@ export class ProductsService {
     .andWhere('product.deletedAt IS NULL')
     .andWhere('category.status = :status', { status: true })
     .andWhere('unit.status = :status', { status: true })
-    .orderBy('product.id', 'DESC')
     .getOne();
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
     
     if (product) {
       product.purchasePrice = parseFloat(product.purchasePrice.toString());

@@ -83,12 +83,15 @@ export class CompoundProductsService {
       ])
       .where('compound_product.deletedAt IS NULL')
       .andWhere('compound_product.id = :id', { id })
-      .orderBy('compound_product.id', 'DESC')
       .getOne();
 
       if (compoundProduct && compoundProduct.product) {
         compoundProduct.product.purchasePrice = parseFloat(compoundProduct.product.purchasePrice.toString());
         compoundProduct.product.sellingPrice = parseFloat(compoundProduct.product.sellingPrice.toString());
+      }
+
+      if (!compoundProduct) {
+        throw new NotFoundException('Compound product not found');
       }
   
       console.log(compoundProduct);

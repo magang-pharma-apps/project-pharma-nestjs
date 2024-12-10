@@ -52,28 +52,6 @@ export class PrescriptionRedemptionsService {
 
     const transactionRedeem = await this.transactionsService.create(transaction);
 
-    // const transactionRedeem = this.transactionRepository.create({
-    //   userId: data.transaction.userId,
-    //       transactionDate: data.transaction.transactionDate,
-    //       transactionType: data.transaction.transactionType,
-    //       categoryType: data.transaction.categoryType,
-    //       note: data.transaction.note,
-    //       tax: data.transaction.tax,
-    //       subTotal: data.transaction.subTotal,
-    //       grandTotal: data.transaction.grandTotal,
-    //       paymentMethod: data.transaction.paymentMethod,
-    //       // Membuat items untuk transaksi
-    //       items: data.transaction.items.map(itemData => {
-    //         const item = new TransactionDetailEntity();
-    //         item.productId = itemData.productId;
-    //         item.quantity = itemData.quantity;
-    //         item.note = itemData.note;
-    //         return item;
-    //       }),
-    // })
-
-    // await this.transactionRepository.save(transactionRedeem);
-
     const prescriptionRedemption = this.prescriptionRedemptionRepository.create({
       prescriptionId: data.prescriptionId,
       isPaid: data.isPaid,
@@ -196,9 +174,13 @@ export class PrescriptionRedemptionsService {
       .where('prescriptionRedemption.id = :id', { id })
       .andWhere('prescriptionRedemption.deletedAt IS NULL')
       .andWhere('prescriptionRedemption.isRedeem = true')
-      .orderBy('prescriptionRedemption.id', 'DESC');
 
     const data = await prescriptionRedemption.getOne();
+
+    if (!data) {
+      throw new NotFoundException('PrescriptionRedemption not found');
+    }
+
     console.log(data);
 
     // Konversi sellingPrice menjadi float untuk setiap product dalam items

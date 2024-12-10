@@ -65,9 +65,13 @@ export class TransactionDetailsService {
       .andWhere('transaction.status = :status', { status: true })
       .andWhere('transactionDetail.deletedAt IS NULL')
       .andWhere('transactionDetail.id = :id', { id })
-      .orderBy('transactionDetail.id', 'DESC');
 
     const data = await transactionDetail.getOne();
+
+    if (!data) {
+      throw new NotFoundException('TransactionDetail not found');
+    }
+
     console.log(data);
 
     return data;

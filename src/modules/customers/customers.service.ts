@@ -45,9 +45,13 @@ export class CustomersService {
       ])
       .where('customer.id = :id', { id: customers_id })
       .andWhere('customer.deletedAt IS NULL')
-      .orderBy('customer.id', 'DESC')
 
     const data = await customer.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Customer not found');
+    }
+
     console.log(data);
 
     return data;

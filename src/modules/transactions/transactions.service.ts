@@ -147,9 +147,13 @@ export class TransactionsService {
       ])
       .where('transaction.id = :id', { id: transactions_id })
       .andWhere('transaction.deletedAt IS NULL')
-      .orderBy('transaction.id', 'DESC')
 
     const data = await transaction.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Transaction not found');
+    }
+
     console.log(data);
 
     // Konversi sellingPrice menjadi float untuk setiap produk dalam items menggunakan map

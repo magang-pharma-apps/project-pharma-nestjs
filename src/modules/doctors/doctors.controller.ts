@@ -7,7 +7,8 @@ import {
   Param, 
   Delete, 
   UseGuards,
-  HttpStatus
+  HttpStatus,
+  NotFoundException
 } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
@@ -63,6 +64,10 @@ export class DoctorsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const doctor = await this.doctorsService.findOne(+id);
+
+    if (!doctor) {
+      return new NotFoundException('Doctor not found');
+    }
 
     return new ResponseFormatter(doctor, 'Doctor found');
   }

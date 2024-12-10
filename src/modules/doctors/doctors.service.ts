@@ -47,9 +47,13 @@ export class DoctorsService {
     ])
       .where('doctor.id = :id', { id: doctors_id })
       .andWhere('doctor.deletedAt IS NULL')
-      .orderBy('doctor.id', 'DESC')
 
     const data = await doctor.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Doctor not found');
+    }
+
     console.log(data);
 
     return data;

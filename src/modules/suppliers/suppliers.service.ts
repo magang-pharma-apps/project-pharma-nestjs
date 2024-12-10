@@ -47,9 +47,13 @@ export class SuppliersService {
     ])
       .where('supplier.id = :supplier_id', { suppliers_id })
       .andWhere('supplier.deletedAt IS NULL')
-      .orderBy('supplier.id', 'DESC')
 
     const data = await supplier.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Supplier not found');
+    }
+
     console.log(data);
 
     return data;

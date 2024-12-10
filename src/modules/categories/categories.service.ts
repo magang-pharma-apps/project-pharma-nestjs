@@ -87,12 +87,15 @@ export class CategoriesService {
     ])
     .where('category.id = :id', { id: categories_id })
     .andWhere('category.deletedAt IS NULL')
-    .orderBy('category.id', 'DESC');
+    .getOne();
 
-    const data = await category.getOne();
-    console.log(data);
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
 
-    return data;
+    console.log(category);
+
+    return category;
   }
 
   async update(categories_id: number, data: UpdateCategoryDto) {
