@@ -59,6 +59,7 @@ export class ProductsService {
     const queryProducts = await this.productRepository.createQueryBuilder('product')
     .leftJoinAndSelect('product.category', 'category')
     .leftJoinAndSelect('product.unit', 'unit')
+    .leftJoinAndSelect('product.stockOpnameEntries', 'stockOpnameEntries')
     .select([
       'product.id',
       'product.productCode',
@@ -76,6 +77,8 @@ export class ProductsService {
       'unit.id',
       'unit.name',
       'unit.status',
+      'stockOpnameEntries.discrepancy',
+      'stockOpnameEntries.opnameDate',
     ])
     .where('category.status = :status', { status: true })
     .andWhere('unit.status = :status', { status: true })
@@ -90,9 +93,39 @@ export class ProductsService {
     const products = await queryProducts.getMany();
 
     const data = products.map((product) => {
-      product.purchasePrice = parseFloat(product.purchasePrice.toString());
-      product.sellingPrice = parseFloat(product.sellingPrice.toString());
-      return product;
+
+      const lastOpname = product.stockOpnameEntries
+        ?.sort((a, b) => new Date(b.opnameDate).getTime() - new Date(a.opnameDate).getTime())[0];
+
+      return {
+        id: product.id,
+        productCode: product.productCode,
+        name: product.name,
+        description: product.description,
+        purchasePrice: parseFloat(product.purchasePrice.toString()),
+        sellingPrice: parseFloat(product.sellingPrice.toString()),
+        expiryDate: product.expiryDate,
+        stockQuantity: product.stockQuantity,
+        productImageUrl: product.productImageUrl,
+        drugClass: product.drugClass,
+        category: {
+          id: product.category.id,
+          name: product.category.name,
+        },
+        unit: {
+          id: product.unit.id,
+          name: product.unit.name,
+        },
+        lastOpname: lastOpname
+          ? {
+              discrepancy: lastOpname.discrepancy,
+              opnameDate: lastOpname.opnameDate,
+            }
+          : null,
+      };
+      // product.purchasePrice = parseFloat(product.purchasePrice.toString());
+      // product.sellingPrice = parseFloat(product.sellingPrice.toString());
+      // return product;
     });
 
     console.log(data);
@@ -104,6 +137,7 @@ export class ProductsService {
     const product = await this.productRepository.createQueryBuilder('product')
     .leftJoinAndSelect('product.category', 'category')
     .leftJoinAndSelect('product.unit', 'unit')
+    .leftJoinAndSelect('product.stockOpnameEntries', 'stockOpnameEntries')
     .select([
       'product.id',
       'product.productCode',
@@ -121,6 +155,8 @@ export class ProductsService {
       'unit.id',
       'unit.name',
       'unit.status',
+      'stockOpnameEntries.discrepancy',
+      'stockOpnameEntries.opnameDate',
     ])
     .where('product.id = :id', { id })
     .andWhere('product.deletedAt IS NULL')
@@ -131,14 +167,45 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException('Product not found');
     }
-    
-    if (product) {
-      product.purchasePrice = parseFloat(product.purchasePrice.toString());
-      product.sellingPrice = parseFloat(product.sellingPrice.toString());
-    }
-    console.log(product);
-    
-    return product;
+
+    const lastOpname = product.stockOpnameEntries?.length
+    ? product.stockOpnameEntries.reduce((latest, current) =>
+        new Date(current.opnameDate) > new Date(latest.opnameDate) ? current : latest
+      )
+    : null;
+
+    console.log(lastOpname);
+
+    const result = {
+      id: product.id,
+      productCode: product.productCode,
+      name: product.name,
+      description: product.description,
+      purchasePrice: parseFloat(product.purchasePrice.toString()),
+      sellingPrice: parseFloat(product.sellingPrice.toString()),
+      expiryDate: product.expiryDate,
+      stockQuantity: product.stockQuantity,
+      productImageUrl: product.productImageUrl,
+      drugClass: product.drugClass,
+      category: {
+        id: product.category.id,
+        name: product.category.name,
+      },
+      unit: {
+        id: product.unit.id,
+        name: product.unit.name,
+      },
+      lastOpname: lastOpname
+        ? {
+            discrepancy: lastOpname.discrepancy,
+            opnameDate: lastOpname.opnameDate,
+          }
+        : null,
+    };
+
+    console.log(result);
+
+    return result;
   }
 
   async update(id: number, data: UpdateProductDto) {
