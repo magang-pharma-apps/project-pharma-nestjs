@@ -53,21 +53,37 @@ export class StockOpnameEntriesService {
   }
 
   async findAll() {
-    const stockOpnameEntries = await this.stockOpnameEntriesRepository.createQueryBuilder('stockOpnameEntry')
+    const queryOpnameEntries = await this.stockOpnameEntriesRepository.createQueryBuilder('stockOpnameEntry')
     .leftJoinAndSelect('stockOpnameEntry.product', 'product')
     .select([
       'stockOpnameEntry.id',
-      'stockOpnameEntry.recordedStock',
       'stockOpnameEntry.physicalStock',
-      'stockOpnameEntry.opnameDate',
       'stockOpnameEntry.discrepancy',
+      'stockOpnameEntry.opnameDate',
+      'stockOpnameEntry.note',
       'product.id',
       'product.name',
     ])
     .where('stockOpnameEntry.deletedAt IS NULL')
+    .andWhere('product.status = :status', { status: true })
     .orderBy('stockOpnameEntry.id', 'DESC')
 
-    const data = await stockOpnameEntries.getMany();
+    const opname = await queryOpnameEntries.getMany();
+
+    const data = opname.map((stockOpnameEntry) => ({
+      id: stockOpnameEntry.id,
+      items: [
+        {
+          productId: stockOpnameEntry.product.id,
+          productName: stockOpnameEntry.product.name,
+          physicalStock: stockOpnameEntry.physicalStock,
+          discrepancy: stockOpnameEntry.discrepancy,
+        }
+      ],
+      opnameDate: stockOpnameEntry.opnameDate,
+      note: stockOpnameEntry.note,
+    }));
+
     console.log(data);
 
     return data;
@@ -78,18 +94,36 @@ export class StockOpnameEntriesService {
     .leftJoinAndSelect('stockOpnameEntry.product', 'product')
     .select([
       'stockOpnameEntry.id',
-      'stockOpnameEntry.recordedStock',
       'stockOpnameEntry.physicalStock',
-      'stockOpnameEntry.opnameDate',
       'stockOpnameEntry.discrepancy',
+      'stockOpnameEntry.opnameDate',
+      'stockOpnameEntry.note',
       'product.id',
       'product.name',
     ])
     .where('stockOpnameEntry.id = :id', { id: id })
     .andWhere('stockOpnameEntry.deletedAt IS NULL')
-    .orderBy('stockOpnameEntry.id', 'DESC')
+    .andWhere('product.status = :status', { status: true })
+    .getOne();
 
-    const data = await stockOpnameEntry.getOne();
+    if (!stockOpnameEntry) {
+      throw new NotFoundException('StockOpnameEntry not found');
+    }
+
+    const data = {
+      id: stockOpnameEntry.id,
+      items: [
+        {
+          productId: stockOpnameEntry.product.id,
+          productName: stockOpnameEntry.product.name,
+          physicalStock: stockOpnameEntry.physicalStock,
+          discrepancy: stockOpnameEntry.discrepancy,
+        }
+      ],
+      opnameDate: stockOpnameEntry.opnameDate,
+      note: stockOpnameEntry.note,
+    };
+
     console.log(data);
 
     return data;

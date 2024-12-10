@@ -55,9 +55,13 @@ export class WarehouseService {
       ])
       .where('warehouse.id = :id', { id })
       .andWhere('warehouse.deletedAt IS NULL')
-      .orderBy('warehouse.id', 'DESC')
 
     const data = await warehouse.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Warehouse not found');
+    }
+
     console.log(data);
 
     return data;

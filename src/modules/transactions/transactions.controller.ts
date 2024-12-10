@@ -8,6 +8,7 @@ import {
   Delete, 
   UseGuards,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -63,6 +64,10 @@ export class TransactionsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const transaction = await this.transactionsService.findOne(+id);
+
+    if (!transaction) {
+      return new NotFoundException('Transaction not found');
+    }
 
     return new ResponseFormatter(transaction, 'Transaction found');
   }

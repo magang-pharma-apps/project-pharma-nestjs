@@ -7,7 +7,8 @@ import {
   Param, 
   Delete, 
   UseGuards,
-  HttpStatus
+  HttpStatus,
+  NotFoundException
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -62,6 +63,10 @@ export class CustomersController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const customer = await this.customersService.findOne(+id);
+
+    if (!customer) {
+      return new NotFoundException('Customer not found');
+    }
 
     return new ResponseFormatter(customer, 'Customer found');
   }

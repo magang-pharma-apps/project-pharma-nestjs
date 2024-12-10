@@ -57,9 +57,13 @@ export class CardStockEntriesService {
       ])
       .where('cardStockEntry.deletedAt IS NULL')
       .andWhere('cardStockEntry.id = :id', { id: id })
-      .orderBy('cardStockEntry.id', 'DESC')
 
     const data = await cardStockEntry.getOne();
+
+    if (!data) {
+      throw new NotFoundException('Card stock entry not found');
+    }
+
     console.log(data);
 
     return data;
