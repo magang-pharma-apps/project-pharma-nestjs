@@ -55,7 +55,7 @@ export class ProductsService {
     });
   }
 
-  async findAll(categoryId?: number) {
+  async findAll(categoryId?: number, productCode?: string) {
     const queryProducts = await this.productRepository.createQueryBuilder('product')
     .leftJoinAndSelect('product.category', 'category')
     .leftJoinAndSelect('product.unit', 'unit')
@@ -90,10 +90,17 @@ export class ProductsService {
       queryProducts.andWhere('category.id = :categoryId', { categoryId });
     }
 
+    if (productCode) {
+      queryProducts.andWhere('product.productCode = :productCode', { productCode });
+    }
+
     const products = await queryProducts.getMany();
 
-    const data = products.map((product) => {
+    if (products.length === 0) {
+      throw new NotFoundException('No products found with the given criteria');
+    }
 
+    const data = products.map((product) => {
       const lastOpname = product.stockOpnameEntries
         ?.sort((a, b) => new Date(b.opnameDate).getTime() - new Date(a.opnameDate).getTime())[0];
 
@@ -123,9 +130,6 @@ export class ProductsService {
             }
           : null,
       };
-      // product.purchasePrice = parseFloat(product.purchasePrice.toString());
-      // product.sellingPrice = parseFloat(product.sellingPrice.toString());
-      // return product;
     });
 
     console.log(data);

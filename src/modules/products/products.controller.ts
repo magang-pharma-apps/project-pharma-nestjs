@@ -52,11 +52,13 @@ export class ProductsController {
   @Permission('read:product')
   @Get()
   @ApiQuery({ name: 'categoryId', required: false })
+  @ApiQuery({ name: 'productCode', required: false })
   async findAll(
-    @Query('categoryId') categoryId?: number
+    @Query('categoryId') categoryId?: number,
+    @Query('productCode') productCode?: string,
   ) {
     
-    const products = await this.productsService.findAll(categoryId);
+    const products = await this.productsService.findAll(categoryId, productCode);
 
     if (!products || products.length === 0) {
       return new NotFoundException('Products not found');
